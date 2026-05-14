@@ -1,0 +1,13 @@
+{
+  "name": "com.clabs.adapter.unity.editor",
+  "version": "0.1.0",
+  "displayName": "CLabs Adapter: Editor (Unity)",
+  "description": "Shared Unity editor framework — CLabsEditorWindow, CLabsGraphWindow, components, theme.",
+  "shortDescription": "Unity editor UI framework",
+  "unity": "6000.0",
+  "dependencies": {},
+  "author": {
+    "name": "Crumpet Labs"
+  },
+  "group": "Adapters"
+}

@@ -1,0 +1,20 @@
+{
+    "name": "CLabs.Belfry.Unity",
+    "rootNamespace": "CLabs.Adapters",
+    "references": [
+        "Buttr.Core",
+        "Buttr.Unity",
+        "CLabs.Belfry",
+        "CLabs.Tickets",
+        "CLabs.Utility"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

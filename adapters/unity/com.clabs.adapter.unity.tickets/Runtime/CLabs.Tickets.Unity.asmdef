@@ -1,0 +1,67 @@
+{
+    "name": "CLabs.Tickets.Unity",
+    "rootNamespace": "CLabs.Adapters",
+    "references": [
+        "CLabs.Tickets.Linq",
+        "CLabs.Utility",
+        "Buttr.Core",
+        "Buttr.Injection",
+        "Buttr.Unity",
+        "CLabs.Tickets"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.modules.assetbundle",
+            "expression": "",
+            "define": "UNITASK_ASSETBUNDLE_SUPPORT"
+        },
+        {
+            "name": "com.unity.modules.physics",
+            "expression": "",
+            "define": "UNITASK_PHYSICS_SUPPORT"
+        },
+        {
+            "name": "com.unity.modules.physics2d",
+            "expression": "",
+            "define": "UNITASK_PHYSICS2D_SUPPORT"
+        },
+        {
+            "name": "com.unity.modules.particlesystem",
+            "expression": "",
+            "define": "UNITASK_PARTICLESYSTEM_SUPPORT"
+        },
+        {
+            "name": "com.unity.ugui",
+            "expression": "",
+            "define": "UNITASK_UGUI_SUPPORT"
+        },
+        {
+            "name": "com.unity.modules.unitywebrequest",
+            "expression": "",
+            "define": "UNITASK_WEBREQUEST_SUPPORT"
+        },
+        {
+            "name": "com.unity.addressables",
+            "expression": "",
+            "define": "Ticket_ADDRESSABLE_SUPPORT"
+        },
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "",
+            "define": "Ticket_TEXTMESHPRO_SUPPORT"
+        },
+        {
+            "name": "com.demigiant.dotween",
+            "expression": "",
+            "define": "Ticket_DOTWEEN_SUPPORT"
+        }
+    ],
+    "noEngineReferences": false
+}

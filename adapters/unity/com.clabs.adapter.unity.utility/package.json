@@ -1,0 +1,17 @@
+{
+  "name": "com.clabs.adapter.unity.utility",
+  "version": "0.1.0",
+  "displayName": "CLabs Adapter: Utility (Unity)",
+  "description": "Unity-specific bindings for CLabs.Utility types, including OwnerId resolution from MonoBehaviour.",
+  "shortDescription": "Utility Unity adapter",
+  "unity": "6000.0",
+  "dependencies": {
+    "com.clabs.utility": "0.1.0",
+    "com.crumpetlabs.buttr.unity": "2.4.0",
+    "com.unity.addressables": "2.3.16"
+  },
+  "author": {
+    "name": "Crumpet Labs"
+  },
+  "group": "Adapters"
+}

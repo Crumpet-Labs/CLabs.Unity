@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "generated": "2026-05-14T17:16:56.646074+00:00",
+  "foundation": [
+    "buttr",
+    "buttr-unity",
+    "utility",
+    "editor"
+  ],
+  "buttr": {
+    "shortName": "buttr",
+    "fullName": "com.crumpetlabs.buttr",
+    "gitUrl": "https://github.com/Crumpet-Labs/Buttr.Core.git?path=package#v1.3.3",
+    "dependencies": [],
+    "description": "Engine-agnostic dependency injection container. UPM package vendoring Buttr.Core and Buttr.Injection DLLs.",
+    "shortDescription": "Dependency injection (core)"
+  },
+  "packages": [
+    {
+      "shortName": "buttr-unity",
+      "fullName": "com.crumpetlabs.buttr.unity",
+      "gitUrl": "https://github.com/Crumpet-Labs/Buttr.Unity.git?path=Assets/Plugins/Buttr#v2.4.0",
+      "dependencies": [
+        "buttr"
+      ],
+      "group": "Foundation",
+      "description": "Unity bridge for Buttr — MonoBehaviour DI, scene walker, [Inject] source generator. Depends on com.crumpetlabs.buttr for the engine-agnostic core.",
+      "shortDescription": "Unity integration for Buttr"
+    }
+  ],
+  "bridges": [],
+  "adapters": [
+    {
+      "name": "belfry",
+      "fullName": "com.clabs.adapter.unity.belfry",
+      "gitUrl": "https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.belfry#v0.1.0",
+      "requiredPackages": [
+        "belfry",
+        "buttr-unity",
+        "buttr"
+      ],
+      "platforms": [
+        "unity"
+      ],
+      "description": "Unity adapter for CLabs Belfry — ScriptableObject-based ring orders and loader",
+      "shortDescription": "Unity adapter for Belfry"
+    },
+    {
+      "name": "editor",
+      "fullName": "com.clabs.adapter.unity.editor",
+      "gitUrl": "https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.editor#v0.1.0",
+      "requiredPackages": [],
+      "platforms": [
+        "unity"
+      ],
+      "description": "Shared Unity editor framework — CLabsEditorWindow, CLabsGraphWindow, components, theme.",
+      "shortDescription": "Unity editor UI framework"
+    },
+    {
+      "name": "tickets",
+      "fullName": "com.clabs.adapter.unity.tickets",
+      "gitUrl": "https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.tickets#v0.1.0",
+      "requiredPackages": [
+        "utility",
+        "buttr-unity",
+        "buttr",
+        "tickets"
+      ],
+      "platforms": [
+        "unity"
+      ],
+      "description": "Unity bindings for CLabs.Tickets: PlayerLoop integration, MonoBehaviour message triggers, AsyncOperation/Coroutine/UnityWebRequest awaiters, and optional Addressables/DOTween/TextMeshPro integrations gated by version defines."
+    },
+    {
+      "name": "utility",
+      "fullName": "com.clabs.adapter.unity.utility",
+      "gitUrl": "https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.utility#v0.1.0",
+      "requiredPackages": [
+        "utility",
+        "buttr-unity"
+      ],
+      "platforms": [
+        "unity"
+      ],
+      "description": "Unity-specific bindings for CLabs.Utility types, including OwnerId resolution from MonoBehaviour.",
+      "shortDescription": "Utility Unity adapter"
+    }
+  ]
+}

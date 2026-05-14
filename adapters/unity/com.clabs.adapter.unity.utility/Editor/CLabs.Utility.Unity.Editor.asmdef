@@ -1,0 +1,21 @@
+{
+    "name": "CLabs.Utility.Unity.Editor",
+    "rootNamespace": "CLabs.Utility.Unity.Editor",
+    "references": [
+        "CLabs.Utility",
+        "CLabs.Utility.Unity",
+        "Unity.Addressables.Editor",
+        "Unity.Addressables"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
