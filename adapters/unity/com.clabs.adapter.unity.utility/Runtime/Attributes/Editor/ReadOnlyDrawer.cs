@@ -1,4 +1,3 @@
-using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,21 +25,5 @@ namespace CLabs.Utility.Editor
             }
         }
 
-        private object GetTargetObjectOfProperty(SerializedProperty prop) {
-            if (prop == null) return null;
-
-            var path = prop.propertyPath.Split('.');
-            Debug.Log(prop.propertyPath);
-            object obj = prop.serializedObject.targetObject;
-            
-            foreach (var part in path) {
-                var type = obj.GetType();
-                var field = type.GetField(part, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                if (field == null) return null;
-                obj = field.GetValue(obj);
-            }
-
-            return obj;
-        }
     }
 }

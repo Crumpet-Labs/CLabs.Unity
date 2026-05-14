@@ -9,7 +9,7 @@ namespace CLabs.Adapters {
         private BellRope m_Rope;
 
         private void Awake() {
-            m_Rope = Application<IBellTower>.Get().Rope(typeof(Publisher));
+            m_Rope = Application<IBellTower>.Get().Rope(k.BellTowers.Publisher);
         }
 
         private void OnEnable() {

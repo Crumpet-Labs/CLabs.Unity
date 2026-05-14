@@ -1,0 +1,16 @@
+{
+    "name": "CLabs.Tickets.Linq",
+    "rootNamespace": "CLabs.Tickets.Linq",
+    "references": [
+        "CLabs.Tickets"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

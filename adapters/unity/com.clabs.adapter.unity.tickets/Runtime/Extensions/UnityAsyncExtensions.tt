@@ -1,4 +1,4 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
@@ -14,8 +14,8 @@
         ("UnityWebRequestAsyncOperation", "UnityWebRequest", "webRequest") // -> #if ENABLE_UNITYWEBREQUEST && (!UNITY_2019_1_OR_NEWER || UNITASK_WEBREQUEST_SUPPORT)
     };
 
-    Func<string, string> ToUniTaskReturnType = x => (x == "void") ? "UniTask" : $"UniTask<{x}>";
-    Func<string, string> ToIUniTaskSourceReturnType = x => (x == "void") ? "IUniTaskSource" : $"IUniTaskSource<{x}>";
+    Func<string, string> ToTicketReturnType = x => (x == "void") ? "Ticket" : $"Ticket<{x}>";
+    Func<string, string> ToITicketSourceReturnType = x => (x == "void") ? "ITicketSource" : $"ITicketSource<{x}>";
     Func<(string typeName, string returnType, string returnField), bool> IsAsyncOperationBase = x => x.typeName == "AsyncOperation";
     Func<(string typeName, string returnType, string returnField), bool> IsUnityWebRequest = x => x.returnType == "UnityWebRequest";
     Func<(string typeName, string returnType, string returnField), bool> IsAssetBundleModule = x => x.typeName == "AssetBundleRequest" || x.typeName == "AssetBundleCreateRequest";
@@ -27,12 +27,12 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
-using Cysharp.Threading.Tasks.Internal;
+using CLabs.Tickets.Internal;
 #if ENABLE_UNITYWEBREQUEST && (!UNITY_2019_1_OR_NEWER || UNITASK_WEBREQUEST_SUPPORT)
 using UnityEngine.Networking;
 #endif
 
-namespace Cysharp.Threading.Tasks
+namespace CLabs.Tickets
 {
     public static partial class UnityAsyncExtensions
     {
@@ -57,33 +57,33 @@ namespace Cysharp.Threading.Tasks
 #endif
 <# } #>
 
-        public static <#= ToUniTaskReturnType(t.returnType) #> WithCancellation(this <#= t.typeName #> asyncOperation, CancellationToken cancellationToken)
+        public static <#= ToTicketReturnType(t.returnType) #> WithCancellation(this <#= t.typeName #> asyncOperation, CancellationToken cancellationToken)
         {
-            return ToUniTask(asyncOperation, cancellationToken: cancellationToken);
+            return ToTicket(asyncOperation, cancellationToken: cancellationToken);
         }
 
-        public static <#= ToUniTaskReturnType(t.returnType) #> WithCancellation(this <#= t.typeName #> asyncOperation, CancellationToken cancellationToken, bool cancelImmediately)
+        public static <#= ToTicketReturnType(t.returnType) #> WithCancellation(this <#= t.typeName #> asyncOperation, CancellationToken cancellationToken, bool cancelImmediately)
         {
-            return ToUniTask(asyncOperation, cancellationToken: cancellationToken, cancelImmediately: cancelImmediately);
+            return ToTicket(asyncOperation, cancellationToken: cancellationToken, cancelImmediately: cancelImmediately);
         }
 
-        public static <#= ToUniTaskReturnType(t.returnType) #> ToUniTask(this <#= t.typeName #> asyncOperation, IProgress<float> progress = null, PlayerLoopTiming timing = PlayerLoopTiming.Update, CancellationToken cancellationToken = default(CancellationToken), bool cancelImmediately = false)
+        public static <#= ToTicketReturnType(t.returnType) #> ToTicket(this <#= t.typeName #> asyncOperation, IProgress<float> progress = null, PlayerLoopTiming timing = PlayerLoopTiming.Update, CancellationToken cancellationToken = default(CancellationToken), bool cancelImmediately = false)
         {
             Error.ThrowArgumentNullException(asyncOperation, nameof(asyncOperation));
-            if (cancellationToken.IsCancellationRequested) return UniTask.FromCanceled<#= IsVoid(t) ? "" : "<" + t.returnType + ">" #>(cancellationToken);
+            if (cancellationToken.IsCancellationRequested) return Ticket.FromCanceled<#= IsVoid(t) ? "" : "<" + t.returnType + ">" #>(cancellationToken);
 <# if(IsUnityWebRequest(t)) { #>
             if (asyncOperation.isDone)
             {
                 if (asyncOperation.webRequest.IsError())
                 {
-                    return UniTask.FromException<UnityWebRequest>(new UnityWebRequestException(asyncOperation.webRequest));
+                    return Ticket.FromException<UnityWebRequest>(new UnityWebRequestException(asyncOperation.webRequest));
                 }
-                return UniTask.FromResult(asyncOperation.webRequest);
+                return Ticket.FromResult(asyncOperation.webRequest);
             }
 <# } else { #>
-            if (asyncOperation.isDone) return <#= IsVoid(t) ? "UniTask.CompletedTask" : $"UniTask.FromResult(asyncOperation.{t.returnField})" #>;
+            if (asyncOperation.isDone) return <#= IsVoid(t) ? "Ticket.CompletedTask" : $"Ticket.FromResult(asyncOperation.{t.returnField})" #>;
 <# } #>
-            return new <#= ToUniTaskReturnType(t.returnType) #>(<#= t.typeName #>ConfiguredSource.Create(asyncOperation, timing, progress, cancellationToken, cancelImmediately, out var token), token);
+            return new <#= ToTicketReturnType(t.returnType) #>(<#= t.typeName #>ConfiguredSource.Create(asyncOperation, timing, progress, cancellationToken, cancelImmediately, out var token), token);
         }
 
         public struct <#= t.typeName #>Awaiter : ICriticalNotifyCompletion
@@ -150,7 +150,7 @@ namespace Cysharp.Threading.Tasks
             }
         }
 
-        sealed class <#= t.typeName #>ConfiguredSource : <#= ToIUniTaskSourceReturnType(t.returnType) #>, IPlayerLoopItem, ITaskPoolNode<<#= t.typeName #>ConfiguredSource>
+        sealed class <#= t.typeName #>ConfiguredSource : <#= ToITicketSourceReturnType(t.returnType) #>, IPlayerLoopItem, ITaskPoolNode<<#= t.typeName #>ConfiguredSource>
         {
             static TaskPool<<#= t.typeName #>ConfiguredSource> pool;
             <#= t.typeName #>ConfiguredSource nextNode;
@@ -168,7 +168,7 @@ namespace Cysharp.Threading.Tasks
             bool cancelImmediately;
             bool completed;
 
-            UniTaskCompletionSourceCore<<#= IsVoid(t) ? "AsyncUnit" : t.returnType #>> core;
+            TicketCompletionSourceCore<<#= IsVoid(t) ? "AsyncUnit" : t.returnType #>> core;
 
             Action<AsyncOperation> continuationAction;
 
@@ -177,11 +177,11 @@ namespace Cysharp.Threading.Tasks
                 continuationAction = Continuation;
             }
 
-            public static <#= ToIUniTaskSourceReturnType(t.returnType) #> Create(<#= t.typeName #> asyncOperation, PlayerLoopTiming timing, IProgress<float> progress, CancellationToken cancellationToken, bool cancelImmediately, out short token)
+            public static <#= ToITicketSourceReturnType(t.returnType) #> Create(<#= t.typeName #> asyncOperation, PlayerLoopTiming timing, IProgress<float> progress, CancellationToken cancellationToken, bool cancelImmediately, out short token)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    return AutoResetUniTaskCompletionSource<#= IsVoid(t) ? "" : $"<{t.returnType}>" #>.CreateFromCanceled(cancellationToken, out token);
+                    return AutoResetTicketCompletionSource<#= IsVoid(t) ? "" : $"<{t.returnType}>" #>.CreateFromCanceled(cancellationToken, out token);
                 }
 
                 if (!pool.TryPop(out var result))
@@ -194,7 +194,7 @@ namespace Cysharp.Threading.Tasks
                 result.cancellationToken = cancellationToken;
                 result.cancelImmediately = cancelImmediately;
                 result.completed = false;
-                
+
                 asyncOperation.completed += result.continuationAction;
 
                 if (cancelImmediately && cancellationToken.CanBeCanceled)
@@ -237,18 +237,18 @@ namespace Cysharp.Threading.Tasks
             }
 
 <# if (!IsVoid(t)) { #>
-            void IUniTaskSource.GetResult(short token)
+            void ITicketSource.GetResult(short token)
             {
                 GetResult(token);
             }
 <# } #>
 
-            public UniTaskStatus GetStatus(short token)
+            public TicketStatus GetStatus(short token)
             {
                 return core.GetStatus(token);
             }
 
-            public UniTaskStatus UnsafeGetStatus()
+            public TicketStatus UnsafeGetStatus()
             {
                 return core.UnsafeGetStatus();
             }

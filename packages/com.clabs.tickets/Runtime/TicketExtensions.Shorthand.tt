@@ -1,0 +1,63 @@
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+using System.Collections.Generic;
+
+namespace CLabs.Tickets
+{
+    public static partial class TicketExtensions
+    {
+        // shorthand of WhenAll
+
+        public static Ticket.Awaiter GetAwaiter(this Ticket[] tasks)
+        {
+            return Ticket.WhenAll(tasks).GetAwaiter();
+        }
+
+        public static Ticket.Awaiter GetAwaiter(this IEnumerable<Ticket> tasks)
+        {
+            return Ticket.WhenAll(tasks).GetAwaiter();
+        }
+
+        public static Ticket<T[]>.Awaiter GetAwaiter<T>(this Ticket<T>[] tasks)
+        {
+            return Ticket.WhenAll(tasks).GetAwaiter();
+        }
+
+        public static Ticket<T[]>.Awaiter GetAwaiter<T>(this IEnumerable<Ticket<T>> tasks)
+        {
+            return Ticket.WhenAll(tasks).GetAwaiter();
+        }
+
+<# for(var i = 2; i <= 15; i++ ) {
+    var range = Enumerable.Range(1, i);
+    var t = string.Join(", ", range.Select(x => "T" + x));
+    var args = string.Join(", ", range.Select(x => $"Ticket<T{x}> task{x}"));
+    var titems = string.Join(", ", range.Select(x => $"tasks.Item{x}"));
+#>
+        public static Ticket<(<#= t #>)>.Awaiter GetAwaiter<<#= t #>>(this (<#= args #>) tasks)
+        {
+            return Ticket.WhenAll(<#= titems #>).GetAwaiter();
+        }
+
+<# } #>
+
+<# for(var i = 2; i <= 15; i++ ) {
+    var range = Enumerable.Range(1, i);
+    var args = string.Join(", ", range.Select(x => $"Ticket task{x}"));
+    var titems = string.Join(", ", range.Select(x => $"tasks.Item{x}"));
+#>
+
+        public static Ticket.Awaiter GetAwaiter(this (<#= args #>) tasks)
+        {
+            return Ticket.WhenAll(<#= titems #>).GetAwaiter();
+        }
+
+<# } #>
+
+    }
+}

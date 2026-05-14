@@ -3,7 +3,6 @@
     "rootNamespace": "CLabs.Adapters",
     "references": [
         "CLabs.Utility",
-        "Buttr.Core",
         "Buttr.Unity"
     ],
     "includePlatforms": [],

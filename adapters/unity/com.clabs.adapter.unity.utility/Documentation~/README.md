@@ -32,7 +32,7 @@ This adapter is consumed transitively by every other adapter. If you're writing 
 ## Dependencies
 
 - `com.clabs.utility` — core engine-agnostic types (`OwnerId`, `Color`, `Registry<,>`)
-- `com.crumpetlabs.buttr`, `com.crumpetlabs.buttr.unity`
+- `com.crumpetlabs.buttr.unity`
 - `Unity.Addressables` (editor) — for addressable asset-address resolution
 
 ## See also

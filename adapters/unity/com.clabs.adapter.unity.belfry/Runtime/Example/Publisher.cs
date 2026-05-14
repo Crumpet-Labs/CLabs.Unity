@@ -3,6 +3,12 @@ using CLabs.Belfry;
 using UnityEngine;
 
 namespace CLabs.Adapters {
+    public static class k {
+        public static class BellTowers {
+            public const int Publisher = 1;
+        }
+    }
+    
     public readonly struct ExampleMessage {
         public string Message { get; }
         public ExampleMessage(string message) => Message = message;
@@ -12,7 +18,8 @@ namespace CLabs.Adapters {
         private BellRope m_Rope;
 
         private void Awake() {
-            m_Rope = Application<IBellTower>.Get().Rope(GetType());
+            m_Rope = Application<IBellTower>.Get()
+                .Rope(k.BellTowers.Publisher);
         }
 
         [ContextMenu("Send Message")]

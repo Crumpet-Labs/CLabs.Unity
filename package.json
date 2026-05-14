@@ -2,9 +2,7 @@
   "name": "com.clabs.unity",
   "version": "0.1.0",
   "displayName": "CLabs.Unity",
-  "description": "Every public CLabs Unity adapter, installable as a single Unity package. To install just one adapter instead, use a ?path= URL -- see the README.",
+  "description": "Every public CLabs package, bridge and Unity adapter, in one install.",
   "unity": "6000.0",
-  "author": {
-    "name": "Crumpet Labs"
-  }
+  "author": { "name": "Crumpet Labs" }
 }

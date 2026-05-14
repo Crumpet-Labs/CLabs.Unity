@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 namespace CLabs.Utility.Editor {
-    [CustomPropertyDrawer(typeof(Vector2Property))] // Repeat for other types
+    [CustomPropertyDrawer(typeof(Vector2Property))]
     public class PropertyDrawer_Vector2 : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

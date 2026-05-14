@@ -1,0 +1,17 @@
+{
+    "name": "CLabs.Belfry",
+    "rootNamespace": "CLabs.Belfry",
+    "references": [
+        "Buttr.Core",
+        "CLabs.Tickets"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

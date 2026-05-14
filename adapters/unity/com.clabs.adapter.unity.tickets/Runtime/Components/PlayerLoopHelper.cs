@@ -487,6 +487,7 @@ namespace CLabs.Tickets
 
 #if UNITY_2019_3_OR_NEWER
 
+        /// <summary>Dumps the current Unity PlayerLoop subsystem tree to the console via Debug.Log. Intentional debug utility — logs to console by design.</summary>
         public static void DumpCurrentPlayerLoop()
         {
             var playerLoop = UnityEngine.LowLevel.PlayerLoop.GetCurrentPlayerLoop();

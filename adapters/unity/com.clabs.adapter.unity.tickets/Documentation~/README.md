@@ -23,7 +23,7 @@ The adapter registers static function pointers with core's `TicketRuntime` at `[
 ## Setup
 
 1. Add package dependency: `com.clabs.adapter.unity.tickets` (pulls in `com.clabs.tickets` automatically)
-2. Register in Buttr: `builder.UseUnityTicketsPackage()` (optional — the adapter also self-registers via `[RuntimeInitializeOnLoadMethod]`, so `await Ticket.Delay(...)` works even before `ApplicationBuilder.Build()` runs)
+2. Register in Buttr: `builder.UseTicketUnityPackage()` (optional — the adapter also self-registers via `[RuntimeInitializeOnLoadMethod]`, so `await Ticket.Delay(...)` works even before `ApplicationBuilder.Build()` runs)
 3. Use `Ticket` / `Ticket<T>` anywhere you'd have used `UniTask` / `UniTask<T>`
 
 No Unity-side configuration is required — the PlayerLoop injection happens automatically when the adapter assembly loads.
@@ -36,4 +36,4 @@ No Unity-side configuration is required — the PlayerLoop injection happens aut
 
 ## Attribution
 
-Forked from [Cysharp UniTask](https://github.com/Cysharp/UniTask) 2.5.10 (MIT). Cysharp's original copyright is preserved in [`../../packages/com.clabs.tickets/LICENSE.md`](../../../../packages/com.clabs.tickets/LICENSE.md).
+Forked from [Cysharp UniTask](https://github.com/Cysharp/UniTask) 2.5.10 (MIT). Cysharp's original copyright is preserved in the `LICENSE` file at the root of each published repository.

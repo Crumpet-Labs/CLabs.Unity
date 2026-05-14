@@ -25,8 +25,6 @@ namespace CLabs.Utility.Unity.Editor {
 
                 field.RegisterValueChangedCallback((ev) => {
                     objects[list.itemsSource.Count-1] = (T)ev.newValue;
-                    Debug.Log((T)ev.previousValue);
-                    Debug.Log((T)ev.newValue);
                 });
 
                 return field;

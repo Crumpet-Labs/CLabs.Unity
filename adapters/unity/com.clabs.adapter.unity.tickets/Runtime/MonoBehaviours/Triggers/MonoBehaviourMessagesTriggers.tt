@@ -1,4 +1,4 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
@@ -25,7 +25,7 @@
         ("Update", "Update", "AsyncUnit", null, empty),
         ("FixedUpdate", "FixedUpdate", "AsyncUnit", null, empty),
         ("LateUpdate", "LateUpdate", "AsyncUnit", null, empty),
-        
+
         ("ParticleCollision", "OnParticleCollision", "GameObject", null, new []{ ("GameObject", "other") }),
         ("RectTransformDimensionsChange", "OnRectTransformDimensionsChange", "AsyncUnit", null, empty),
         ("RectTransformRemoved", "OnRectTransformRemoved", "AsyncUnit", null, empty),
@@ -40,7 +40,7 @@
         ("TriggerStay", "OnTriggerStay", "Collider", null, new []{ ("Collider", "other") }),
         ("BecameInvisible", "OnBecameInvisible", "AsyncUnit", null, empty),
         ("BecameVisible", "OnBecameVisible", "AsyncUnit", null, empty),
-        
+
         // Mouse... #if !(UNITY_IPHONE || UNITY_ANDROID || UNITY_METRO)
         ("MouseDown", "OnMouseDown", "AsyncUnit", null, empty),
         ("MouseDrag", "OnMouseDrag", "AsyncUnit", null, empty),
@@ -100,16 +100,16 @@
     triggers = triggers.OrderBy(x => x.handlerInterface != null).ThenBy(x => x.handlerInterface != null ? x.handlerInterface : x.methodName).ToArray();
 
     Func<string, string> ToInterfaceName = x => $"IAsync{x}Handler";
-    Func<string, string> ToUniTaskName = x => x == "AsyncUnit" ? "UniTask" : $"UniTask<{x}>";
-    Func<string, string> ToCastUniTasSourceType = x => x == "AsyncUnit" ? "IUniTaskSource" : $"IUniTaskSource<{x}>";
-    Func<string, string> OnInvokeSuffix = x => x == "AsyncUnit" ? ".AsUniTask()" : $"";
+    Func<string, string> ToTicketName = x => x == "AsyncUnit" ? "Ticket" : $"Ticket<{x}>";
+    Func<string, string> ToCastTicketSourceType = x => x == "AsyncUnit" ? "ITicketSource" : $"ITicketSource<{x}>";
+    Func<string, string> OnInvokeSuffix = x => x == "AsyncUnit" ? ".AsTicket()" : $"";
     Func<(string argType, string argName)[], string> BuildMethodArgument = x => string.Join(", ", x.Select(y => y.argType + " " + y.argName));
     Func<(string argType, string argName)[], string> BuildResultParameter = x => x.Length == 0 ? "AsyncUnit.Default" : "(" + string.Join(", ", x.Select(y => y.argName)) + ")";
 
     Func<string, bool> IsParticleSystem = x => x == "ParticleUpdateJobScheduled";
     Func<string, bool> IsMouseTrigger = x => x.StartsWith("Mouse");
     Func<string, string> RequirePhysicsModule = x => (x.StartsWith("Collision") || x.StartsWith("Collider") || x.StartsWith("ControllerCollider") || x.StartsWith("Joint") || x.StartsWith("Trigger"))
-        ? (x.Contains("2D") ? "UNITASK_PHYSICS2D_SUPPORT" : "UNITASK_PHYSICS_SUPPORT") 
+        ? (x.Contains("2D") ? "UNITASK_PHYSICS2D_SUPPORT" : "UNITASK_PHYSICS_SUPPORT")
         : null;
     Func<string, bool> IsUguiSystem = x => x != null;
 #>
@@ -121,7 +121,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 #endif
 
-namespace Cysharp.Threading.Tasks.Triggers
+namespace CLabs.Tickets.Unity.Triggers
 {
 <# foreach(var t in triggers) { #>
 #region <#= t.triggerName #>
@@ -140,15 +140,15 @@ namespace Cysharp.Threading.Tasks.Triggers
 
     public interface <#= ToInterfaceName(t.methodName) #>
     {
-        <#= ToUniTaskName(t.returnType) #> <#= t.methodName #>Async();
+        <#= ToTicketName(t.returnType) #> <#= t.methodName #>Async();
     }
 
     public partial class AsyncTriggerHandler<T> : <#= ToInterfaceName(t.methodName) #>
     {
-        <#= ToUniTaskName(t.returnType) #> <#= ToInterfaceName(t.methodName) #>.<#= t.methodName #>Async()
+        <#= ToTicketName(t.returnType) #> <#= ToInterfaceName(t.methodName) #>.<#= t.methodName #>Async()
         {
             core.Reset();
-            return new <#= ToUniTaskName(t.returnType) #>((<#= ToCastUniTasSourceType(t.returnType) #>)(object)this, core.Version);
+            return new <#= ToTicketName(t.returnType) #>((<#= ToCastTicketSourceType(t.returnType) #>)(object)this, core.Version);
         }
     }
 
@@ -158,7 +158,7 @@ namespace Cysharp.Threading.Tasks.Triggers
         {
             return GetOrAddComponent<Async<#= t.triggerName #>Trigger>(gameObject);
         }
-        
+
         public static Async<#= t.triggerName #>Trigger GetAsync<#= t.triggerName #>Trigger(this Component component)
         {
             return component.gameObject.GetAsync<#= t.triggerName #>Trigger();
@@ -183,12 +183,12 @@ namespace Cysharp.Threading.Tasks.Triggers
             return new AsyncTriggerHandler<<#= t.returnType #>>(this, cancellationToken, false);
         }
 
-        public <#= ToUniTaskName(t.returnType) #> <#= t.methodName #>Async()
+        public <#= ToTicketName(t.returnType) #> <#= t.methodName #>Async()
         {
             return ((<#= ToInterfaceName(t.methodName) #>)new AsyncTriggerHandler<<#= t.returnType #>>(this, true)).<#= t.methodName #>Async();
         }
 
-        public <#= ToUniTaskName(t.returnType) #> <#= t.methodName #>Async(CancellationToken cancellationToken)
+        public <#= ToTicketName(t.returnType) #> <#= t.methodName #>Async(CancellationToken cancellationToken)
         {
             return ((<#= ToInterfaceName(t.methodName) #>)new AsyncTriggerHandler<<#= t.returnType #>>(this, cancellationToken, true)).<#= t.methodName #>Async();
         }

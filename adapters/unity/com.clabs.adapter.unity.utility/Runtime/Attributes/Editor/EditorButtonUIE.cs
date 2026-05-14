@@ -17,7 +17,7 @@ namespace CLabs.Utility.Editor
                 property.serializedObject.targetObject.GetType().GetMethod("Invoke")?.Invoke(property.serializedObject.targetObject, null);
             })
             {
-                text = (string)property.serializedObject.targetObject.GetType().GetProperty("Text")?.GetValue(property.serializedObject.targetObject)
+                text = (string)property.serializedObject.targetObject.GetType().GetProperty("Name")?.GetValue(property.serializedObject.targetObject)
             });
             
             return container;

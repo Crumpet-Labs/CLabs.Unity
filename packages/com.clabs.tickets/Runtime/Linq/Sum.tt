@@ -1,0 +1,167 @@
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+    var types = new[]
+    {
+        typeof(int),
+        typeof(long),
+        typeof(float),
+        typeof(double),
+        typeof(decimal),
+
+        typeof(int?),
+        typeof(long?),
+        typeof(float?),
+        typeof(double?),
+        typeof(decimal?),
+    };
+
+    Func<Type, bool> IsNullable = x => x.IsGenericType;
+    Func<Type, string> TypeName = x => IsNullable(x) ? x.GetGenericArguments()[0].Name + "?" : x.Name;
+    Func<Type, string> WithSuffix = x => IsNullable(x) ? ".GetValueOrDefault()" : "";
+#>
+using System;
+using System.Threading;
+using CLabs.Tickets.Internal;
+
+namespace CLabs.Tickets.Linq
+{
+    public static partial class TicketAsyncEnumerable
+    {
+<# foreach(var t in types) { #>
+        public static Ticket<<#= TypeName(t) #>> SumAsync(this ITicketAsyncEnumerable<<#= TypeName(t) #>> source, CancellationToken cancellationToken = default)
+        {
+            Error.ThrowArgumentNullException(source, nameof(source));
+
+            return Sum.SumAsync(source, cancellationToken);
+        }
+
+        public static Ticket<<#= TypeName(t) #>> SumAsync<TSource>(this ITicketAsyncEnumerable<TSource> source, Func<TSource, <#= TypeName(t) #>> selector, CancellationToken cancellationToken = default)
+        {
+            Error.ThrowArgumentNullException(source, nameof(source));
+            Error.ThrowArgumentNullException(source, nameof(selector));
+
+            return Sum.SumAsync(source, selector, cancellationToken);
+        }
+
+        public static Ticket<<#= TypeName(t) #>> SumAwaitAsync<TSource>(this ITicketAsyncEnumerable<TSource> source, Func<TSource, Ticket<<#= TypeName(t) #>>> selector, CancellationToken cancellationToken = default)
+        {
+            Error.ThrowArgumentNullException(source, nameof(source));
+            Error.ThrowArgumentNullException(source, nameof(selector));
+
+            return Sum.SumAwaitAsync(source, selector, cancellationToken);
+        }
+
+        public static Ticket<<#= TypeName(t) #>> SumAwaitWithCancellationAsync<TSource>(this ITicketAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Ticket<<#= TypeName(t) #>>> selector, CancellationToken cancellationToken = default)
+        {
+            Error.ThrowArgumentNullException(source, nameof(source));
+            Error.ThrowArgumentNullException(source, nameof(selector));
+
+            return Sum.SumAwaitWithCancellationAsync(source, selector, cancellationToken);
+        }
+
+<# } #>
+    }
+
+    internal static class Sum
+    {
+<# foreach(var t in types) { #>
+        public static async Ticket<<#= TypeName(t) #>> SumAsync(ITicketAsyncEnumerable<<#= TypeName(t) #>> source, CancellationToken cancellationToken)
+        {
+            <#= TypeName(t) #> sum = default;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+            try
+            {
+                while (await e.MoveNextAsync())
+                {
+                    sum += e.Current<#= WithSuffix(t) #>;
+                }
+            }
+            finally
+            {
+                if (e != null)
+                {
+                    await e.DisposeAsync();
+                }
+            }
+
+            return sum;
+        }
+
+        public static async Ticket<<#= TypeName(t) #>> SumAsync<TSource>(ITicketAsyncEnumerable<TSource> source, Func<TSource, <#= TypeName(t) #>> selector, CancellationToken cancellationToken)
+        {
+            <#= TypeName(t) #> sum = default;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+            try
+            {
+                while (await e.MoveNextAsync())
+                {
+                    sum += selector(e.Current)<#= WithSuffix(t) #>;
+                }
+            }
+            finally
+            {
+                if (e != null)
+                {
+                    await e.DisposeAsync();
+                }
+            }
+
+            return sum;
+        }
+
+        public static async Ticket<<#= TypeName(t) #>> SumAwaitAsync<TSource>(ITicketAsyncEnumerable<TSource> source, Func<TSource, Ticket<<#= TypeName(t) #>>> selector, CancellationToken cancellationToken)
+        {
+            <#= TypeName(t) #> sum = default;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+            try
+            {
+                while (await e.MoveNextAsync())
+                {
+                    sum += (await selector(e.Current))<#= WithSuffix(t) #>;
+                }
+            }
+            finally
+            {
+                if (e != null)
+                {
+                    await e.DisposeAsync();
+                }
+            }
+
+            return sum;
+        }
+
+        public static async Ticket<<#= TypeName(t) #>> SumAwaitWithCancellationAsync<TSource>(ITicketAsyncEnumerable<TSource> source, Func<TSource, CancellationToken, Ticket<<#= TypeName(t) #>>> selector, CancellationToken cancellationToken)
+        {
+            <#= TypeName(t) #> sum = default;
+
+            var e = source.GetAsyncEnumerator(cancellationToken);
+            try
+            {
+                while (await e.MoveNextAsync())
+                {
+                    sum += (await selector(e.Current, cancellationToken))<#= WithSuffix(t) #>;
+                }
+            }
+            finally
+            {
+                if (e != null)
+                {
+                    await e.DisposeAsync();
+                }
+            }
+
+            return sum;
+        }
+
+<# } #>
+    }
+}
