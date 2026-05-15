@@ -32,54 +32,27 @@ Building games — across engines, across teams, with stable conventions. The li
 
 ## Installation
 
-CLabs.Unity has **two required prerequisites** — install them in this order, then add CLabs.Unity itself.
+CLabs.Unity depends on Buttr.Core and Buttr.Unity. UPM doesn't auto-resolve git-URL dependencies, so install them in order. In `Window > Package Manager` → **+** → **Install package from git URL**:
 
-### Step 1 — Buttr.Core
+1. Install Buttr.Core:
 
-The cross-engine DI framework. Add to your `Packages/manifest.json`:
+   ```
+   https://github.com/Crumpet-Labs/Buttr.Core.git?path=package
+   ```
 
-```json
-{
-  "dependencies": {
-    "com.crumpetlabs.buttr": "https://github.com/Crumpet-Labs/Buttr.Core.git#v1.3.3"
-  }
-}
-```
+2. Install Buttr.Unity:
 
-### Step 2 — Buttr.Unity
+   ```
+   https://github.com/Crumpet-Labs/Buttr.Unity.git?path=Assets/Plugins/Buttr
+   ```
 
-The Unity adapter for Buttr (`MonoBehaviour` injection, scene lifecycle, editor wiring). Add alongside Buttr.Core:
+3. Install CLabs.Unity:
 
-```json
-{
-  "dependencies": {
-    "com.crumpetlabs.buttr": "https://github.com/Crumpet-Labs/Buttr.Core.git#v1.3.3",
-    "com.crumpetlabs.buttr.unity": "https://github.com/Crumpet-Labs/Buttr.Unity.git#v1.3.3"
-  }
-}
-```
+   ```
+   https://github.com/Crumpet-Labs/CLabs.Unity.git
+   ```
 
-### Step 3 — CLabs.Unity
-
-Finally, add the CLabs umbrella:
-
-```json
-{
-  "dependencies": {
-    "com.crumpetlabs.buttr": "https://github.com/Crumpet-Labs/Buttr.Core.git#v1.3.3",
-    "com.crumpetlabs.buttr.unity": "https://github.com/Crumpet-Labs/Buttr.Unity.git#v1.3.3",
-    "com.clabs.unity": "https://github.com/Crumpet-Labs/CLabs.Unity.git#v1.1.0"
-  }
-}
-```
-
-Save the manifest, return to Unity, and let the Package Manager resolve. You should see CLabs packages appear under **In Project** once the import settles.
-
-Pin to a specific release tag (`#v1.1.0`, `#v1.2.0`, …) so the install is reproducible — see the [Releases](https://github.com/Crumpet-Labs/CLabs.Unity/releases) tab for what's available.
-
-### Single-package install (advanced)
-
-If you want only one CLabs package and not the full umbrella, every live package also ships in its own .NET-native repo (CLabs.Belfry, CLabs.Tickets, CLabs.Utility, …). Those are for plain .NET consumption though — not UPM. For Unity, the umbrella is the supported install.
+Pin versions by appending a tag (e.g. `#v1.3.3` for Buttr.Core, `#v1.3.3` for Buttr.Unity, `#v1.1.0` for CLabs.Unity). See the [Releases](https://github.com/Crumpet-Labs/CLabs.Unity/releases) tab for what's available. Requires Unity 6.0+.
 
 ## Using it
 
