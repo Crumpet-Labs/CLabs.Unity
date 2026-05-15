@@ -9,7 +9,7 @@ Cross-engine async/await task primitive. Hard fork of Cysharp UniTask 2.5.10 (MI
 ## Assemblies
 
 ### `CLabs.Tickets` — `Runtime/CLabs.Tickets.asmdef`
-References: `Buttr.Core`
+References: _(none)_
 
 ### `CLabs.Tickets.Linq` — `Runtime/Linq/CLabs.Tickets.Linq.asmdef`
 References: `CLabs.Tickets`
@@ -1183,7 +1183,7 @@ References: `CLabs.Tickets`
   - `void MoveNextCore(object state)`
   - `Ticket DisposeAsync()`
 
-### `Runtime/Linq/AsUniTaskAsyncEnumerable.cs`
+### `Runtime/Linq/AsTicketAsyncEnumerable.cs`
 - **class static partial TicketAsyncEnumerable**
   - `ITicketAsyncEnumerable<TSource> AsTicketAsyncEnumerable<TSource>(this ITicketAsyncEnumerable<TSource> source)`
 
@@ -2314,7 +2314,7 @@ References: `CLabs.Tickets`
   - `TicketVoid RunAsync(ITicketAsyncEnumerable<T> src, IObserver<T> observer, CancellationToken cancellationToken)`
   - `void Dispose()`
 
-### `Runtime/Linq/ToUniTaskAsyncEnumerable.cs`
+### `Runtime/Linq/ToTicketAsyncEnumerable.cs`
 - **class static partial TicketAsyncEnumerable**
 - **class sealed ToTicketAsyncEnumerable<T>** : ITicketAsyncEnumerable<T>
 - **class sealed ToTicketAsyncEnumerableTask<T>** : ITicketAsyncEnumerable<T>

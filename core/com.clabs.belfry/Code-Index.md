@@ -21,7 +21,7 @@ References: `Buttr.Core`, `CLabs.Tickets`
 
 ### `Runtime/Common/BellBinding.cs`
 - **struct readonly BellBinding** : IEquatable<BellBinding>
-  - `BellBinding(BellChannel channel, Delegate handler, int priority = 0)`
+  - `BellBinding(in BellChannel channel, Delegate handler, int priority = 0)`
   - `BellChannel Channel` *(property)*
   - `Delegate Handler` *(property)*
   - `int Priority` *(property)*
@@ -82,10 +82,10 @@ References: `Buttr.Core`, `CLabs.Tickets`
 
 ### `Runtime/Components/Belfry.cs`
 - **class sealed Belfry** : IBelfry
-  - `IDisposable Subscribe(BellChannel channel, Delegate handler, int priority = 0)`
+  - `IDisposable Subscribe(in BellBinding binding, int priority = 0)`
   - `IDisposable Subscribe(IReadOnlyList<BellBinding> bindings)`
-  - `void Publish<T>(BellChannel channel, in T message)`
-  - `IReadOnlyList<BellBinding> GetBindings(BellChannel channel)`
+  - `void Publish<T>(in BellChannel channel, in T message)`
+  - `IReadOnlyList<BellBinding> GetBindings(in BellChannel channel)`
   - `void Dispose()`
 
 ### `Runtime/Components/BellTower.cs`
@@ -99,10 +99,10 @@ References: `Buttr.Core`, `CLabs.Tickets`
 
 ### `Runtime/Contracts/IBelfry.cs`
 - **interface IBelfry**
-  - `IDisposable Subscribe(BellChannel channel, Delegate handler, int priority = 0)`
+  - `IDisposable Subscribe(in BellBinding binding, int priority = 0)`
   - `IDisposable Subscribe(IReadOnlyList<BellBinding> bindings)`
-  - `void Publish<T>(BellChannel channel, in T message)`
-  - `IReadOnlyList<BellBinding> GetBindings(BellChannel channel)`
+  - `void Publish<T>(in BellChannel channel, in T message)`
+  - `IReadOnlyList<BellBinding> GetBindings(in BellChannel channel)`
 
 ### `Runtime/Contracts/IBellListener.cs`
 - **interface IBellListener**
@@ -135,6 +135,6 @@ References: `Buttr.Core`, `CLabs.Tickets`
   - `bool TryDequeue(out Func<CancellationToken, Ticket> action)`
   - `void Clear()`
 
-### `Runtime/Delegates/EventMessage.cs`
+### `Runtime/Delegates/BellMessage.cs`
 - `delegate void BellMessage<T>(in T message)`
   - `delegate void BellMessage<T>(in T message)`

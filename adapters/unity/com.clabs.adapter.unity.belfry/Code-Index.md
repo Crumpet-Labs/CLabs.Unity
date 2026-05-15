@@ -21,6 +21,8 @@ References: `Buttr.Core`, `Buttr.Unity`, `CLabs.Belfry`, `CLabs.Tickets`, `CLabs
   - `Awaitable UnloadAsync()`
 
 ### `Runtime/Example/Publisher.cs`
+- **class static k**
+- **class static BellTowers**
 - **struct readonly ExampleMessage**
 - **class sealed Publisher** : MonoBehaviour
   - `string Message` *(property)*

@@ -1,38 +1,63 @@
-# CLabs Belfry
+# CLabs.Belfry
 
-A type-safe, key-scoped pub/sub messaging system for Unity 6+. Decouples publishers from subscribers through a mediator pattern with struct-based messages, disposable subscriptions, and priority-aware async ringing.
+A type-safe, key-scoped pub/sub messaging system built on the **Tower / Rope / Ring** metaphor. Decouples publishers from subscribers through a mediator with struct-based messages, disposable subscriptions, and priority-aware async ringing.
 
-## Features
+## What it provides
 
-- **Tower / Rope / Ring API** — inject `IBellTower`, grab a `BellRope` for a key, ring messages or hook listeners
-- **Key-scoped channels** — every subscription is keyed by `(scope, messageType)`, so the same struct can travel multiple ropes without collision
-- **Struct messages** — all Belfry messages are `readonly struct` passed by `in` reference for zero-allocation publishing
-- **Disposable subscriptions** — `On<T>(...)` returns `IDisposable`. Hook in `OnEnable`, dispose in `OnDisable`
-- **Async ringing via Peals** — `RingAsync` queues through an `IPeal` with priority-aware ordering
-- **Two built-in ring orders** — `FairRoundRobinRingOrder` (no starvation) and `StrictPriorityRingOrder` (highest first)
-- **Critical priority bypass** — entries flagged critical in the `IPealConfig` execute immediately, skipping the queue
-- **Custom ring orders** — implement `IRingOrder` for bespoke dequeue logic
+| Type | Purpose |
+|------|---------|
+| `IBellTower` | Top-level entry point. `Rope(key)` returns a `BellRope` for a given scope key. |
+| `BellRope` | Per-key façade exposing `Ring<T>(in T msg)`, `RingAsync<T>(in T msg, priority)`, and `On<T>(handler, priority)`. |
+| `IBelfry` | Low-level subscription store backing the tower. Most code goes through `BellRope`. |
+| `IPeal` / `Peal` / `IPealConfig` / `PealConfig` | Async queue + config for `RingAsync`. Backed by an `IRingOrder`. |
+| `IRingOrder` + `FairRoundRobinRingOrder` / `StrictPriorityRingOrder` | Pluggable dequeue strategies — fairness vs strict priority. |
+| `BellMessage<T>` | `delegate void BellMessage<T>(in T message)` — the handler signature. |
+| `UseBelfry()` | `ApplicationBuilder` extension registering `IBelfry`, `IPealFactory`, `IBellTower` as singletons. |
 
 ## Installation
 
-Add to your `Packages/manifest.json`:
+### .NET projects
 
-```json
-{
-  "dependencies": {
-    "com.clabs.belfry": "https://github.com/Crumpet-Labs/Belfry.git"
-  }
-}
+Clone the repo (or add as a submodule) and reference the project from your `.csproj`:
+
+```xml
+<ItemGroup>
+  <ProjectReference Include="path/to/CLabs.Belfry/CLabs.Belfry.csproj" />
+</ItemGroup>
+```
+
+Or, once published, via NuGet:
+
+```bash
+dotnet add package CLabs.Belfry
 ```
 
 ### Dependencies
 
-- `com.crumpetlabs.buttr` — DI / architecture container
-- `com.clabs.tickets` — async primitive used by the `Peal` machinery
+You must install these alongside Belfry **in this order**:
 
-## Quick Start
+1. **Buttr.Core** — the DI / application-builder framework. Belfry registers its services on an `ApplicationBuilder` from Buttr. → [Buttr.Core](https://github.com/Crumpet-Labs/Buttr.Core)
+2. **CLabs.Tickets** — the async/await primitive `RingAsync` returns. → [CLabs.Tickets](https://github.com/Crumpet-Labs/CLabs.Tickets)
+3. **CLabs.Belfry** itself.
+
+## Using it
+
+### Register Belfry with Buttr
+
+```csharp
+using Buttr.Core;
+using CLabs.Belfry;
+
+var builder = new ApplicationBuilder();
+
+builder.UseBelfry();   // registers IBelfry, IPealFactory, IBellTower
+
+var app = builder.Build();
+```
 
 ### Define a message
+
+Messages are plain `readonly struct`s passed by `in` reference, so there's no allocation on the hot path.
 
 ```csharp
 public readonly struct EnemyDefeated {
@@ -46,74 +71,69 @@ public readonly struct EnemyDefeated {
 }
 ```
 
-### Ring (publish)
+### Ring a bell (publish)
 
 ```csharp
 using Buttr.Injection;
 using CLabs.Belfry;
-using UnityEngine;
 
-public sealed partial class CombatSystem : MonoBehaviour {
-    [Inject] private IBellTower i_Tower;
+public sealed class CombatService {
+    [Inject] private readonly IBellTower i_Tower;
 
     public void DefeatEnemy(int entityId, int xp) {
-        var message = new EnemyDefeatedMessage(entityId, xp);
-        i_Tower.Rope(k.Towers.CombatSystem).Ring();
+        i_Tower
+            .Rope("combat")
+            .Ring(new EnemyDefeated(entityId, xp));
     }
 }
 ```
 
-### Hook (subscribe)
+### Hook a listener (subscribe)
+
+`On<T>(...)` returns an `IDisposable`. Hook on activation, dispose on teardown.
 
 ```csharp
 using System;
 using Buttr.Injection;
 using CLabs.Belfry;
-using UnityEngine;
 
-public sealed partial class XPListener : MonoBehaviour {
-    [Inject] private IBellTower i_Tower;
+public sealed class XPListener : IDisposable {
+    [Inject] private readonly IBellTower i_Tower;
     private IDisposable m_Subscription;
 
-    private void OnEnable() {
+    public void Start() {
         m_Subscription = i_Tower
-            .Rope(k.Towers.CombatSystem)
-            .On<EnemyDefeatedMessage>(OnEnemyDefeated);
+            .Rope("combat")
+            .On<EnemyDefeated>(OnEnemyDefeated);
     }
 
-    private void OnDisable() {
-        m_Subscription?.Dispose();
-    }
+    public void Dispose() => m_Subscription?.Dispose();
 
-    private void OnEnemyDefeated(in EnemyDefeatedMessage msg) {
-        Debug.Log($"Enemy {msg.EntityId} defeated — +{msg.XPReward} XP");
-    }
+    private void OnEnemyDefeated(in EnemyDefeated msg)
+        => Console.WriteLine($"Entity {msg.EntityId} defeated -- +{msg.XPReward} XP");
 }
 ```
 
-## Buttr Integration
+### Async ringing through a Peal
+
+`RingAsync` queues each invocation through an `IPeal` backed by an `IRingOrder` (fairness or strict-priority). Critical priorities bypass the queue and run inline.
 
 ```csharp
-using Buttr.Core;
 using CLabs.Belfry;
 
-namespace YourProject {
-    public sealed class Program {
-        public static ApplicationContainer Main() => Main(CMDArgs.Get());
-        
-        private static ApplicationContainer Main(Dictionary<string, string> args) {
-            var builder = new ApplicationBuilder();
-            
-            builder.UseBelfry();
-            
-            return builder.Build();
-        }
-    }
-}
+var config = new PealConfig(
+    strategy: new StrictPriorityRingOrder(),
+    criticalPriorities: new[] { 100 });
+
+await i_Tower
+    .Rope("combat", config)
+    .RingAsync(new EnemyDefeated(42, 10), priority: 50);
 ```
 
-`UseBelfry()` registers `IBelfry`, `IPealFactory`, and `IBellTower` as singletons. `IPealConfig` and `IRingOrder` are user-provided when constructing async ropes.
+## Unity users
 
-## Documentation
+If you're building a Unity project, install the [CLabs.Unity](https://github.com/Crumpet-Labs/CLabs.Unity) UPM umbrella — Belfry ships inside it together with its Unity adapter (`com.clabs.adapter.unity.belfry`). This repo is for plain .NET consumers.
 
-- [Guide](Guide.md) — full usage guide covering ringing, hooking, peals, ring orders, and the bridge pattern
+## License
+
+MIT.
