@@ -1,6 +1,6 @@
 {
   "name": "com.clabs.adapter.unity.tickets",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "displayName": "CLabs Adapter: Unity Tickets",
   "description": "Unity bindings for CLabs.Tickets: PlayerLoop integration, MonoBehaviour message triggers, AsyncOperation/Coroutine/UnityWebRequest awaiters, and optional Addressables/DOTween/TextMeshPro integrations gated by version defines.",
   "unity": "6000.0",

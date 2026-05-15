@@ -1,6 +1,6 @@
 {
   "name": "com.clabs.adapter.unity.belfry",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "displayName": "CLabs Belfry Unity Adapter",
   "description": "Unity adapter for CLabs Belfry — ScriptableObject-based ring orders and loader",
   "shortDescription": "Unity adapter for Belfry",

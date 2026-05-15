@@ -1,6 +1,6 @@
 {
   "name": "com.clabs.utility",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "displayName": "CLabs Utility",
   "description": "Shared utilities — Registry, Disposable, SerializableDictionary",
   "shortDescription": "Shared utilities",

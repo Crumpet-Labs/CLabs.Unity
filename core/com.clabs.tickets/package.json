@@ -1,6 +1,6 @@
 {
   "name": "com.clabs.tickets",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "displayName": "CLabs Tickets",
   "description": "Cross-engine async/await task primitive. Hard fork of Cysharp UniTask 2.5.10 (MIT), engine-decoupled and Buttr-integrated.",
   "shortDescription": "Async/await primitive",
