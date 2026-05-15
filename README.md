@@ -2,33 +2,9 @@
 
 A Unity UPM distribution of the **CLabs** game-development standard library — a curated, opinionated set of packages and bridges for building Unity 6+ games in C#, designed to compose cleanly with the [Buttr](https://github.com/Crumpet-Labs/Buttr.Core) dependency-injection framework.
 
-This repo is a **single Unity UPM umbrella package** that ships every public CLabs package, bridge, and Unity adapter as one installable unit. Drop it in your `Packages/manifest.json` and you have a complete CLabs runtime for your Unity project — with Unity adapters wired in for `OwnerId`, `Color`, Unity PlayerLoop integration for `Ticket`, and the rest.
+This repo is a **single Unity UPM umbrella package** that ships every public CLabs package, bridge, and Unity adapter as one installable unit. Drop it in your project from the Package Manager and you have a complete CLabs runtime.
 
-If you're building a non-Unity .NET project, use [CLabs.Core](https://github.com/Crumpet-Labs/CLabs.Core) instead — CLabs.Unity is Unity-specific.
-
-## What's inside
-
-Inside the umbrella you'll find the full live CLabs surface laid out for Unity:
-
-```
-CLabs.Unity
-+- core/         domain packages (Belfry, Tickets, Utility, ...)
-+- bridges/      cross-package wiring
-+- adapters/     Unity engine adapters (PlayerLoop, OwnerId<->Unity types, Color<->Unity Color, ...)
-+- package.json  the UPM umbrella manifest
-```
-
-Highlights of what you get:
-
-- **Belfry** — type-safe key-scoped pub/sub messaging (Tower / Rope / Ring).
-- **Tickets** — cross-engine async/await primitive, full UniTask surface with Unity PlayerLoop integration, MonoBehaviour message triggers, and `AsyncOperation` / `Coroutine` / `UnityWebRequest` awaiters.
-- **Utility** — foundation utilities: `OwnerId`, `Color`, `Registry<,>`, `Disposable`, plus the Unity adapter mapping these to engine-native equivalents (`Color` ⇄ `UnityEngine.Color`, etc.).
-
-Each package's `Documentation~/README.md` (inside the umbrella) covers package-specific usage in detail.
-
-## What CLabs is for
-
-Building games — across engines, across teams, with stable conventions. The library was extracted from years of shipping commercial Unity games; it's deliberately concrete (no abstract-framework navel-gazing), Buttr-first (DI everywhere, no static singletons), and engine-pluggable (cores are pure C#, Unity specifics live in adapters).
+If you're building a non-Unity .NET project, use [CLabs.Core](https://github.com/Crumpet-Labs/CLabs.Core) instead.
 
 ## Installation
 
@@ -52,47 +28,53 @@ CLabs.Unity depends on Buttr.Core and Buttr.Unity. UPM doesn't auto-resolve git-
    https://github.com/Crumpet-Labs/CLabs.Unity.git
    ```
 
-Pin versions by appending a tag (e.g. `#v1.3.3` for Buttr.Core, `#v1.3.3` for Buttr.Unity, `#v1.1.0` for CLabs.Unity). See the [Releases](https://github.com/Crumpet-Labs/CLabs.Unity/releases) tab for what's available. Requires Unity 6.0+.
+Pin versions by appending a tag (e.g. `#v1.3.3` for Buttr.Core, `#v1.3.3` for Buttr.Unity, `#v1.1.0` for CLabs.Unity). See the [Releases](https://github.com/Crumpet-Labs/CLabs.Unity/releases) tab. Requires Unity 6.0+.
 
-## Using it
+## Single-package install
 
-Each package registers its services on Buttr's `ApplicationBuilder`. A minimal bootstrap:
+Prefer to install one CLabs package without pulling the whole umbrella? Add the package's UPM URL directly via `Window > Package Manager` → **+** → **Install package from git URL**. Each package's Unity adapter is a separate UPM URL — install both for full functionality. Buttr.Core and Buttr.Unity from the umbrella install above are still required prerequisites.
 
-```csharp
-using Buttr.Core;
-using CLabs.Belfry;
+## Packages
 
-public sealed class Bootstrap : MonoBehaviour {
-    private void Awake() {
-        var builder = new ApplicationBuilder();
+- **Belfry**
 
-        builder.UseBelfry();    // registers IBellTower, IBelfry, IPealFactory
-        // builder.Use<...>();  // any other CLabs packages you depend on
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.belfry
+  ```
 
-        var app = builder.Build();
-    }
-}
-```
+  Unity adapter:
 
-Once built, anywhere in your code:
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.belfry
+  ```
 
-```csharp
-using Buttr.Injection;
-using CLabs.Belfry;
-using UnityEngine;
+- **Tickets**
 
-public sealed class CombatSystem : MonoBehaviour {
-    [Inject] private IBellTower i_Tower;
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.tickets
+  ```
 
-    public void DefeatEnemy(int entityId, int xp) {
-        i_Tower
-            .Rope("combat")
-            .Ring(new EnemyDefeated(entityId, xp));
-    }
-}
-```
+  Unity adapter:
 
-See each package's `Documentation~/README.md` (inside the imported package, accessible from Unity's Package Manager window) for the full API and usage walkthroughs.
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.tickets
+  ```
+
+- **Utility**
+
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.utility
+  ```
+
+  Unity adapter:
+
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.utility
+  ```
+
+## Bridges
+
+_No live bridges yet._
 
 ## Versioning
 
