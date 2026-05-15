@@ -9,10 +9,13 @@ Unity-specific bindings for CLabs.Utility types, including OwnerId resolution fr
 ## Assemblies
 
 ### `CLabs.Utility.Unity` — `Runtime/CLabs.Utility.Unity.asmdef`
-References: `CLabs.Utility`, `Buttr.Core`, `Buttr.Unity`
+References: `CLabs.Utility`, `Buttr.Unity`
+
+### `CLabs.Utility.Unity.Addressables` (Editor) — `Editor/External/Addressables/CLabs.Utility.Unity.Addressables.asmdef`
+References: `Unity.Addressables.Editor`, `Unity.Addressables`
 
 ### `CLabs.Utility.Unity.Editor` (Editor) — `Editor/CLabs.Utility.Unity.Editor.asmdef`
-References: `CLabs.Utility`, `CLabs.Utility.Unity`, `Unity.Addressables.Editor`, `Unity.Addressables`
+References: `CLabs.Utility`, `CLabs.Utility.Unity`
 
 ## API Surface
 
@@ -128,20 +131,19 @@ References: `CLabs.Utility`, `CLabs.Utility.Unity`, `Unity.Addressables.Editor`,
   - `bool ContainsKey(TKey key)`
   - `void Clear()`
 
-### `Runtime/Serializer.cs`
-- *(no public API surface)*
-
 ### `Runtime/TransformUtils.cs`
 - **class static TransformUtils**
   - `Transform ForceGameObject(string name, bool dontDestroyOnLoad = false)`
   - `T ForceComponent<T>(this Transform transform)`
   - `bool TryDestroyComponent<T>(this Transform transform)`
 
-### Assembly `CLabs.Utility.Unity.Editor`
+### Assembly `CLabs.Utility.Unity.Addressables`
 
-### `Editor/AssetUtilities.cs`
+### `Editor/External/Addressables/AssetUtilities.cs`
 - **class static AddressableUtilities**
   - `string GetAssetAddress(this UnityEngine.Object @object)`
+
+### Assembly `CLabs.Utility.Unity.Editor`
 
 ### `Editor/Drawers/RequireInterfaceDrawer.cs`
 - **class sealed RequireInterfaceDrawer** : PropertyDrawer
@@ -153,7 +155,7 @@ References: `CLabs.Utility`, `CLabs.Utility.Unity`, `Unity.Addressables.Editor`,
   - `ScriptableObjectList(ListView list, int height)`
   - `ScriptableObjectList<T> ToObjectList<T>(this ListView view, int height)`
 
-### `Editor/SerializableDcitionaryDrawer.cs`
+### `Editor/SerializableDictionaryDrawer.cs`
 - **class SerializableDictionaryDrawer** : PropertyDrawer
   - `VisualElement CreatePropertyGUI(SerializedProperty property)`
   - `void RefreshList()`

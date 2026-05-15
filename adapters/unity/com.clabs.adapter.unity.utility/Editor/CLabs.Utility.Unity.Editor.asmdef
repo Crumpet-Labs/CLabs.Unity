@@ -3,9 +3,7 @@
     "rootNamespace": "CLabs.Utility.Unity.Editor",
     "references": [
         "CLabs.Utility",
-        "CLabs.Utility.Unity",
-        "Unity.Addressables.Editor",
-        "Unity.Addressables"
+        "CLabs.Utility.Unity"
     ],
     "includePlatforms": [
         "Editor"

@@ -1,3 +1,4 @@
+#if CLABS_ADDRESSABLES
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 
@@ -12,3 +13,4 @@ namespace CLabs.Utility.Unity.Editor {
         }
     }
 }
+#endif

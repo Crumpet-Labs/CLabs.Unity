@@ -22,7 +22,7 @@ Unity bindings for [`com.clabs.utility`](../../../../packages/com.clabs.utility)
 **Editor (in `CLabs.Utility.Unity.Editor`):**
 - `RequireInterfaceDrawer` — drawer that constrains an SO field to implementers of an interface.
 - `ScriptableObjectList<T>` — utility for building `ListView`s of SOs in editor windows.
-- `AddressableUtilities.GetAssetAddress(...)` — resolve a Unity object's Addressables address.
+- `AddressableUtilities.GetAssetAddress(...)` — resolve a Unity object's Addressables address (requires `com.unity.addressables` in the consumer project; version-gated, not bundled).
 - `SerializableDictionaryDrawer`, `UIToolkitUtils`.
 
 ## Setup
@@ -33,7 +33,7 @@ This adapter is consumed transitively by every other adapter. If you're writing 
 
 - `com.clabs.utility` — core engine-agnostic types (`OwnerId`, `Color`, `Registry<,>`)
 - `com.crumpetlabs.buttr.unity`
-- `Unity.Addressables` (editor) — for addressable asset-address resolution
+- `com.unity.addressables` (optional, consumer-provided) — enables `AddressableUtilities.GetAssetAddress`
 
 ## See also
 

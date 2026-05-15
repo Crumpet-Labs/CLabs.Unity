@@ -4,5 +4,8 @@
   "displayName": "CLabs.Unity",
   "description": "Every public CLabs package, bridge and Unity adapter, in one install.",
   "unity": "6000.0",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.2"
+  },
   "author": { "name": "Crumpet Labs" }
 }
