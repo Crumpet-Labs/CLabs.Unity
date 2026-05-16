@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace CLabs.Belfry {
-    public readonly struct BellChannel : IEquatable<BellChannel> {
+    internal readonly struct BellChannel : IEquatable<BellChannel> {
         private readonly object m_Scope;
         private readonly Type m_MessageType;
 

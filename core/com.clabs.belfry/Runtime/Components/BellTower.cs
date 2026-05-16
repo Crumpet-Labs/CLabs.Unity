@@ -1,5 +1,5 @@
 namespace CLabs.Belfry {
-    public sealed class BellTower : IBellTower {
+    internal sealed class BellTower : IBellTower {
         private readonly IBelfry m_Belfry;
         private readonly IPealFactory m_PealFactory;
 

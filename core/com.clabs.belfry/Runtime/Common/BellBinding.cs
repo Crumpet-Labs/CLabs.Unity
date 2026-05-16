@@ -1,26 +1,20 @@
 using System;
 
 namespace CLabs.Belfry {
-    /// <summary>
-    /// A stored listener binding: channel + handler + priority + sequence.
-    /// Sequence is assigned by the Belfry on Subscribe and used as a FIFO tie-breaker
-    /// when two bindings on the same channel share a priority. Externally-constructed
-    /// bindings have Sequence = 0 until the Belfry stamps them.
-    /// </summary>
-    public readonly struct BellBinding : IEquatable<BellBinding> {
+    internal readonly struct BellBinding : IEquatable<BellBinding> {
         public BellChannel Channel { get; }
         public Delegate Handler { get; }
         public int Priority { get; }
         public int Sequence { get; }
 
-        public BellBinding(in BellChannel channel, Delegate handler, int priority = 0) {
+        public BellBinding(BellChannel channel, Delegate handler, int priority = 0) {
             Channel = channel;
             Handler = handler;
             Priority = priority;
             Sequence = 0;
         }
 
-        internal BellBinding(in BellChannel channel, Delegate handler, int priority, int sequence) {
+        internal BellBinding(BellChannel channel, Delegate handler, int priority, int sequence) {
             Channel = channel;
             Handler = handler;
             Priority = priority;

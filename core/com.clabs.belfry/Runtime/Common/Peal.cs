@@ -26,17 +26,21 @@ namespace CLabs.Belfry {
 
         private async TicketVoid ProcessQueueAsync(CancellationToken ct) {
             m_IsProcessing = true;
-
-            while (m_Config.Strategy.Count > 0 && false == ct.IsCancellationRequested) {
-                if (m_Config.Strategy.TryDequeue(out var action)) {
+            try {
+                while (m_Config.Strategy.Count > 0 && false == ct.IsCancellationRequested) {
+                    if (false == m_Config.Strategy.TryDequeue(out var action)) continue;
                     try {
                         await action(ct);
                         await Ticket.Yield(PlayerLoopTiming.LastPostLateUpdate, ct);
-                    } catch (OperationCanceledException) { /* todo: I should probably log something here */ }
+                    } catch (OperationCanceledException) {
+                        return;
+                    } catch {
+                        // Caller already observed the exception via the action's TCS; keep draining.
+                    }
                 }
+            } finally {
+                m_IsProcessing = false;
             }
-
-            m_IsProcessing = false;
         }
 
         public int Count => m_Config.Strategy.Count;
@@ -47,38 +51,4 @@ namespace CLabs.Belfry {
             m_Config.Strategy.Clear();
         }
     }
-
-    // EXAMPLE
-    // public class ValidationMediator
-    // {
-    //     private readonly IEventBuffer m_EventBuffer;
-    //     private readonly IValidationService m_ValidationService;
-    //     private readonly IDatabaseService m_DatabaseService;
-    //
-    //     public ValidationMediator(IEventBuffer eventBuffer, IValidationService validationService, IDatabaseService databaseService)
-    //     {
-    //         m_EventBuffer = eventBuffer;
-    //         m_ValidationService = validationService;
-    //         m_DatabaseService = databaseService;
-    //     }
-    //
-    //     public void OnUserEditedNode()
-    //     {
-    //         // Mediator coordinates: validate, then save
-    //         m_EventBuffer.Enqueue(async ct =>
-    //         {
-    //             await m_ValidationService.ValidateAsync(ct);
-    //             await m_DatabaseService.SaveAsync(ct);
-    //         }, priority: 5);
-    //     }
-    //     
-    //     public void OnCriticalShutdown()
-    //     {
-    //         // Critical priority - executes immediately
-    //         m_EventBuffer.Enqueue(async ct =>
-    //         {
-    //             await m_DatabaseService.FlushAsync(ct);
-    //         }, priority: 100);
-    //     }
-    // }
 }

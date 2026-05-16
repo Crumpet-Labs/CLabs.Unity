@@ -1,48 +1,81 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using CLabs.Tickets;
 
 namespace CLabs.Belfry {
-    public sealed class Belfry : IBelfry {
-        private readonly Dictionary<BellChannel, List<BellBinding>> m_Listeners = new();
+    internal sealed class Belfry : IBelfry {
+        private readonly Dictionary<BellChannel, List<BellBinding>> m_BellListeners = new();
+        private readonly Dictionary<BellChannel, List<BellBinding>> m_TollListeners = new();
         private int m_NextSequence;
 
-        public IDisposable Subscribe(in BellBinding binding, int priority = 0) {
-            InsertSorted(binding);
-            return new BellSubscription(this, new[] { binding });
+        public IDisposable SubscribeBell(BellChannel channel, Delegate handler, int priority = 0) {
+            var binding = new BellBinding(channel, handler, priority, m_NextSequence++);
+            InsertSorted(m_BellListeners, binding);
+            return new LaneSubscription(m_BellListeners, new[] { binding });
         }
 
-        public IDisposable Subscribe(IReadOnlyList<BellBinding> bindings) {
+        public IDisposable SubscribeBell(IReadOnlyList<BellBinding> bindings) {
             var sequenced = new BellBinding[bindings.Count];
             for (var i = 0; i < bindings.Count; i++) {
                 sequenced[i] = bindings[i].WithSequence(m_NextSequence++);
-                InsertSorted(sequenced[i]);
+                InsertSorted(m_BellListeners, sequenced[i]);
             }
-            return new BellSubscription(this, sequenced);
+            return new LaneSubscription(m_BellListeners, sequenced);
         }
 
-        public void Publish<T>(in BellChannel channel, in T message) where T : struct {
-            if (m_Listeners.TryGetValue(channel, out var list)) {
-                // Snapshot to tolerate (un)subscribe-during-dispatch re-entrancy.
-                var snapshot = list.ToArray();
-                foreach (var binding in snapshot) {
-                    if (binding.Handler is BellMessage<T> bell) bell.Invoke(in message);
-                }
+        public void PublishBell<T>(BellChannel channel, in T message) where T : struct {
+            if (false == m_BellListeners.TryGetValue(channel, out var list)) return;
+
+            var snapshot = list.ToArray();
+            for (var i = 0; i < snapshot.Length; i++) {
+                if (snapshot[i].Handler is BellMessage<T> bell) bell.Invoke(in message);
             }
         }
 
-        public IReadOnlyList<BellBinding> GetBindings(in BellChannel channel) {
-            if (m_Listeners.TryGetValue(channel, out var list))
+        public IReadOnlyList<BellBinding> GetBellBindings(BellChannel channel) {
+            if (m_BellListeners.TryGetValue(channel, out var list))
                 return list.ToArray();
             return Array.Empty<BellBinding>();
         }
 
-        private void InsertSorted(BellBinding binding) {
-            if (false == m_Listeners.TryGetValue(binding.Channel, out var list)) {
+        public IDisposable SubscribeToll(BellChannel channel, Delegate handler, int priority = 0) {
+            var binding = new BellBinding(channel, handler, priority, m_NextSequence++);
+            InsertSorted(m_TollListeners, binding);
+            return new LaneSubscription(m_TollListeners, new[] { binding });
+        }
+
+        public IDisposable SubscribeToll(IReadOnlyList<BellBinding> bindings) {
+            var sequenced = new BellBinding[bindings.Count];
+            for (var i = 0; i < bindings.Count; i++) {
+                sequenced[i] = bindings[i].WithSequence(m_NextSequence++);
+                InsertSorted(m_TollListeners, sequenced[i]);
+            }
+            return new LaneSubscription(m_TollListeners, sequenced);
+        }
+
+        public async Ticket PublishToll<T>(BellChannel channel, T message, CancellationToken ct) where T : struct {
+            if (false == m_TollListeners.TryGetValue(channel, out var list)) return;
+
+            var snapshot = list.ToArray();
+            for (var i = 0; i < snapshot.Length; i++) {
+                ct.ThrowIfCancellationRequested();
+                if (snapshot[i].Handler is TollMessage<T> toll) await toll.Invoke(message);
+            }
+        }
+
+        public IReadOnlyList<BellBinding> GetTollBindings(BellChannel channel) {
+            if (m_TollListeners.TryGetValue(channel, out var list))
+                return list.ToArray();
+            return Array.Empty<BellBinding>();
+        }
+
+        private static void InsertSorted(Dictionary<BellChannel, List<BellBinding>> lane, BellBinding binding) {
+            if (false == lane.TryGetValue(binding.Channel, out var list)) {
                 list = new List<BellBinding>();
-                m_Listeners[binding.Channel] = list;
+                lane[binding.Channel] = list;
             }
 
-            // Binary search for insertion point: priority desc, sequence asc within ties (FIFO).
             var lo = 0;
             var hi = list.Count;
             while (lo < hi) {
@@ -58,18 +91,18 @@ namespace CLabs.Belfry {
             return p != 0 ? p : a.Sequence.CompareTo(b.Sequence);
         }
 
-        private sealed class BellSubscription : IDisposable {
-            private readonly Belfry m_Belfry;
+        private sealed class LaneSubscription : IDisposable {
+            private readonly Dictionary<BellChannel, List<BellBinding>> m_Lane;
             private readonly BellBinding[] m_Bindings;
 
-            public BellSubscription(Belfry belfry, BellBinding[] bindings) {
-                m_Belfry = belfry;
+            public LaneSubscription(Dictionary<BellChannel, List<BellBinding>> lane, BellBinding[] bindings) {
+                m_Lane = lane;
                 m_Bindings = bindings;
             }
 
             public void Dispose() {
                 foreach (var binding in m_Bindings) {
-                    if (m_Belfry.m_Listeners.TryGetValue(binding.Channel, out var list))
+                    if (m_Lane.TryGetValue(binding.Channel, out var list))
                         list.Remove(binding);
                 }
             }
