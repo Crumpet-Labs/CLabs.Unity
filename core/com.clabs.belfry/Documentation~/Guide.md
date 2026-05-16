@@ -1,6 +1,6 @@
 # CLabs Belfry — Guide
 
-> Historic note: renamed from `com.clabs.eda` (Event-Driven Architecture) in the kitchen-theme sweep. The public API moved from `IEventFactory.CreatePublisher/CreateSubscriber` to the Tower/Rope/Ring shape: `IBellTower.Rope(key).Ring(msg)` to publish, `IBellTower.Rope(key).On<T>(handler)` to subscribe. Internal types were also renamed: `EventService → Belfry`, `EventBuffer → Peal`, `IEventQueueStrategy → IRingOrder`, `FairRoundRobinStrategy → FairRoundRobinRingOrder`, `StrictPriorityStrategy → StrictPriorityRingOrder`.
+> Historic note: renamed from `com.clabs.eda` (Event-Driven Architecture) in the kitchen-theme sweep. The public API moved from `IEventFactory.CreatePublisher/CreateSubscriber` to the Tower/Rope/Ring shape: `IBellTower.Rope(key).RingBell(msg)` to publish, `IBellTower.Rope(key).OnBell<T>(handler)` to subscribe. Internal types were also renamed: `EventService → Belfry`, `EventBuffer → Peal`, `IEventQueueStrategy → IRingOrder`, `FairRoundRobinStrategy → FairRoundRobinRingOrder`, `StrictPriorityStrategy → StrictPriorityRingOrder`.
 
 ## Overview
 
@@ -13,13 +13,14 @@ Packages don't depend on Belfry directly. Each package uses local `Action<>` eve
 ```
 IBellTower (singleton)
 └── Rope(key, pealConfig?) → BellRope (readonly struct)
-    ├── Ring<T>(in T message)
-    │   └── Belfry.Publish(new BellChannel(key, typeof(T)), in message)
+    ├── RingBell<T>(in T message)        (sync)
+    │   └── Belfry.PublishBell(new BellChannel(key, typeof(T)), in message)
     │       └── Dictionary<BellChannel, List<Delegate>>
     │           └── foreach listener → BellMessage<T>(in message)
-    ├── RingAsync<T>(in T message, priority) → Ticket
+    ├── RingToll<T>(in T message, priority) → Ticket   (async)
     │   └── Peal.Enqueue → IRingOrder dispatch
-    └── On<T>(BellMessage<T> handler) → IDisposable
+    ├── OnBell<T>(BellMessage<T> handler) → IDisposable (sync subscribe)
+    └── OnToll<T>(TollMessage<T> handler) → IDisposable (async subscribe)
 
 IPealFactory (singleton)
 └── CreatePeal(IPealConfig) → IPeal
@@ -56,7 +57,7 @@ public delegate void BellMessage<T>(in T message) where T : struct;
 
 ## Ringing (publishing)
 
-Inject `IBellTower` from Buttr, grab a `BellRope` for your channel key, and call `Ring`:
+Inject `IBellTower` from Buttr, grab a `BellRope` for your channel key, and call `RingBell`:
 
 ```csharp
 public sealed partial class GameManager : MonoBehaviour {
@@ -64,7 +65,7 @@ public sealed partial class GameManager : MonoBehaviour {
 
     public void EndRound() {
         var message = new RoundEnded(roundNumber: 3, winner: "Blue");
-        i_Tower.Rope(k.Towers.GameManager).Ring(in message);
+        i_Tower.Rope(k.Towers.GameManager).RingBell(in message);
     }
 }
 ```
@@ -87,19 +88,19 @@ The rope combines the key with `typeof(T)` to form a `BellChannel(scope, message
 
 ### Async ringing
 
-`RingAsync` enqueues the message through a peal so listeners are invoked off the calling frame, returning a `Ticket` that completes after delivery:
+`RingToll` enqueues the message through a peal so listeners are invoked off the calling frame, returning a `Ticket` that completes after delivery:
 
 ```csharp
 
 var message = new StateFlushedMessage(slotId: "slot1");
-await i_Tower.Rope(k.Towers.SaveSystem).RingAsync(in message, priority: 10);
+await i_Tower.Rope(k.Towers.SaveSystem).RingToll(in message, priority: 10);
 ```
 
 Async ringing requires the rope to have been built with a `IPealConfig` (see *Peals* below).
 
 ## Hooking (subscribing)
 
-Call `Rope(key).On<T>(handler)` and hold the returned `IDisposable`:
+Call `Rope(key).OnBell<T>(handler)` and hold the returned `IDisposable`:
 
 ```csharp
 public sealed partial class ScoreTracker : MonoBehaviour {
@@ -111,8 +112,8 @@ public sealed partial class ScoreTracker : MonoBehaviour {
     private void OnEnable() {
         var rope = i_Tower.Rope(k.Towers.GameManager);
         
-        m_RoundEnded = rope.On<RoundEndedMessage>(OnRoundEnded);
-        m_PlayerDied = rope.On<PlayerDiedMessage>(OnPlayerDied);
+        m_RoundEnded = rope.OnBell<RoundEndedMessage>(OnRoundEnded);
+        m_PlayerDied = rope.OnBell<PlayerDiedMessage>(OnPlayerDied);
     }
 
     private void OnDisable() {
@@ -132,7 +133,7 @@ public sealed partial class ScoreTracker : MonoBehaviour {
 
 ### Subscription lifecycle
 
-`On` returns an `IDisposable`. Disposing it removes the listener. The standard pattern:
+`OnBell` returns an `IDisposable`. Disposing it removes the listener. The standard pattern:
 
 - `OnEnable` — hook
 - `OnDisable` — dispose
@@ -141,10 +142,10 @@ This keeps subscriptions tied to Unity's enable/disable lifecycle and avoids dan
 
 ### Multiple listeners in one hook
 
-`On(params IBellListener[])` registers many at once; dispose the returned `IDisposable` to tear them all down. Wrap typed handlers in `BellListener<T>`:
+`OnBell(params IBellListener[])` registers many at once; dispose the returned `IDisposable` to tear them all down. Wrap typed handlers in `BellListener<T>`:
 
 ```csharp
-m_Subscription = rope.On(
+m_Subscription = rope.OnBell(
     new BellListener<RoundEndedMessage>(OnRoundEnded),
     new BellListener<PlayerDiedMessage>(OnPlayerDied)
 );
@@ -155,7 +156,7 @@ m_Subscription = rope.On(
 The routing pair is `BellChannel(object scope, Type messageType)`:
 
 - **scope** — the publisher identity, typically a `Type` like `k.Towers.CombatSystem`
-- **messageType** — the message struct type, derived from the generic parameter on `Ring<T>` / `On<T>`
+- **messageType** — the message struct type, derived from the generic parameter on `RingBell<T>` / `OnBell<T>`
 
 So:
 
@@ -188,18 +189,18 @@ public sealed class SaveMediator {
 
     public void OnStateChanged() {
         var message = new SaveRequestedMessage(reason: "auto");
-        m_SaveRope.RingAsync(in message, priority: 5);
+        m_SaveRope.RingToll(in message, priority: 5);
     }
 
     public void OnCriticalShutdown() {
         // Priority 100 is in the critical set — fires immediately, skipping the queue.
         var message = new SaveRequestedMessage(reason: "shutdown");
-        m_SaveRope.RingAsync(in message, priority: 100);
+        m_SaveRope.RingToll(in message, priority: 100);
     }
 }
 ```
 
-Calling `Rope(key)` without a `PealConfig` produces a sync-only rope — `RingAsync` on that rope has no peal to enqueue through.
+Calling `Rope(key)` without a `PealConfig` produces a sync-only rope — `RingToll` on that rope has no peal to enqueue through.
 
 ### IPealConfig
 

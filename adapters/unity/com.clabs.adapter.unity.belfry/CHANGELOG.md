@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.2 — 2026-05-16
+
+### Fixes
+
+- align consumers + docs with bell/toll lane API (7e9f74c)
+
 ## v1.0.1 — 2026-05-15
 
 ### Fixes

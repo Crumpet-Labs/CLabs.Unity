@@ -23,6 +23,6 @@ namespace CLabs.Adapters {
         }
 
         [ContextMenu("Send Message")]
-        public void SendMessage() => m_Rope.Ring(new ExampleMessage("Hello from Bell"));
+        public void SendMessage() => m_Rope.RingBell(new ExampleMessage("Hello from Bell"));
     }
 }

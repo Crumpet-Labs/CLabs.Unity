@@ -7,9 +7,9 @@ A type-safe, key-scoped pub/sub messaging system built on the **Tower / Rope / R
 | Type | Purpose |
 |------|---------|
 | `IBellTower` | Top-level entry point. `Rope(key)` returns a `BellRope` for a given scope key. |
-| `BellRope` | Per-key façade exposing `Ring<T>(in T msg)`, `RingAsync<T>(in T msg, priority)`, and `On<T>(handler, priority)`. |
+| `BellRope` | Per-key façade exposing `RingBell<T>(in T msg)`, `RingToll<T>(in T msg, priority)`, and `OnBell<T>(handler, priority)`. |
 | `IBelfry` | Low-level subscription store backing the tower. Most code goes through `BellRope`. |
-| `IPeal` / `Peal` / `IPealConfig` / `PealConfig` | Async queue + config for `RingAsync`. Backed by an `IRingOrder`. |
+| `IPeal` / `Peal` / `IPealConfig` / `PealConfig` | Async queue + config for `RingToll`. Backed by an `IRingOrder`. |
 | `IRingOrder` + `FairRoundRobinRingOrder` / `StrictPriorityRingOrder` | Pluggable dequeue strategies — fairness vs strict priority. |
 | `BellMessage<T>` | `delegate void BellMessage<T>(in T message)` — the handler signature. |
 | `UseBelfry()` | `ApplicationBuilder` extension registering `IBelfry`, `IPealFactory`, `IBellTower` as singletons. |
@@ -37,7 +37,7 @@ dotnet add package CLabs.Belfry
 You must install these alongside Belfry **in this order**:
 
 1. **Buttr.Core** — the DI / application-builder framework. Belfry registers its services on an `ApplicationBuilder` from Buttr. → [Buttr.Core](https://github.com/Crumpet-Labs/Buttr.Core)
-2. **CLabs.Tickets** — the async/await primitive `RingAsync` returns. → [CLabs.Tickets](https://github.com/Crumpet-Labs/CLabs.Tickets)
+2. **CLabs.Tickets** — the async/await primitive `RingToll` returns. → [CLabs.Tickets](https://github.com/Crumpet-Labs/CLabs.Tickets)
 3. **CLabs.Belfry** itself.
 
 ## Using it
@@ -83,14 +83,14 @@ public sealed class CombatService {
     public void DefeatEnemy(int entityId, int xp) {
         i_Tower
             .Rope("combat")
-            .Ring(new EnemyDefeated(entityId, xp));
+            .RingBell(new EnemyDefeated(entityId, xp));
     }
 }
 ```
 
 ### Hook a listener (subscribe)
 
-`On<T>(...)` returns an `IDisposable`. Hook on activation, dispose on teardown.
+`OnBell<T>(...)` returns an `IDisposable`. Hook on activation, dispose on teardown.
 
 ```csharp
 using System;
@@ -104,7 +104,7 @@ public sealed class XPListener : IDisposable {
     public void Start() {
         m_Subscription = i_Tower
             .Rope("combat")
-            .On<EnemyDefeated>(OnEnemyDefeated);
+            .OnBell<EnemyDefeated>(OnEnemyDefeated);
     }
 
     public void Dispose() => m_Subscription?.Dispose();
@@ -116,7 +116,7 @@ public sealed class XPListener : IDisposable {
 
 ### Async ringing through a Peal
 
-`RingAsync` queues each invocation through an `IPeal` backed by an `IRingOrder` (fairness or strict-priority). Critical priorities bypass the queue and run inline.
+`RingToll` queues each invocation through an `IPeal` backed by an `IRingOrder` (fairness or strict-priority). Critical priorities bypass the queue and run inline.
 
 ```csharp
 using CLabs.Belfry;
@@ -127,7 +127,7 @@ var config = new PealConfig(
 
 await i_Tower
     .Rope("combat", config)
-    .RingAsync(new EnemyDefeated(42, 10), priority: 50);
+    .RingToll(new EnemyDefeated(42, 10), priority: 50);
 ```
 
 ## Unity users
