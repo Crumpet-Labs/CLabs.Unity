@@ -48,6 +48,42 @@ Prefer to install one CLabs package without pulling the whole umbrella? Add the 
   https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.belfry
   ```
 
+- **Crumb**
+
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.crumb
+  ```
+
+  Unity adapter:
+
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.crumb
+  ```
+
+- **Fork**
+
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.fork
+  ```
+
+  Unity adapter:
+
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.fork
+  ```
+
+- **Spoon**
+
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.spoon
+  ```
+
+  Unity adapter:
+
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.spoon
+  ```
+
 - **Tickets**
 
   ```
@@ -74,7 +110,11 @@ Prefer to install one CLabs package without pulling the whole umbrella? Add the 
 
 ## Bridges
 
-_No live bridges yet._
+- **Spoon ↔ Belfry**
+
+  ```
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=bridges/com.clabs.bridge.spoon-belfry
+  ```
 
 ## Versioning
 

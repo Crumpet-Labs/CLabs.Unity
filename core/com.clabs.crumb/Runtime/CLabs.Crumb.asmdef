@@ -1,0 +1,17 @@
+{
+    "name": "CLabs.Crumb",
+    "rootNamespace": "CLabs.Crumb",
+    "references": [
+        "Buttr.Core",
+        "CLabs.Utility"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

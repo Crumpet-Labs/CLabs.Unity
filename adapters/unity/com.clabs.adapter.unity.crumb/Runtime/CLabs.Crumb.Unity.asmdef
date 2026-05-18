@@ -1,0 +1,19 @@
+{
+    "name": "CLabs.Crumb.Unity",
+    "rootNamespace": "CLabs.Adapters",
+    "references": [
+        "Buttr.Core",
+        "CLabs.Crumb",
+        "Buttr.Unity",
+        "CLabs.Utility"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

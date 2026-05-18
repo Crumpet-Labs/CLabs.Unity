@@ -1,0 +1,97 @@
+/* ═══════════════════════════════════════
+   Logger Manager — Package-specific styles
+   Base styles provided by CrumpetLabs.uss
+   ═══════════════════════════════════════ */
+
+:root {
+    --logger-row-height: 32px;
+    --chip-size: 28px;
+    --chip-font-size: 9px;
+    --chip-border-radius: 4px;
+
+    --color-vrb: #6B7280;
+    --color-inf: #3B82F6;
+    --color-wrn: #F59E0B;
+    --color-err: #EF4444;
+    --color-ftl: #DC2626;
+
+    --color-vrb-bg: rgba(107, 114, 128, 0.15);
+    --color-inf-bg: rgba(59, 130, 246, 0.15);
+    --color-wrn-bg: rgba(245, 158, 11, 0.15);
+    --color-err-bg: rgba(239, 68, 68, 0.15);
+    --color-ftl-bg: rgba(220, 38, 38, 0.15);
+}
+
+/* ── Logger Row ── */
+
+.logger-list {
+    flex-grow: 1;
+}
+
+.logger-row {
+    flex-direction: row;
+    align-items: center;
+    height: var(--logger-row-height);
+    padding: 0 var(--clabs-spacing-md);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--clabs-border);
+}
+
+.logger-row:hover {
+    background-color: var(--unity-colors-highlight-background);
+}
+
+.logger-row__toggle {
+    margin-right: 6px;
+    width: 18px;
+}
+
+.logger-row__name {
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+    font-size: var(--clabs-font-md);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.logger-row__name--disabled {
+    opacity: 0.45;
+}
+
+.logger-row__filters {
+    flex-direction: row;
+    align-items: center;
+}
+
+/* ── Filter Chips (log-level colored) ── */
+
+.filter-chip {
+    width: var(--chip-size);
+    height: 20px;
+    margin-left: var(--clabs-spacing-xs);
+    padding: 0;
+    border-radius: var(--chip-border-radius);
+    border-width: 1px;
+    font-size: var(--chip-font-size);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    background-color: transparent;
+    cursor: link;
+}
+
+.filter-chip:hover {
+    opacity: 0.85;
+}
+
+.filter-chip--vrb { color: var(--color-vrb); border-color: var(--color-vrb); }
+.filter-chip--inf { color: var(--color-inf); border-color: var(--color-inf); }
+.filter-chip--wrn { color: var(--color-wrn); border-color: var(--color-wrn); }
+.filter-chip--err { color: var(--color-err); border-color: var(--color-err); }
+.filter-chip--ftl { color: var(--color-ftl); border-color: var(--color-ftl); }
+
+.filter-chip--vrb.filter-chip--active { background-color: var(--color-vrb); color: #FFFFFF; }
+.filter-chip--inf.filter-chip--active { background-color: var(--color-inf); color: #FFFFFF; }
+.filter-chip--wrn.filter-chip--active { background-color: var(--color-wrn); color: #1F2937; }
+.filter-chip--err.filter-chip--active { background-color: var(--color-err); color: #FFFFFF; }
+.filter-chip--ftl.filter-chip--active { background-color: var(--color-ftl); color: #FFFFFF; }

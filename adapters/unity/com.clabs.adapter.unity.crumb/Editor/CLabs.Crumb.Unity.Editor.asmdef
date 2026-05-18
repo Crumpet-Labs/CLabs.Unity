@@ -1,0 +1,22 @@
+{
+    "name": "CLabs.Crumb.Unity.Editor",
+    "rootNamespace": "CLabs.Crumb.Unity.Editor",
+    "references": [
+        "CLabs.Crumb",
+        "CLabs.Editor.Unity.Editor",
+        "CLabs.Utility",
+        "Buttr.Core",
+        "Buttr.Unity"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

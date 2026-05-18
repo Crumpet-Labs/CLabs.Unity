@@ -1,0 +1,21 @@
+{
+    "name": "CLabs.Spoon.Unity.Editor",
+    "rootNamespace": "CLabs.Spoon.Unity.Editor",
+    "references": [
+        "CLabs.Spoon",
+        "CLabs.Editor.Unity.Editor",
+        "CLabs.Utility",
+        "Buttr.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

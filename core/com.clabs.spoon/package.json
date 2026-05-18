@@ -1,0 +1,15 @@
+{
+  "name": "com.clabs.spoon",
+  "version": "2.0.0",
+  "displayName": "CLabs Spoon",
+  "description": "Redux-style state containers for feature-level state. Immutable snapshots, reducer-driven mutation, middleware pipeline, observable subscriptions.",
+  "shortDescription": "Feature state containers",
+  "unity": "6000.0",
+  "dependencies": {
+    "com.crumpetlabs.buttr": "1.3.3"
+  },
+  "author": {
+    "name": "Crumpet Labs"
+  },
+  "group": "Infrastructure"
+}

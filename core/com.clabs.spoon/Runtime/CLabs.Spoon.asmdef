@@ -1,0 +1,17 @@
+{
+    "name": "CLabs.Spoon",
+    "rootNamespace": "CLabs.Spoon",
+    "references": [
+        "Buttr.Core",
+        "Buttr.Injection"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

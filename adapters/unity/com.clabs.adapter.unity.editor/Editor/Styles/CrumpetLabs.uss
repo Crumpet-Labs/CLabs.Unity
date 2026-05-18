@@ -1,0 +1,364 @@
+/* ═══════════════════════════════════════════════════════════════
+   Crumpet Labs — Shared Editor Theme
+   Dark professional with brand accents
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+    /* ── Brand Palette ── */
+    --clabs-accent:           #FD6900;
+    --clabs-accent-hover:     #FDB200;
+    --clabs-accent-text:      #FDB200;
+    --clabs-secondary:        #50C1FC;
+    --clabs-secondary-hover:  #74FDFC;
+
+    --clabs-brand-orange:     #FD6900;
+    --clabs-brand-gold:       #FDB200;
+    --clabs-brand-pink:       #FF00D8;
+    --clabs-brand-rose:       #F051B1;
+    --clabs-brand-magenta:    #BE1BA6;
+    --clabs-brand-sky:        #50C1FC;
+    --clabs-brand-cyan:       #74FDFC;
+    --clabs-brand-blue:       #2D59C4;
+
+    /* ── Semantic Colors ── */
+    --clabs-success:          #22C55E;
+    --clabs-warning:          #F59E0B;
+    --clabs-error:            #EF4444;
+    --clabs-info:             #3B82F6;
+    --clabs-neutral:          #6B7280;
+
+    /* ── Surfaces ── */
+    --clabs-surface-0:        var(--unity-colors-default-background);
+    --clabs-surface-1:        var(--unity-colors-toolbar-background);
+    --clabs-surface-2:        rgba(255, 255, 255, 0.03);
+    --clabs-border:           var(--unity-colors-default-border);
+
+    /* ── Typography ── */
+    --clabs-font-xs:          9px;
+    --clabs-font-sm:          10px;
+    --clabs-font-md:          12px;
+    --clabs-font-lg:          14px;
+
+    /* ── Spacing ── */
+    --clabs-spacing-xs:       2px;
+    --clabs-spacing-sm:       4px;
+    --clabs-spacing-md:       8px;
+    --clabs-spacing-lg:       12px;
+    --clabs-spacing-xl:       16px;
+}
+
+
+/* ═══════════════════════════════════════
+   Header
+   ═══════════════════════════════════════ */
+
+.clabs-header {
+    flex-direction: row;
+    align-items: center;
+    padding: 6px var(--clabs-spacing-md);
+    background-color: var(--clabs-surface-1);
+    border-top-width: 2px;
+    border-top-color: var(--clabs-accent);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--clabs-border);
+}
+
+.clabs-header__brand {
+    font-size: var(--clabs-font-xs);
+    -unity-font-style: bold;
+    color: var(--clabs-accent);
+    letter-spacing: 1px;
+    margin-right: var(--clabs-spacing-sm);
+}
+
+.clabs-header__separator {
+    font-size: var(--clabs-font-sm);
+    color: var(--clabs-neutral);
+    margin-right: var(--clabs-spacing-sm);
+}
+
+.clabs-header__title {
+    font-size: var(--clabs-font-md);
+    color: var(--unity-colors-default-text);
+}
+
+
+/* ═══════════════════════════════════════
+   Toolbar
+   ═══════════════════════════════════════ */
+
+.clabs-toolbar {
+    flex-direction: row;
+    align-items: center;
+    padding: 6px var(--clabs-spacing-md);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--clabs-border);
+    background-color: var(--clabs-surface-1);
+}
+
+.clabs-toolbar__search {
+    flex-grow: 1;
+    margin-right: var(--clabs-spacing-md);
+    min-width: 120px;
+}
+
+.clabs-toolbar__button {
+    padding: 3px 10px;
+    margin-left: var(--clabs-spacing-sm);
+    border-radius: 3px;
+    font-size: 11px;
+    -unity-font-style: bold;
+}
+
+
+/* ═══════════════════════════════════════
+   Panel (list container with header)
+   ═══════════════════════════════════════ */
+
+.clabs-panels {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.clabs-panel {
+    flex-grow: 1;
+    flex-basis: 0;
+    border-right-width: 1px;
+    border-right-color: var(--clabs-border);
+}
+
+.clabs-panel:last-child {
+    border-right-width: 0;
+}
+
+.clabs-panel__header {
+    padding: 6px var(--clabs-spacing-md);
+    background-color: var(--clabs-surface-1);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--clabs-border);
+    -unity-font-style: bold;
+    font-size: 11px;
+}
+
+.clabs-panel__list {
+    flex-grow: 1;
+}
+
+
+/* ═══════════════════════════════════════
+   List Row
+   ═══════════════════════════════════════ */
+
+.clabs-row {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--clabs-spacing-sm) var(--clabs-spacing-md);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--clabs-border);
+    font-size: var(--clabs-font-md);
+}
+
+.clabs-row:hover {
+    background-color: var(--unity-colors-highlight-background);
+}
+
+.clabs-row--selected {
+    background-color: var(--unity-colors-highlight-background);
+    color: var(--unity-colors-highlight-text);
+}
+
+.clabs-row--disabled {
+    opacity: 0.45;
+}
+
+.clabs-row__name {
+    flex-grow: 1;
+    -unity-text-align: middle-left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ═══════════════════════════════════════
+   Badge
+   ═══════════════════════════════════════ */
+
+.clabs-badge {
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: var(--clabs-font-xs);
+    -unity-font-style: bold;
+    color: #FFFFFF;
+}
+
+.clabs-badge--success {
+    background-color: var(--clabs-success);
+}
+
+.clabs-badge--warning {
+    background-color: var(--clabs-warning);
+    color: #1F2937;
+}
+
+.clabs-badge--error {
+    background-color: var(--clabs-error);
+}
+
+.clabs-badge--neutral {
+    background-color: var(--clabs-neutral);
+}
+
+.clabs-badge--accent {
+    background-color: var(--clabs-accent);
+}
+
+
+/* ═══════════════════════════════════════
+   Chip (toggle button)
+   ═══════════════════════════════════════ */
+
+.clabs-chip {
+    width: 28px;
+    height: 20px;
+    margin-left: var(--clabs-spacing-xs);
+    padding: 0;
+    border-radius: 4px;
+    border-width: 1px;
+    font-size: var(--clabs-font-xs);
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    background-color: transparent;
+    cursor: link;
+}
+
+.clabs-chip:hover {
+    opacity: 0.85;
+}
+
+.clabs-chip--active {
+    color: #FFFFFF;
+}
+
+
+/* ═══════════════════════════════════════
+   Empty State
+   ═══════════════════════════════════════ */
+
+.clabs-empty {
+    flex-grow: 1;
+    -unity-text-align: middle-center;
+    font-size: var(--clabs-font-md);
+    -unity-font-style: italic;
+    color: var(--unity-colors-default-text);
+    opacity: 0.5;
+    padding: 40px 20px;
+}
+
+
+/* ═══════════════════════════════════════
+   Status Bar
+   ═══════════════════════════════════════ */
+
+.clabs-status {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--clabs-spacing-sm) var(--clabs-spacing-md);
+    border-top-width: 1px;
+    border-top-color: var(--clabs-border);
+    background-color: var(--clabs-surface-1);
+    font-size: var(--clabs-font-sm);
+    color: var(--unity-colors-default-text);
+    opacity: 0.7;
+}
+
+.clabs-status__label {
+    margin-right: var(--clabs-spacing-lg);
+}
+
+.clabs-status__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    margin-right: var(--clabs-spacing-sm);
+}
+
+.clabs-status__dot--enabled {
+    background-color: var(--clabs-success);
+}
+
+.clabs-status__dot--disabled {
+    background-color: var(--clabs-error);
+}
+
+
+/* ═══════════════════════════════════════
+   Separator
+   ═══════════════════════════════════════ */
+
+.clabs-separator {
+    height: 1px;
+    background-color: var(--clabs-border);
+    margin: var(--clabs-spacing-sm) 0;
+}
+
+
+/* ═══════════════════════════════════════
+   Graph Window Layout
+   ═══════════════════════════════════════ */
+
+.clabs-graph-toolbar {
+    flex-direction: row;
+    align-items: center;
+    padding: var(--clabs-spacing-sm) var(--clabs-spacing-md);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--clabs-border);
+    background-color: var(--clabs-surface-1);
+}
+
+.clabs-graph-split {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.clabs-graph-view {
+    flex-grow: 1;
+}
+
+.clabs-graph-properties {
+    width: 250px;
+    max-width: 300px;
+    flex-shrink: 0;
+    border-left-width: 1px;
+    border-left-color: var(--clabs-border);
+}
+
+.clabs-graph-properties__empty {
+    -unity-text-align: middle-center;
+    font-size: var(--clabs-font-md);
+    -unity-font-style: italic;
+    opacity: 0.4;
+    padding: 20px var(--clabs-spacing-md);
+}
+
+.clabs-graph-properties__title {
+    font-size: var(--clabs-font-lg);
+    -unity-font-style: bold;
+    padding: var(--clabs-spacing-md);
+    border-bottom-width: 1px;
+    border-bottom-color: var(--clabs-border);
+}
+
+.clabs-graph-properties__section {
+    padding: var(--clabs-spacing-sm) var(--clabs-spacing-md);
+    font-size: var(--clabs-font-sm);
+    -unity-font-style: bold;
+    opacity: 0.6;
+    margin-top: var(--clabs-spacing-md);
+}
+
+.clabs-graph-properties__item {
+    padding: var(--clabs-spacing-xs) var(--clabs-spacing-md);
+    padding-left: var(--clabs-spacing-xl);
+    font-size: var(--clabs-font-md);
+}
