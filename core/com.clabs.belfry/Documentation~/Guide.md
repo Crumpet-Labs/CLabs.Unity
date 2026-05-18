@@ -275,18 +275,18 @@ Intended bridge ecosystem (forthcoming — not all shipped yet):
 
 | Bridge | Source package | What it rings |
 |---|---|---|
-| `dough-bell` | Dough | XP gained, level up, milestone reached |
-| `glaze-bell` | Glaze | Effect applied, removed, ticked |
-| `drip-bell` | Drip | Item equipped, unequipped |
-| `freezer-bell` | Freezer | Item added, removed, moved, stack changed |
-| `mint-bell` | Mint | Balance changed, transaction completed |
-| `spice-bell` | Spice | Ability activated, cooldown started/ended |
-| `temper-bell` | Temper | State entered, exited, transition occurred |
-| `stats-bell` | Stats | Stat changed, modifier added/removed |
-| `oven-bell` | Oven | Day / month / season / phase / year transitions |
-| `whisk-bell` | Whisk | Tick heartbeats |
-| `zest-bell` | Zest | Reputation value + tier changes |
-| `sprig-bell` | Sprig | Talent unlock / refund / grant / revoke / respec |
+| `dough-belfry` | Dough | XP gained, level up, milestone reached |
+| `glaze-belfry` | Glaze | Effect applied, removed, ticked |
+| `drip-belfry` | Drip | Item equipped, unequipped |
+| `freezer-belfry` | Freezer | Item added, removed, moved, stack changed |
+| `mint-belfry` | Mint | Balance changed, transaction completed |
+| `spice-belfry` | Spice | Ability activated, cooldown started/ended |
+| `temper-belfry` | Temper | State entered, exited, transition occurred |
+| `stats-belfry` | Stats | Stat changed, modifier added/removed |
+| `oven-belfry` | Oven | Day / month / season / phase / year transitions |
+| `whisk-belfry` | Whisk | Tick heartbeats |
+| `zest-belfry` | Zest | Reputation value + tier changes |
+| `sprig-belfry` | Sprig | Talent unlock / refund / grant / revoke / respec |
 
 ## Buttr registration
 
