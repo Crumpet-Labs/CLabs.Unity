@@ -21,7 +21,7 @@ References: `Buttr.Core`, `CLabs.Tickets`
 
 ### `Runtime/Common/BellBinding.cs`
 - **struct readonly BellBinding** : IEquatable<BellBinding>
-  - `BellBinding(in BellChannel channel, Delegate handler, int priority = 0)`
+  - `BellBinding(BellChannel channel, Delegate handler, int priority = 0)`
   - `BellChannel Channel` *(property)*
   - `Delegate Handler` *(property)*
   - `int Priority` *(property)*
@@ -48,10 +48,12 @@ References: `Buttr.Core`, `CLabs.Tickets`
 
 ### `Runtime/Common/BellRope.cs`
 - **struct readonly BellRope**
-  - `void Ring<T>(in T message)`
-  - `Ticket RingAsync<T>(in T message, int priority = 0)`
-  - `IDisposable On<T>(BellMessage<T> handler, int priority = 0)`
-  - `IDisposable On(params IBellListener[] listeners)`
+  - `void RingBell<T>(in T message)`
+  - `IDisposable OnBell<T>(BellMessage<T> handler, int priority = 0)`
+  - `IDisposable OnBell(params IBellListener[] listeners)`
+  - `Ticket RingToll<T>(in T message, int priority = 0)`
+  - `IDisposable OnToll<T>(TollMessage<T> handler, int priority = 0)`
+  - `IDisposable OnToll(params ITollListener[] listeners)`
 
 ### `Runtime/Common/FairRoundRobinRingOrder.cs`
 - **class sealed FairRoundRobinRingOrder** : IRingOrder
@@ -80,12 +82,23 @@ References: `Buttr.Core`, `CLabs.Tickets`
   - `bool TryDequeue(out Func<CancellationToken, Ticket> action)`
   - `void Clear()`
 
+### `Runtime/Common/TollListener.cs`
+- **class sealed TollListener<T>** : ITollListener
+  - `TollListener(TollMessage<T> handler, int priority = 0)`
+  - `Type MessageType` *(property)*
+  - `Delegate Delegate` *(property)*
+  - `int Priority` *(property)*
+
 ### `Runtime/Components/Belfry.cs`
 - **class sealed Belfry** : IBelfry
-  - `IDisposable Subscribe(in BellBinding binding, int priority = 0)`
-  - `IDisposable Subscribe(IReadOnlyList<BellBinding> bindings)`
-  - `void Publish<T>(in BellChannel channel, in T message)`
-  - `IReadOnlyList<BellBinding> GetBindings(in BellChannel channel)`
+  - `IDisposable SubscribeBell(BellChannel channel, Delegate handler, int priority = 0)`
+  - `IDisposable SubscribeBell(IReadOnlyList<BellBinding> bindings)`
+  - `void PublishBell<T>(BellChannel channel, in T message)`
+  - `IReadOnlyList<BellBinding> GetBellBindings(BellChannel channel)`
+  - `IDisposable SubscribeToll(BellChannel channel, Delegate handler, int priority = 0)`
+  - `IDisposable SubscribeToll(IReadOnlyList<BellBinding> bindings)`
+  - `Ticket PublishToll<T>(BellChannel channel, T message, CancellationToken ct)`
+  - `IReadOnlyList<BellBinding> GetTollBindings(BellChannel channel)`
   - `void Dispose()`
 
 ### `Runtime/Components/BellTower.cs`
@@ -99,10 +112,14 @@ References: `Buttr.Core`, `CLabs.Tickets`
 
 ### `Runtime/Contracts/IBelfry.cs`
 - **interface IBelfry**
-  - `IDisposable Subscribe(in BellBinding binding, int priority = 0)`
-  - `IDisposable Subscribe(IReadOnlyList<BellBinding> bindings)`
-  - `void Publish<T>(in BellChannel channel, in T message)`
-  - `IReadOnlyList<BellBinding> GetBindings(in BellChannel channel)`
+  - `IDisposable SubscribeBell(BellChannel channel, Delegate handler, int priority = 0)`
+  - `IDisposable SubscribeBell(IReadOnlyList<BellBinding> bindings)`
+  - `void PublishBell<T>(BellChannel channel, in T message)`
+  - `IReadOnlyList<BellBinding> GetBellBindings(BellChannel channel)`
+  - `IDisposable SubscribeToll(BellChannel channel, Delegate handler, int priority = 0)`
+  - `IDisposable SubscribeToll(IReadOnlyList<BellBinding> bindings)`
+  - `Ticket PublishToll<T>(BellChannel channel, T message, CancellationToken ct)`
+  - `IReadOnlyList<BellBinding> GetTollBindings(BellChannel channel)`
 
 ### `Runtime/Contracts/IBellListener.cs`
 - **interface IBellListener**
@@ -135,6 +152,16 @@ References: `Buttr.Core`, `CLabs.Tickets`
   - `bool TryDequeue(out Func<CancellationToken, Ticket> action)`
   - `void Clear()`
 
+### `Runtime/Contracts/ITollListener.cs`
+- **interface ITollListener**
+  - `Type MessageType` *(property)*
+  - `Delegate Delegate` *(property)*
+  - `int Priority` *(property)*
+
 ### `Runtime/Delegates/BellMessage.cs`
 - `delegate void BellMessage<T>(in T message)`
   - `delegate void BellMessage<T>(in T message)`
+
+### `Runtime/Delegates/TollMessage.cs`
+- `delegate Ticket TollMessage<T>(T message)`
+  - `delegate Ticket TollMessage<T>(T message)`

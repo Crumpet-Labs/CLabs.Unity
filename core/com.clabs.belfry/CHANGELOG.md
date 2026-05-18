@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.2 — 2026-05-18
+
+### Fixes
+
+- Spoon update (9b63742)
+
 ## v2.0.1 — 2026-05-16
 
 ### Fixes

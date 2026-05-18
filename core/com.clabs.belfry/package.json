@@ -1,6 +1,6 @@
 {
   "name": "com.clabs.belfry",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "displayName": "CLabs Belfry",
   "description": "Event-driven pub/sub messaging via Tower/Rope/Ring metaphor",
   "shortDescription": "Pub/sub messaging",
