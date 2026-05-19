@@ -362,3 +362,56 @@
     padding-left: var(--clabs-spacing-xl);
     font-size: var(--clabs-font-md);
 }
+
+
+/* ═══════════════════════════════════════
+   Progress Bar
+   ═══════════════════════════════════════ */
+
+.clabs-progress {
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--clabs-surface-2);
+    border-width: 1px;
+    border-color: var(--clabs-border);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.clabs-progress__fill {
+    height: 100%;
+    background-color: var(--clabs-accent);
+}
+
+.clabs-progress__label {
+    position: absolute;
+    right: var(--clabs-spacing-sm);
+    font-size: var(--clabs-font-sm);
+    -unity-text-align: middle-right;
+}
+
+
+/* ═══════════════════════════════════════
+   Detail Row (label + value, for property panels)
+   ═══════════════════════════════════════ */
+
+.clabs-detail-row {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: var(--clabs-spacing-sm) var(--clabs-spacing-md);
+    font-size: var(--clabs-font-md);
+}
+
+.clabs-detail-row__label {
+    -unity-font-style: bold;
+    -unity-text-align: upper-left;
+    opacity: 0.75;
+    margin-right: var(--clabs-spacing-md);
+    flex-shrink: 0;
+}
+
+.clabs-detail-row__value {
+    flex-grow: 1;
+    flex-direction: column;
+    font-size: var(--clabs-font-md);
+}

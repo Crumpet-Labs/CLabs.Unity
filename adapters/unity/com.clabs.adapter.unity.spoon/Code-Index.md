@@ -8,10 +8,18 @@ Unity adapter for CLabs Spoon — editor inspector window (Spoon Stores DevTools
 
 ## Assemblies
 
+### `CLabs.Spoon.Unity` — `Runtime/CLabs.Spoon.Unity.asmdef`
+References: `Buttr.Core`, `Buttr.Unity`, `CLabs.Spoon`, `CLabs.Utility`
+
 ### `CLabs.Spoon.Unity.Editor` (Editor) — `Editor/CLabs.Spoon.Unity.Editor.asmdef`
 References: `CLabs.Spoon`, `CLabs.Editor.Unity.Editor`, `CLabs.Utility`, `Buttr.Core`
 
 ## API Surface
+
+### Assembly `CLabs.Spoon.Unity`
+
+### `Runtime/Components/SpoonView.cs`
+- **class abstract SpoonView<TState>** : MonoBehaviour
 
 ### Assembly `CLabs.Spoon.Unity.Editor`
 

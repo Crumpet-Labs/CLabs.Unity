@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.1 — 2026-05-19
+
+### Fixes
+
+- Editor Adapters. Brought up to a better standard (f168b56)
+
 ## v0.2.0 — 2026-05-18
 
 ### Features

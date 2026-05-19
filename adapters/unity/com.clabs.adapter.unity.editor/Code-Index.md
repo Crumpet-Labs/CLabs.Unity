@@ -4,7 +4,7 @@
 
 **Package:** `com.clabs.adapter.unity.editor`
 
-Shared Unity editor framework — CLabsEditorWindow, CLabsGraphWindow, components, theme.
+Shared Unity editor framework — window bases (CLabsEditorWindow, CLabsGraphWindow), components (Header/Panel/Toolbar/StatusBar/Row/Badge/EmptyState/ProgressBar/DetailRow), and the CrumpetLabs.uss theme.
 
 ## Assemblies
 
@@ -23,6 +23,30 @@ References: _(none)_
 - **class abstract CLabsGraphWindow** : EditorWindow
   - `void CreateGUI()`
 
+### `Editor/Components/CLabsBadge.cs`
+- **enum BadgeKind**
+- **class static CLabsBadge**
+  - `Label Create(string text, BadgeKind kind = BadgeKind.Neutral)`
+  - `Label Create(string text, Color background)`
+  - `Color ContrastColor(Color background)`
+
+### `Editor/Components/CLabsDetailRow.cs`
+- **class sealed CLabsDetailRow** : VisualElement
+  - `Label LabelElement` *(property)*
+  - `VisualElement ValueContainer` *(property)*
+  - `CLabsDetailRow SetValue(string text)`
+  - `CLabsDetailRow SetValue(VisualElement element)`
+  - `CLabsDetailRow AddValue(VisualElement element)`
+  - `CLabsDetailRow Create(string label, int labelWidth = 90)`
+
+### `Editor/Components/CLabsEmptyState.cs`
+- **class sealed CLabsEmptyState** : VisualElement
+  - `Label MessageLabel` *(property)*
+  - `CLabsEmptyState SetMessage(string message)`
+  - `CLabsEmptyState SetVisible(bool visible)`
+  - `CLabsEmptyState BindTo(params VisualElement[] siblings)`
+  - `CLabsEmptyState Create(string message)`
+
 ### `Editor/Components/CLabsHeader.cs`
 - **class static CLabsHeader**
   - `VisualElement Create(string title)`
@@ -32,6 +56,26 @@ References: _(none)_
   - `CLabsPanel(string title)`
   - `ScrollView Content` *(property)*
   - `CLabsPanel Create(string title)`
+
+### `Editor/Components/CLabsProgressBar.cs`
+- **class sealed CLabsProgressBar** : VisualElement
+  - `Label ValueLabel` *(property)*
+  - `CLabsProgressBar SetProgress(float normalized)`
+  - `CLabsProgressBar SetProgress(float current, float max)`
+  - `CLabsProgressBar SetLabel(string text)`
+  - `CLabsProgressBar SetFillColor(Color color)`
+  - `CLabsProgressBar Create(bool showLabel = false, int height = 6)`
+
+### `Editor/Components/CLabsRow.cs`
+- **class sealed CLabsRow** : VisualElement
+  - `Label NameLabel` *(property)*
+  - `bool Selected` *(property)*
+  - `CLabsRow Add(VisualElement element)`
+  - `CLabsRow SetSelected(bool selected)`
+  - `else RemoveFromClassList("clabs-row--selected")`
+  - `CLabsRow SetDisabled(bool disabled)`
+  - `else RemoveFromClassList("clabs-row--disabled")`
+  - `CLabsRow Create(string name, Action onClick = null)`
 
 ### `Editor/Components/CLabsStatusBar.cs`
 - **class sealed CLabsStatusBar** : VisualElement
