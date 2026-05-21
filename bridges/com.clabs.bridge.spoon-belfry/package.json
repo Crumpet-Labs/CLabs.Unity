@@ -1,6 +1,6 @@
 {
   "name": "com.clabs.bridge.spoon-belfry",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "displayName": "CLabs Bridge: Spoon-Belfry",
   "description": "Re-publishes Spoon store state changes as Belfry messages. Lets distant systems react to state changes without importing Spoon types directly.",
   "unity": "6000.0",

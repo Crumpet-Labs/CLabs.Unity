@@ -19,6 +19,7 @@ namespace CLabs.Adapters {
 
         public override Awaitable LoadAsync(CancellationToken cancellationToken) {
             var builder = new ApplicationBuilder();
+            
             var collection = builder.UseCrumbPackage()
                 .WithFactory<ICrumbSink>(() => new UnityCrumbSink());
 

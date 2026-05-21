@@ -1,5 +1,11 @@
 # Changelog
 
+## v3.0.1 — 2026-05-21
+
+### Fixes
+
+- ability to use packages as scopes (b5a1a7a)
+
 ## v3.0.0 — 2026-05-18
 
 ### Breaking changes

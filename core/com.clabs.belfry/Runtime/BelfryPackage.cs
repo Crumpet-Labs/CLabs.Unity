@@ -8,5 +8,12 @@ namespace CLabs.Belfry {
                 .Register(builder.Resolvers.AddSingleton<IPealFactory, PealFactory>())
                 .Register(builder.Resolvers.AddSingleton<IBellTower, BellTower>());
         }
+        
+        public static IConfigurableCollection UseBelfry(this IDIBuilder builder) {
+            return new ConfigurableCollection()
+                .Register(builder.Resolvers.AddSingleton<IBelfry, Belfry>())
+                .Register(builder.Resolvers.AddSingleton<IPealFactory, PealFactory>())
+                .Register(builder.Resolvers.AddSingleton<IBellTower, BellTower>());
+        }
     }
 }

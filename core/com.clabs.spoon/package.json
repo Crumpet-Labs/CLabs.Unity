@@ -1,6 +1,6 @@
 {
   "name": "com.clabs.spoon",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "displayName": "CLabs Spoon",
   "description": "Redux-style state containers for feature-level state. Immutable snapshots, reducer-driven mutation, middleware pipeline, observable subscriptions.",
   "shortDescription": "Feature state containers",

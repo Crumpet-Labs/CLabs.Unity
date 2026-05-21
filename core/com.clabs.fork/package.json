@@ -1,6 +1,6 @@
 {
   "name": "com.clabs.fork",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "displayName": "CLabs Fork",
   "description": "Save slot management — write-then-swap, integrity-checked saves, schema migration pipelines, pluggable storage providers.",
   "shortDescription": "Save slots",
