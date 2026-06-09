@@ -1,9 +1,10 @@
 # Changelog
 
-## v3.0.1 — 2026-05-21
+## v3.0.1 — 2026-06-09
 
 ### Fixes
 
+- integrate with Belfry pub/sub; fix BellChannel value equality (2a9fa66)
 - ability to use packages as scopes (b5a1a7a)
 
 ## v3.0.0 — 2026-05-18

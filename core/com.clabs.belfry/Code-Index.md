@@ -18,6 +18,7 @@ References: `Buttr.Core`, `CLabs.Tickets`
 ### `Runtime/BelfryPackage.cs`
 - **class static BelfryPackage**
   - `IConfigurableCollection UseBelfry(this ApplicationBuilder builder)`
+  - `IConfigurableCollection UseBelfry(this IDIBuilder builder)`
 
 ### `Runtime/Common/BellBinding.cs`
 - **struct readonly BellBinding** : IEquatable<BellBinding>

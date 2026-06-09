@@ -132,9 +132,12 @@ namespace CLabs.Fork {
             // 2. Embed checksum
             serialized = EmbedChecksum(serialized);
 
-            // 3. Write to temp file
+            // 3. Write to temp file (unique name so a same-second save can't overwrite the slot's current/backup)
             var timestamp = DateTime.UtcNow.ToString("yyyyMMdd_HHmmss");
             var tempFile = $"{slotId}_{timestamp}.sav";
+            var attempt = 2;
+            while (await m_Provider.ExistsAsync(tempFile))
+                tempFile = $"{slotId}_{timestamp}_{attempt++}.sav";
 
             var writeSuccess = await m_Provider.WriteAsync(tempFile, serialized);
 

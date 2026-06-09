@@ -16,11 +16,6 @@ References: `CLabs.Spoon`, `CLabs.Editor.Unity.Editor`, `CLabs.Utility`, `Buttr.
 
 ## API Surface
 
-### Assembly `CLabs.Spoon.Unity`
-
-### `Runtime/Components/SpoonView.cs`
-- **class abstract SpoonView<TState>** : MonoBehaviour
-
 ### Assembly `CLabs.Spoon.Unity.Editor`
 
 ### `Editor/SpoonStoresWindow.cs`

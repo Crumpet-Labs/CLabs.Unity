@@ -1,6 +1,10 @@
 # Changelog
 
-## v2.0.1 — 2026-05-21
+## v2.1.0 — 2026-06-09
+
+### Features
+
+- Lab Report Season 1 — Belfry/Spoon/Fork/Knife samples (862dc44)
 
 ### Fixes
 

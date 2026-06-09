@@ -42,7 +42,8 @@ namespace CLabs.Crumb {
 
             m_CurrentFilePath = Path.Combine(directory, "current.log");
             var append = File.Exists(m_CurrentFilePath);
-            m_Writer = new StreamWriter(m_CurrentFilePath, append) { AutoFlush = false };
+            var stream = new FileStream(m_CurrentFilePath, append ? FileMode.Append : FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+            m_Writer = new StreamWriter(stream) { AutoFlush = false };
             m_CurrentFileSize = append ? new FileInfo(m_CurrentFilePath).Length : 0;
         }
 
@@ -53,6 +54,9 @@ namespace CLabs.Crumb {
             var directory = m_Configuration.LogDirectory;
             var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             var rotatedPath = Path.Combine(directory, $"log_{timestamp}.log");
+            var attempt = 2;
+            while (File.Exists(rotatedPath))
+                rotatedPath = Path.Combine(directory, $"log_{timestamp}_{attempt++}.log");
             File.Move(m_CurrentFilePath, rotatedPath);
 
             PruneOldFiles(directory);

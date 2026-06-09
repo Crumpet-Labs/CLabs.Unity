@@ -1,9 +1,11 @@
 # Changelog
 
-## v1.1.1 — 2026-05-21
+## v1.1.1 — 2026-06-09
 
 ### Fixes
 
+- collision-proof rotation/save filenames; tailable logs (6905727)
+- register overridable configs interface-keyed with a factory (301915e)
 - ability to use packages as scopes (b5a1a7a)
 
 ## v1.1.0 — 2026-05-18
