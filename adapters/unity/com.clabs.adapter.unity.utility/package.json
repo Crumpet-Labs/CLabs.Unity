@@ -1,6 +1,6 @@
 {
   "name": "com.clabs.adapter.unity.utility",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "displayName": "CLabs Adapter: Utility (Unity)",
   "description": "Unity-specific bindings for CLabs.Utility types, including OwnerId resolution from MonoBehaviour.",
   "shortDescription": "Utility Unity adapter",

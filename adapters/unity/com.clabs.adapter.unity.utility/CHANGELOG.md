@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.2 — 2026-06-18
+
+### Fixes
+
+- PlayerLoopInjector fan-out — per-callback dispose, one subsystem per channel (016dc92)
+
 ## v1.0.1 — 2026-05-15
 
 ### Fixes

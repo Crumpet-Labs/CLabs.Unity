@@ -88,10 +88,19 @@ References: `CLabs.Utility`, `CLabs.Utility.Unity`
   - `bool TryDestroyComponent<T>(this GameObject gameObject)`
   - `void SetLayer(this GameObject obj, int layer)`
 
+### `Runtime/PlayerLoopFanOut.cs`
+- **class sealed PlayerLoopFanOut**
+  - `PlayerLoopFanOut(Action<Type, Action> insertSubsystem, Action<Type> removeSubsystem)`
+  - `int Count` *(property)*
+  - `IDisposable Subscribe(Type channelKey, Action callback)`
+  - `void Add(Action callback)`
+  - `void Remove(Action callback)`
+  - `void Invoke()`
+  - `void Dispose()`
+
 ### `Runtime/PlayerLoopInjector.cs`
 - **class static PlayerLoopInjector**
   - `IDisposable InjectUpdate<T>(Action customUpdate)`
-  - `void Dispose()`
 
 ### `Runtime/Properties/BoolProperty.cs`
 - **class sealed BoolProperty** : Property<bool>
