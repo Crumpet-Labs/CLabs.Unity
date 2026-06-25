@@ -21,18 +21,23 @@ namespace CLabs.Belfry {
 
         public IDisposable OnBell(params IBellListener[] listeners) {
             var bindings = new BellBinding[listeners.Length];
-            for (var i = 0; i < listeners.Length; i++)
+                
+            for (var i = 0; i < listeners.Length; i++) {
                 bindings[i] = new BellBinding(
                     new BellChannel(m_Key, listeners[i].MessageType),
                     listeners[i].Delegate,
-                    listeners[i].Priority);
+                    listeners[i].Priority
+                );
+            }
+            
             return m_Belfry.SubscribeBell(bindings);
         }
 
         public Ticket RingToll<T>(in T message, int priority = 0) where T : struct {
             if (m_Peal == null) {
                 throw new InvalidOperationException(
-                    "RingToll requires a peal-configured rope. Pass an IPealConfig to IBellTower.Rope(key, pealConfig).");
+                    "RingToll requires a peal-configured rope. Pass an IPealConfig to IBellTower.Rope(key, pealConfig)."
+                );
             }
 
             var captured = message;
@@ -59,11 +64,15 @@ namespace CLabs.Belfry {
 
         public IDisposable OnToll(params ITollListener[] listeners) {
             var bindings = new BellBinding[listeners.Length];
-            for (var i = 0; i < listeners.Length; i++)
+            
+            for (var i = 0; i < listeners.Length; i++) {
                 bindings[i] = new BellBinding(
                     new BellChannel(m_Key, listeners[i].MessageType),
                     listeners[i].Delegate,
-                    listeners[i].Priority);
+                    listeners[i].Priority
+                );
+            }
+            
             return m_Belfry.SubscribeToll(bindings);
         }
     }

@@ -1,38 +1,4 @@
 namespace CLabs.Fork {
-    public readonly struct SaveLoadResult<T> where T : class {
-        public SaveLoadResult(SaveLoadStatus status, T data = null, SaveSlotInfo slotInfo = null, string message = null) {
-            Status = status;
-            Data = data;
-            SlotInfo = slotInfo;
-            Message = message;
-        }
-
-        public bool Success => Status is SaveLoadStatus.Success
-            or SaveLoadStatus.SuccessFromBackup
-            or SaveLoadStatus.SuccessMigrated
-            or SaveLoadStatus.SuccessMigratedFromBackup;
-
-        public SaveLoadStatus Status { get; }
-        public T Data { get; }
-        public SaveSlotInfo SlotInfo { get; }
-        public string Message { get; }
-
-        public static SaveLoadResult<T> Ok(T data, SaveSlotInfo info) =>
-            new(SaveLoadStatus.Success, data, info);
-
-        public static SaveLoadResult<T> FromBackup(T data, SaveSlotInfo info) =>
-            new(SaveLoadStatus.SuccessFromBackup, data, info, "Primary save was corrupt — loaded from backup");
-
-        public static SaveLoadResult<T> Migrated(T data, SaveSlotInfo info) =>
-            new(SaveLoadStatus.SuccessMigrated, data, info, "Save migrated from older version");
-
-        public static SaveLoadResult<T> MigratedFromBackup(T data, SaveSlotInfo info) =>
-            new(SaveLoadStatus.SuccessMigratedFromBackup, data, info, "Backup loaded and migrated from older version");
-
-        public static SaveLoadResult<T> Fail(SaveLoadStatus status, string message) =>
-            new(status, null, null, message);
-    }
-
     public enum SaveLoadStatus {
         Success,
         SuccessFromBackup,
@@ -41,5 +7,49 @@ namespace CLabs.Fork {
         NoValidSave,
         MigrationFailed,
         ProviderError
+    }
+    
+    public readonly struct SaveLoadResult<T> where T : class {
+        private readonly SaveLoadStatus m_Status;
+        private readonly T m_Data;
+        private readonly SaveSlotInfo m_SlotInfo;
+        private readonly string m_Message;
+        
+        public SaveLoadResult(SaveLoadStatus status, T data = null, SaveSlotInfo slotInfo = null, string message = null) {
+            m_Status = status;
+            m_Data = data;
+            m_SlotInfo = slotInfo;
+            m_Message = message;
+        }
+
+        public bool Success => Status is SaveLoadStatus.Success
+            or SaveLoadStatus.SuccessFromBackup
+            or SaveLoadStatus.SuccessMigrated
+            or SaveLoadStatus.SuccessMigratedFromBackup;
+
+        public SaveLoadStatus Status => m_Status;
+        public T Data => m_Data;
+        public SaveSlotInfo SlotInfo => m_SlotInfo;
+        public string Message => m_Message;
+
+        public static SaveLoadResult<T> Ok(T data, SaveSlotInfo info) {
+            return new(SaveLoadStatus.Success, data, info);
+        }
+
+        public static SaveLoadResult<T> FromBackup(T data, SaveSlotInfo info) {
+            return new(SaveLoadStatus.SuccessFromBackup, data, info, "Primary save was corrupt — loaded from backup");
+        }
+
+        public static SaveLoadResult<T> Migrated(T data, SaveSlotInfo info) {
+            return new(SaveLoadStatus.SuccessMigrated, data, info, "Save migrated from older version");
+        }
+
+        public static SaveLoadResult<T> MigratedFromBackup(T data, SaveSlotInfo info) {
+            return new(SaveLoadStatus.SuccessMigratedFromBackup, data, info, "Backup loaded and migrated from older version");
+        }
+
+        public static SaveLoadResult<T> Fail(SaveLoadStatus status, string message) {
+            return new(status, null, null, message);
+        }
     }
 }

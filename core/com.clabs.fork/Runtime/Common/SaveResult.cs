@@ -1,19 +1,4 @@
 namespace CLabs.Fork {
-    public readonly struct SaveResult {
-        public SaveResult(bool success, string filePath = null, SaveFailureReason reason = SaveFailureReason.None) {
-            Success = success;
-            FilePath = filePath;
-            Reason = reason;
-        }
-
-        public bool Success { get; }
-        public string FilePath { get; }
-        public SaveFailureReason Reason { get; }
-
-        public static SaveResult Ok(string filePath) => new(true, filePath);
-        public static SaveResult Fail(SaveFailureReason reason) => new(false, null, reason);
-    }
-
     public enum SaveFailureReason {
         None,
         SaveAlreadyInProgress,
@@ -21,5 +6,29 @@ namespace CLabs.Fork {
         WriteFailed,
         PostWriteValidationFailed,
         Unknown
+    }
+    
+    public readonly struct SaveResult {
+        private readonly bool m_Success;
+        private readonly string m_FilePath;
+        private readonly SaveFailureReason m_Reason;
+        
+        public SaveResult(bool success, string filePath = null, SaveFailureReason reason = SaveFailureReason.None) {
+            m_Success = success;
+            m_FilePath = filePath;
+            m_Reason = reason;
+        }
+
+        public bool Success => m_Success;
+        public string FilePath => m_FilePath;
+        public SaveFailureReason Reason => m_Reason;
+
+        public static SaveResult Ok(string filePath) {
+            return new(true, filePath);
+        }
+        
+        public static SaveResult Fail(SaveFailureReason reason) {
+            return new(false, null, reason);
+        }
     }
 }

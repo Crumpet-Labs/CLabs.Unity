@@ -14,7 +14,7 @@ namespace CLabs.Belfry {
         public Type MessageType => m_MessageType;
         
         public bool Equals(BellChannel other)
-            => object.Equals(m_Scope, other.Scope) && other.MessageType == m_MessageType;
+            => Equals(m_Scope, other.Scope) && other.MessageType == m_MessageType;
         
         public override bool Equals(object obj)
             => obj is BellChannel other && Equals(other);

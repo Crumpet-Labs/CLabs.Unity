@@ -1,18 +1,28 @@
 ﻿namespace CLabs.Fork {
     public readonly struct SaveDeserializeResult<T> where T : class {
+        private readonly bool m_Success;
+        private readonly T m_Data;
+        private readonly int m_SchemaVersion;
+        private readonly string m_ErrorMessage;
+        
         public SaveDeserializeResult(bool success, T data = null, int schemaVersion = 0, string errorMessage = null) {
-            Success = success;
-            Data = data;
-            SchemaVersion = schemaVersion;
-            ErrorMessage = errorMessage;
+            m_Success = success;
+            m_Data = data;
+            m_SchemaVersion = schemaVersion;
+            m_ErrorMessage = errorMessage;
         }
 
-        public bool Success { get; }
-        public T Data { get; }
-        public int SchemaVersion { get; }
-        public string ErrorMessage { get; }
+        public bool Success => m_Success;
+        public T Data => m_Data;
+        public int SchemaVersion => m_SchemaVersion;
+        public string ErrorMessage => m_ErrorMessage;
 
-        public static SaveDeserializeResult<T> Ok(T data, int version) => new(true, data, version);
-        public static SaveDeserializeResult<T> Fail(string error) => new(false, errorMessage: error);
+        public static SaveDeserializeResult<T> Ok(T data, int version) {
+            return new(true, data, version);
+        }
+        
+        public static SaveDeserializeResult<T> Fail(string error) {
+            return new(false, errorMessage: error);
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace CLabs.Belfry {
                 m_ActivePriorities.Add(priority);
                 m_ActivePriorities.Sort((a, b) => a.CompareTo(b));
             }
+            
             queue.Enqueue(action);
         }
 

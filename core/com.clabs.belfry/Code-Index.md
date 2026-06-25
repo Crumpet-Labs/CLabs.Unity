@@ -92,6 +92,7 @@ References: `Buttr.Core`, `CLabs.Tickets`
 
 ### `Runtime/Components/Belfry.cs`
 - **class sealed Belfry** : IBelfry
+- **class static BelfryInternals**
   - `IDisposable SubscribeBell(BellChannel channel, Delegate handler, int priority = 0)`
   - `IDisposable SubscribeBell(IReadOnlyList<BellBinding> bindings)`
   - `void PublishBell<T>(BellChannel channel, in T message)`
@@ -101,6 +102,7 @@ References: `Buttr.Core`, `CLabs.Tickets`
   - `Ticket PublishToll<T>(BellChannel channel, T message, CancellationToken ct)`
   - `IReadOnlyList<BellBinding> GetTollBindings(BellChannel channel)`
   - `void Dispose()`
+  - `void InsertSorted(this Dictionary<BellChannel, List<BellBinding>> lane, BellBinding binding)`
 
 ### `Runtime/Components/BellTower.cs`
 - **class sealed BellTower** : IBellTower
@@ -164,5 +166,5 @@ References: `Buttr.Core`, `CLabs.Tickets`
   - `delegate void BellMessage<T>(in T message)`
 
 ### `Runtime/Delegates/TollMessage.cs`
-- `delegate Ticket TollMessage<T>(T message)`
-  - `delegate Ticket TollMessage<T>(T message)`
+- `delegate Ticket TollMessage<T>(in T message)`
+  - `delegate Ticket TollMessage<T>(in T message)`

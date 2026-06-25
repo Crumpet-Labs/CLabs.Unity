@@ -21,9 +21,13 @@ References: `Buttr.Core`, `CLabs.Utility`
 
 ### `Runtime/Components/CrumbFileSink.cs`
 - **class sealed CrumbFileSink** : ICrumbSink, IDisposable
+- **class static CrumbFileSinkInternals**
   - `CrumbFileSink(ICrumbConfiguration configuration)`
   - `void Write(string level, string typeName, string message)`
   - `void Dispose()`
+  - `void InitializeWriter(this ICrumbConfiguration configuration, ref StreamWriter writer, ref string currentFilePath, ref long currentFileSize)`
+  - `void Rotate(this ICrumbConfiguration configuration, ref StreamWriter writer, ref string currentFilePath)`
+  - `void PruneOldFiles(this string directory, ICrumbConfiguration configuration)`
 
 ### `Runtime/Components/CrumbLogger.cs`
 - **class sealed CrumbLogger** : IDisposable
@@ -70,6 +74,7 @@ References: `Buttr.Core`, `CLabs.Utility`
 ### `Runtime/CrumbPackage.cs`
 - **class static CrumbPackage**
   - `IConfigurableCollection UseCrumbPackage(this ApplicationBuilder builder)`
+  - `IConfigurableCollection UseCrumbPackage(this IDIBuilder builder)`
 
 ### `Runtime/Flags/CrumbFilters.cs`
 - **enum CrumbFilters**

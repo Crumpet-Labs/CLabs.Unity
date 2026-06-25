@@ -16,8 +16,8 @@ References: `Newtonsoft.Json`, `Buttr.Core`, `Buttr.Injection`, `CLabs.Crumb`, `
 ### Assembly `CLabs.Fork`
 
 ### `Runtime/Common/IntegrityResult.cs`
-- **struct readonly IntegrityResult**
 - **enum IntegrityFailureReason**
+- **struct readonly IntegrityResult**
   - `IntegrityResult(bool isValid, IntegrityFailureReason reason = IntegrityFailureReason.None)`
   - `bool IsValid` *(property)*
   - `IntegrityFailureReason Reason` *(property)*
@@ -46,10 +46,15 @@ References: `Newtonsoft.Json`, `Buttr.Core`, `Buttr.Injection`, `CLabs.Crumb`, `
 
 ### `Runtime/Common/SaveEnvelope.cs`
 - **class sealed SaveEnvelope**
+  - `int SchemaVersion` *(property)*
+  - `string Timestamp` *(property)*
+  - `double TotalPlayTimeSeconds` *(property)*
+  - `string DataJson` *(property)*
+  - `string Checksum` *(property)*
 
 ### `Runtime/Common/SaveLoadResult.cs`
-- **struct readonly SaveLoadResult<T>**
 - **enum SaveLoadStatus**
+- **struct readonly SaveLoadResult<T>**
   - `SaveLoadResult(SaveLoadStatus status, T data = null, SaveSlotInfo slotInfo = null, string message = null)`
   - `bool Success` *(property)*
   - `SaveLoadStatus Status` *(property)*
@@ -63,8 +68,8 @@ References: `Newtonsoft.Json`, `Buttr.Core`, `Buttr.Injection`, `CLabs.Crumb`, `
   - `SaveLoadResult<T> Fail(SaveLoadStatus status, string message)`
 
 ### `Runtime/Common/SaveResult.cs`
-- **struct readonly SaveResult**
 - **enum SaveFailureReason**
+- **struct readonly SaveResult**
   - `SaveResult(bool success, string filePath = null, SaveFailureReason reason = SaveFailureReason.None)`
   - `bool Success` *(property)*
   - `string FilePath` *(property)*
@@ -74,6 +79,13 @@ References: `Newtonsoft.Json`, `Buttr.Core`, `Buttr.Injection`, `CLabs.Crumb`, `
 
 ### `Runtime/Common/SaveSlotInfo.cs`
 - **class sealed SaveSlotInfo**
+  - `string SlotId` *(property)*
+  - `string CurrentFile` *(property)*
+  - `string BackupFile` *(property)*
+  - `DateTime LastSaveTime` *(property)*
+  - `double TotalPlayTimeSeconds` *(property)*
+  - `int SchemaVersion` *(property)*
+  - `bool IsAutoSave` *(property)*
 
 ### `Runtime/Components/FileSaveDataProvider.cs`
 - **class sealed FileSaveDataProvider** : ISaveDataProvider

@@ -2,24 +2,30 @@ using System;
 
 namespace CLabs.Belfry {
     internal readonly struct BellBinding : IEquatable<BellBinding> {
-        public BellChannel Channel { get; }
-        public Delegate Handler { get; }
-        public int Priority { get; }
-        public int Sequence { get; }
+        
+        private readonly BellChannel m_Channel;
+        private readonly Delegate m_Handler;
+        private readonly int m_Priority;
+        private readonly int m_Sequence;
 
         public BellBinding(BellChannel channel, Delegate handler, int priority = 0) {
-            Channel = channel;
-            Handler = handler;
-            Priority = priority;
-            Sequence = 0;
+            m_Channel = channel;
+            m_Handler = handler;
+            m_Priority = priority;
+            m_Sequence = 0;
         }
 
         internal BellBinding(BellChannel channel, Delegate handler, int priority, int sequence) {
-            Channel = channel;
-            Handler = handler;
-            Priority = priority;
-            Sequence = sequence;
+            m_Channel = channel;
+            m_Handler = handler;
+            m_Priority = priority;
+            m_Sequence = sequence;
         }
+        
+        public BellChannel Channel => m_Channel;
+        public Delegate Handler => m_Handler;
+        public int Priority => m_Priority;
+        public int Sequence => m_Sequence;
 
         internal BellBinding WithSequence(int sequence)
             => new BellBinding(Channel, Handler, Priority, sequence);

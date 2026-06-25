@@ -1,17 +1,4 @@
 namespace CLabs.Fork {
-    public readonly struct IntegrityResult {
-        public IntegrityResult(bool isValid, IntegrityFailureReason reason = IntegrityFailureReason.None) {
-            IsValid = isValid;
-            Reason = reason;
-        }
-
-        public bool IsValid { get; }
-        public IntegrityFailureReason Reason { get; }
-
-        public static IntegrityResult Valid() => new(true);
-        public static IntegrityResult Fail(IntegrityFailureReason reason) => new(false, reason);
-    }
-
     public enum IntegrityFailureReason {
         None,
         ChecksumMismatch,
@@ -19,5 +6,26 @@ namespace CLabs.Fork {
         IncompleteFile,
         EmptyFile,
         UnreadableFormat
+    }
+    
+    public readonly struct IntegrityResult {
+        private readonly bool m_IsValid;
+        private readonly IntegrityFailureReason m_Reason;
+        
+        public IntegrityResult(bool isValid, IntegrityFailureReason reason = IntegrityFailureReason.None) {
+            m_IsValid = isValid;
+            m_Reason = reason;
+        }
+
+        public bool IsValid => m_IsValid;
+        public IntegrityFailureReason Reason => m_Reason;
+
+        public static IntegrityResult Valid() {
+            return new(true);
+        }
+        
+        public static IntegrityResult Fail(IntegrityFailureReason reason) {
+            return new(false, reason);
+        }
     }
 }

@@ -19,8 +19,9 @@ namespace CLabs.Belfry {
             else {
                 m_Config.Strategy.Enqueue(action, priority);
 
-                if (false == m_IsProcessing)
+                if (false == m_IsProcessing) {
                     ProcessQueueAsync(m_LifetimeCts.Token).Forget();
+                }
             }
         }
 
