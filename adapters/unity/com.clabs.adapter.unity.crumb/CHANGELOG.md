@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.2.0 — 2026-08-01
+
+### Features
+
+- editor Crumb Console window + buffered/composite sinks (35ba821)
+
 ## v1.1.1 — 2026-06-18
 
 ### Fixes

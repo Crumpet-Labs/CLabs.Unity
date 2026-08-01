@@ -1,0 +1,16 @@
+{
+  "name": "com.clabs.belfry",
+  "version": "4.0.0",
+  "displayName": "CLabs Belfry",
+  "description": "Event-driven pub/sub messaging via Tower/Rope/Ring metaphor",
+  "shortDescription": "Pub/sub messaging",
+  "unity": "6000.0",
+  "dependencies": {
+    "com.crumpetlabs.buttr": "1.4.1",
+    "com.clabs.tickets": "0.1.0"
+  },
+  "author": {
+    "name": "Crumpet Labs"
+  },
+  "group": "Core Systems"
+}

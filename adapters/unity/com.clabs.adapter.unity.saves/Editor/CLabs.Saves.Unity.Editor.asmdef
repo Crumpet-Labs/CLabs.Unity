@@ -1,0 +1,23 @@
+{
+    "name": "CLabs.Saves.Unity.Editor",
+    "rootNamespace": "CLabs.Saves.Unity.Editor",
+    "references": [
+        "Buttr.Core",
+        "CLabs.Saves",
+        "CLabs.Editor.Unity.Editor",
+        "Buttr.Unity",
+        "CLabs.Utility",
+        "CLabs.Tickets"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -7,8 +7,8 @@ the whole point of Belfry.
 ## Run it
 1. Import this sample.
 2. Create a loader asset: **Assets → Create → CLabs → Belfry Samples → Pass Bell Loader**, and add
-   it to your application's loader set (same wiring as the Fork/Crumb application loaders — see the
-   `com.clabs.adapter.unity.fork` adapter for the established pattern).
+   it to your application's loader set (same wiring as the Saves/Crumb application loaders — see the
+   `com.clabs.adapter.unity.saves` adapter for the established pattern).
 3. In a scene, add `PassBell`, `FrontOfHouse`, and `WashUp` to GameObjects.
 4. Enter Play mode and press **Space** (or right-click `PassBell` → *Ring the pass bell*).
 

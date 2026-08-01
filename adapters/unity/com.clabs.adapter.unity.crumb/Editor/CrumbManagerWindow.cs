@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 namespace CLabs.Crumb.Unity.Editor {
     public sealed class CrumbManagerWindow : CLabsEditorWindow {
         protected override string WindowTitle => "Crumb Manager";
-        protected override string PackageStyleSheetPath => "Assets/_Project/Core/Crumb/Editor/CrumbManagerWindow.uss";
+        protected override string PackageStyleSheetPath => "Packages/com.clabs.adapter.unity.crumb/Editor/CrumbManagerWindow.uss";
 
         private ScrollView m_ListView;
         private Label m_EmptyState;

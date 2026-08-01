@@ -6,9 +6,11 @@ using UnityEngine;
 
 namespace CLabs.Adapters {
     /// <summary>
-    /// UnityApplicationLoaderBase that brings up a Crumb application container with the Unity-specific
-    /// console sink wired in. Optionally accepts a <see cref="CrumbConfigurationSO"/>; if none is assigned,
-    /// the core package's default <see cref="CrumbConfiguration"/> is used unchanged.
+    /// UnityApplicationLoaderBase that brings up a Crumb application container with the Unity-specific console
+    /// sink wired in. In the editor it also captures each line into a <see cref="BufferedCrumbSink"/> (composed
+    /// with the console sink) so the Crumb Console window can display the live log stream; player builds wire the
+    /// console sink alone. Optionally accepts a <see cref="CrumbConfigurationSO"/>; if none is assigned, the core
+    /// package's default <see cref="CrumbConfiguration"/> is used unchanged.
     /// </summary>
     [CreateAssetMenu(fileName = "CrumbApplicationLoader", menuName = "CLabs/Crumb/Application Loader")]
     public sealed class CrumbApplicationLoader : UnityApplicationLoaderBase {
@@ -19,12 +21,18 @@ namespace CLabs.Adapters {
 
         public override Awaitable LoadAsync(CancellationToken cancellationToken) {
             var builder = new ApplicationBuilder();
-            
-            var collection = builder.UseCrumbPackage()
-                .WithFactory<ICrumbSink>(() => new UnityCrumbSink());
+            var collection = builder.UseCrumbPackage();
+
+#if UNITY_EDITOR
+            var buffered = new BufferedCrumbSink();
+            builder.Resolvers.AddSingleton<BufferedCrumbSink>().WithFactory(() => buffered);
+            collection.WithImplementation<ICrumbSink>(() => new CompositeCrumbSink(new UnityCrumbSink(), buffered));
+#else
+            collection.WithImplementation<ICrumbSink>(() => new UnityCrumbSink());
+#endif
 
             if (m_Configuration != null) {
-                collection.WithFactory<ICrumbConfiguration>(() => m_Configuration);
+                collection.WithImplementation<ICrumbConfiguration>(() => m_Configuration);
             }
 
             m_Application = builder.Build();

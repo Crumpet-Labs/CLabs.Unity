@@ -39,7 +39,7 @@ Prefer to install one CLabs package without pulling the whole umbrella? Add the 
 - **Belfry**
 
   ```
-  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.belfry
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=foundation/com.clabs.belfry
   ```
 
   Unity adapter:
@@ -51,7 +51,7 @@ Prefer to install one CLabs package without pulling the whole umbrella? Add the 
 - **Crumb**
 
   ```
-  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.crumb
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=foundation/com.clabs.crumb
   ```
 
   Unity adapter:
@@ -60,16 +60,16 @@ Prefer to install one CLabs package without pulling the whole umbrella? Add the 
   https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.crumb
   ```
 
-- **Fork**
+- **Saves**
 
   ```
-  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.fork
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.saves
   ```
 
   Unity adapter:
 
   ```
-  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.fork
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=adapters/unity/com.clabs.adapter.unity.saves
   ```
 
 - **Spoon**
@@ -87,7 +87,7 @@ Prefer to install one CLabs package without pulling the whole umbrella? Add the 
 - **Tickets**
 
   ```
-  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.tickets
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=foundation/com.clabs.tickets
   ```
 
   Unity adapter:
@@ -99,7 +99,7 @@ Prefer to install one CLabs package without pulling the whole umbrella? Add the 
 - **Utility**
 
   ```
-  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=core/com.clabs.utility
+  https://github.com/Crumpet-Labs/CLabs.Unity.git?path=foundation/com.clabs.utility
   ```
 
   Unity adapter:

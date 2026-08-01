@@ -37,6 +37,10 @@ References: `CLabs.Crumb`, `CLabs.Editor.Unity.Editor`, `CLabs.Utility`, `Buttr.
 
 ### Assembly `CLabs.Crumb.Unity.Editor`
 
+### `Editor/CrumbConsoleWindow.cs`
+- **class sealed CrumbConsoleWindow** : CLabsEditorWindow
+  - `void ShowWindow()`
+
 ### `Editor/CrumbManagerWindow.cs`
 - **class sealed CrumbManagerWindow** : CLabsEditorWindow
   - `void ShowWindow()`

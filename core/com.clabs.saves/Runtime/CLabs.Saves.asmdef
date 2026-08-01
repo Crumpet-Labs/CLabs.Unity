@@ -1,0 +1,20 @@
+{
+    "name": "CLabs.Saves",
+    "rootNamespace": "CLabs.Saves",
+    "references": [
+        "Newtonsoft.Json",
+        "Buttr.Core",
+        "Buttr.Injection",
+        "CLabs.Crumb",
+        "CLabs.Tickets"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

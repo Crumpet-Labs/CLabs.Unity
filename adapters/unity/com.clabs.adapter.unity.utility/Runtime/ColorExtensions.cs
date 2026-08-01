@@ -12,6 +12,6 @@ namespace CLabs.Adapters {
 
         /// <summary>Convert a Unity 32-bit colour to the engine-agnostic <see cref="Color"/>.</summary>
         public static Color ToCLabsColor(this UnityEngine.Color32 color) =>
-            Color.FromRgb255(color.r, color.g, color.b, color.a);
+            Color.FromRGB255(color.r, color.g, color.b, color.a);
     }
 }

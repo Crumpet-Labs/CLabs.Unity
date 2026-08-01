@@ -2,6 +2,7 @@ using CLabs.Crumb;
 using UnityEngine;
 
 namespace CLabs.Adapters {
+    /// <summary>The Unity <see cref="ICrumbSink"/>: routes log lines to <c>Debug.Log</c> / <c>LogWarning</c> / <c>LogError</c> by level. The CrumbApplicationLoader registers it in place of the console sink.</summary>
     public sealed class UnityCrumbSink : ICrumbSink {
         public void Write(string level, string typeName, string message) {
             var formatted = $"[{level}] [{typeName}] {message}";

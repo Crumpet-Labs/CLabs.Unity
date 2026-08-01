@@ -25,8 +25,8 @@ The loader builds an `ApplicationBuilder`, calls `UseCrumbPackage()`, then overr
 ```csharp
 var builder = new ApplicationBuilder();
 builder.UseCrumbPackage()
-    .WithFactory<ICrumbConfiguration>(() => m_Configuration)
-    .WithFactory<ICrumbSink>(() => new UnityCrumbSink());
+    .WithImplementation<ICrumbConfiguration>(() => m_Configuration)
+    .WithImplementation<ICrumbSink>(() => new UnityCrumbSink());
 m_Application = builder.Build();
 ```
 
@@ -38,8 +38,8 @@ If your project has a single composite loader that registers many packages, repl
 public override Awaitable LoadAsync(CancellationToken cancellationToken) {
     var builder = new ApplicationBuilder();
     builder.UseCrumbPackage()
-        .WithFactory<ICrumbConfiguration>(() => m_CrumbConfig)
-        .WithFactory<ICrumbSink>(() => new UnityCrumbSink());
+        .WithImplementation<ICrumbConfiguration>(() => m_CrumbConfig)
+        .WithImplementation<ICrumbSink>(() => new UnityCrumbSink());
     // ... other packages ...
     m_App = builder.Build();
     return AwaitableUtility.CompletedTask;

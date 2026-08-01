@@ -1,0 +1,16 @@
+{
+  "name": "com.clabs.crumb",
+  "version": "2.0.0",
+  "displayName": "CLabs Crumb",
+  "description": "Structured logging with per-logger filtering and file sink",
+  "shortDescription": "Structured logging",
+  "unity": "6000.0",
+  "dependencies": {
+    "com.crumpetlabs.buttr": "1.4.1",
+    "com.clabs.utility": "0.1.0"
+  },
+  "author": {
+    "name": "Crumpet Labs"
+  },
+  "group": "Core Systems"
+}

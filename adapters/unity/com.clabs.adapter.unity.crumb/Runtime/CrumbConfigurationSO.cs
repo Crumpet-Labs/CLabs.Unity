@@ -3,6 +3,7 @@ using CLabs.Crumb;
 using UnityEngine;
 
 namespace CLabs.Adapters {
+    /// <summary>ScriptableObject <see cref="ICrumbConfiguration"/> — authors the file-logging toggle, size/retention caps, and default filters. Logs under <c>Application.persistentDataPath/Logs</c>.</summary>
     [CreateAssetMenu(fileName = "CrumbConfiguration", menuName = "CLabs/Crumb/Configuration")]
     public sealed class CrumbConfigurationSO : ScriptableObject, ICrumbConfiguration {
         [Header("File Logging")]
