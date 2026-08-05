@@ -1,7 +1,6 @@
 # Changelog
 
-## v1.0.1 — 2026-05-15
-
+## v1.0.1 (2026-05-15)
 ### Fixes
 
 - correct docs to real bootstrapping, rebrand UniTask .tt/.cs, scrub private refs (7177615)
@@ -17,4 +16,4 @@
 - Tickets, still failing. Removed more functionality over to the adapter (945c088)
 - ticket was fighting against the ticket namespace. Namespace and associated files renamed to tickets (8de5f11)
 
-## v1.0.0 — 2026-05-15
+## v1.0.0 (2026-05-15)

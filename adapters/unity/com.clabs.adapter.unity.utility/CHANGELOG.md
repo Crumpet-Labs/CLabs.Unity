@@ -1,13 +1,11 @@
 # Changelog
 
-## v1.0.2 — 2026-06-18
-
+## v1.0.2 (2026-06-18)
 ### Fixes
 
 - PlayerLoopInjector fan-out — per-callback dispose, one subsystem per channel (016dc92)
 
-## v1.0.1 — 2026-05-15
-
+## v1.0.1 (2026-05-15)
 ### Fixes
 
 - complete the AssetUtilities.cs move (remove old path) (7d719a2)
@@ -20,4 +18,4 @@
 - asmdefs and package.json files (8ff0f10)
 - meta files and package.json regenerated (f33edd1)
 
-## v1.0.0 — 2026-05-15
+## v1.0.0 (2026-05-15)
