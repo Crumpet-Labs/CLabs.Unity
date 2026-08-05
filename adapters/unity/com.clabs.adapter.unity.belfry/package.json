@@ -6,7 +6,7 @@
   "shortDescription": "Unity adapter for Belfry",
   "unity": "6000.0",
   "dependencies": {
-    "com.clabs.belfry": "0.1.0",
+    "com.clabs.belfry": "3.0.1",
     "com.crumpetlabs.buttr.unity": "3.0.1",
     "com.crumpetlabs.buttr": "1.4.1"
   },

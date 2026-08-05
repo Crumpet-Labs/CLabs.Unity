@@ -5,10 +5,10 @@
   "description": "Unity bindings for CLabs.Tickets: PlayerLoop integration, MonoBehaviour message triggers, AsyncOperation/Coroutine/UnityWebRequest awaiters, and optional Addressables/DOTween/TextMeshPro integrations gated by version defines.",
   "unity": "6000.0",
   "dependencies": {
-    "com.clabs.utility": "0.1.0",
+    "com.clabs.utility": "1.1.0",
     "com.crumpetlabs.buttr.unity": "3.0.1",
     "com.crumpetlabs.buttr": "1.4.1",
-    "com.clabs.tickets": "0.1.0"
+    "com.clabs.tickets": "1.0.1"
   },
   "author": {
     "name": "Crumpet Labs"

@@ -1,11 +1,5 @@
 # Changelog
 
-## v2.0.0 — 2026-08-01
-
-### Breaking changes
-
-- move the six foundational packages into foundation/ (52fc8ba)
-
 ## v1.0.1 — 2026-05-15
 
 ### Fixes

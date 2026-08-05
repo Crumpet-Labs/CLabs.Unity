@@ -6,7 +6,7 @@
   "shortDescription": "Utility Unity adapter",
   "unity": "6000.0",
   "dependencies": {
-    "com.clabs.utility": "0.1.0",
+    "com.clabs.utility": "1.1.0",
     "com.crumpetlabs.buttr.unity": "3.0.1"
   },
   "author": {

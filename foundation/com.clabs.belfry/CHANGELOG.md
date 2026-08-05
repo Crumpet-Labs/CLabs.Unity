@@ -1,11 +1,5 @@
 # Changelog
 
-## v4.0.0 — 2026-08-01
-
-### Breaking changes
-
-- move the six foundational packages into foundation/ (52fc8ba)
-
 ## v3.0.1 — 2026-06-18
 
 ### Fixes

@@ -8,8 +8,8 @@
   "dependencies": {
     "com.crumpetlabs.buttr": "1.4.1",
     "com.unity.nuget.newtonsoft-json": "3.2.2",
-    "com.clabs.crumb": "1.0.0",
-    "com.clabs.tickets": "0.1.0"
+    "com.clabs.crumb": "1.1.1",
+    "com.clabs.tickets": "1.0.1"
   },
   "author": {
     "name": "Crumpet Labs"

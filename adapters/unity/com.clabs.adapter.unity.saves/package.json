@@ -6,11 +6,11 @@
   "shortDescription": "Saves Unity adapter",
   "unity": "6000.0",
   "dependencies": {
-    "com.clabs.saves": "1.0.0",
+    "com.clabs.saves": "1.1.1",
     "com.crumpetlabs.buttr.unity": "3.0.1",
     "com.crumpetlabs.buttr": "1.4.1",
-    "com.clabs.adapter.unity.editor": "0.1.0",
-    "com.clabs.tickets": "0.1.0"
+    "com.clabs.adapter.unity.editor": "0.2.1",
+    "com.clabs.tickets": "1.0.1"
   },
   "author": {
     "name": "Crumpet Labs"

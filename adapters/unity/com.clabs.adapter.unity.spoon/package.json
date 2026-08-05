@@ -6,9 +6,9 @@
   "shortDescription": "Unity adapter for Spoon",
   "unity": "6000.0",
   "dependencies": {
-    "com.clabs.spoon": "1.0.0",
-    "com.clabs.utility": "0.1.0",
-    "com.clabs.adapter.unity.editor": "0.1.0",
+    "com.clabs.spoon": "2.0.1",
+    "com.clabs.utility": "1.1.0",
+    "com.clabs.adapter.unity.editor": "0.2.1",
     "com.crumpetlabs.buttr": "1.4.1"
   },
   "author": {
