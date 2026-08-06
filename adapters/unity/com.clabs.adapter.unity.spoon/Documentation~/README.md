@@ -1,11 +1,11 @@
 # CLabs Adapter: Spoon (Unity)
 
-Unity-side companion for `com.clabs.spoon`. The core Spoon package is engine-agnostic — pure C#, no `UnityEngine` reference. This adapter adds two things on top:
+Unity-side companion for `com.clabs.spoon`. The core Spoon package is engine-agnostic: pure C#, with no `UnityEngine` reference. This adapter adds two things on top:
 
 1. An **editor inspector window** (`Window > Crumpet Labs > Spoon Stores`) that lists every Spoon store live in the Buttr container and renders its state in real time during Play mode.
 2. The **Unity-6-specific language conventions** Spoon's docs follow, so the same examples compile under Unity's C# 9.0 compiler.
 
-There is no runtime code in this adapter. Unity consumers wire Spoon stores into MonoBehaviours via Buttr's `[Inject]` source-gen, exactly the same way every other CLabs adapter does — see the canonical pattern below.
+There is no runtime code in this adapter. Unity consumers wire Spoon stores into MonoBehaviours via Buttr's `[Inject]` source-gen, exactly the same way every other CLabs adapter does. The canonical pattern is below.
 
 ## Canonical pattern: a Unity view of a Spoon store
 
@@ -46,16 +46,16 @@ public sealed partial class VolumeLabel : MonoBehaviour
 
 Notes:
 
-- `sealed partial class : MonoBehaviour` — Buttr's source generator requires `partial` to inject fields.
-- `[Inject] private <Type> i_FieldName;` — the `i_` prefix marks injected fields (the rest of CLabs uses `m_` for serialized / regular fields).
-- The store is resolved by Buttr at scene start. No `Application<T>.Get()` from MonoBehaviour code — that's an anti-pattern.
+- `sealed partial class : MonoBehaviour`: Buttr's source generator requires `partial` to inject fields.
+- `[Inject] private <Type> i_FieldName;`: the `i_` prefix marks injected fields (the rest of CLabs uses `m_` for serialized / regular fields).
+- The store is resolved by Buttr at scene start. `Application<T>.Get()` is not used from MonoBehaviour code.
 - Subscribe on `OnEnable`, dispose on `OnDisable`. Push an immediate snapshot after subscribing so the view never starts stale.
 
 ## What this adapter provides
 
 ### Spoon Stores window
 
-A `CLabsEditorWindow` listing every `IStore<TState>` reachable from Buttr's global registration list. Discovery uses Buttr's own registry — `Application<object>.All()` enumerates every non-hidden registration across the process, the window checks each yielded instance's concrete type for an `IStore<>` interface, and pulls `TState` off its generic arguments. No assembly scanning, no `MakeGenericType` per tick — discovery runs once per Play session and the store instance is cached against the state type.
+A `CLabsEditorWindow` listing every `IStore<TState>` reachable from Buttr's global registration list. Discovery uses Buttr's own registry: `Application<object>.All()` enumerates every non-hidden registration across the process, the window checks each yielded instance's concrete type for an `IStore<>` interface, and pulls `TState` off its generic arguments. There is no assembly scanning and no `MakeGenericType` per tick. Discovery runs once per Play session, and the store instance is cached against the state type.
 
 For the selected store the window renders the current state field-by-field via reflection on the struct's public fields and parameter-less properties. Refreshes live on `OnEditorUpdate` as actions dispatch.
 
@@ -72,7 +72,7 @@ Unity 6 ships **C# 9.0**. Modern C# features that Spoon's docs deliberately avoi
 
 | Feature | C# version | Spoon's stance |
 |---|---|---|
-| `record struct` | C# 10 | Not supported in Unity 6 — use plain `readonly struct` with `readonly` fields. |
+| `record struct` | C# 10 | Not supported in Unity 6. Use a plain `readonly struct` with `readonly` fields. |
 | `with` expressions on non-record structs | C# 10 | Not supported. Reducer arms build a new struct via the explicit constructor. |
 | Primary constructors on classes | C# 12 | Not supported. Use a regular constructor. |
 | File-scoped namespaces | C# 10 | Works under Unity 6's Roslyn; Spoon's docs use block-scoped for clarity. Use whichever style you prefer. |
@@ -106,7 +106,7 @@ public readonly struct GameSettings : IEquatable<GameSettings>
 }
 ```
 
-`record struct` would have generated all of that for you — that's the trade. A handful of extra lines per state type is the cost of Unity 6 compatibility.
+`record struct` would generate all of that, at the cost of Unity 6 compatibility. The equivalent written by hand is a few extra lines per state type.
 
 ## Install
 
@@ -126,14 +126,14 @@ There is no separate per-adapter UPM install path.
 
 ## Dependencies
 
-- `com.clabs.spoon` — core store + contracts.
-- `com.clabs.adapter.unity.editor` — `CLabsEditorWindow` framework + panels + status bar.
-- `com.crumpetlabs.buttr` — `Application<T>` accessor (editor-only here).
-- `com.clabs.utility` — foundational types reachable via Spoon's surface.
+- `com.clabs.spoon`: core store + contracts.
+- `com.clabs.adapter.unity.editor`: `CLabsEditorWindow` framework + panels + status bar.
+- `com.crumpetlabs.buttr`: `Application<T>` accessor (editor-only here).
+- `com.clabs.utility`: foundational types reachable via Spoon's surface.
 
 ## See also
 
-- [Guide.md](Guide.md) — full walkthrough of the canonical view pattern, the editor window, and Unity bootstrap order.
-- [../Code-Index.md](../Code-Index.md) — auto-generated public surface listing.
-- The `com.clabs.spoon` package's `Documentation~/Example.md` — recipe cookbook (Unity-compatible syntax throughout).
-- The `com.clabs.spoon` package's `Documentation~/Guide.md` — full Spoon walkthrough.
+- [Guide.md](Guide.md): full walkthrough of the canonical view pattern, the editor window, and Unity bootstrap order.
+- [../Code-Index.md](../Code-Index.md): auto-generated public surface listing.
+- The `com.clabs.spoon` package's `Documentation~/Example.md`: recipe cookbook, in Unity-compatible syntax throughout.
+- The `com.clabs.spoon` package's `Documentation~/Guide.md`: full Spoon walkthrough.

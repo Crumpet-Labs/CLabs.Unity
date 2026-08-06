@@ -5,7 +5,7 @@ using UnityEngine;
 namespace CLabs.Belfry.Samples {
     /// <summary>
     /// Rings the pass bell. Press Space (or use the inspector context menu) to announce a batch.
-    /// The bell does not know — or care — who is listening.
+    /// The bell does not know, or care, who is listening.
     /// </summary>
     public sealed partial class PassBell : MonoBehaviour {
         [Inject] private IBellTower i_Tower;

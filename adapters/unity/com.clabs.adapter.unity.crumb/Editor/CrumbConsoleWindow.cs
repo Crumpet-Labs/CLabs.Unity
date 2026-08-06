@@ -85,7 +85,7 @@ namespace CLabs.Crumb.Unity.Editor {
                 style = { flexGrow = 1 }
             };
 
-            m_EmptyState = new Label("No log entries — enter Play mode with a CrumbApplicationLoader active to stream logs here.");
+            m_EmptyState = new Label("No log entries; enter Play mode with a CrumbApplicationLoader active to stream logs here.");
             m_EmptyState.AddToClassList("clabs-empty");
 
             container.Add(m_ListView);
@@ -211,7 +211,7 @@ namespace CLabs.Crumb.Unity.Editor {
 
             if (buffer == null) {
                 m_StatusLabel.text = EditorApplication.isPlaying
-                    ? "No BufferedCrumbSink resolved — is a CrumbApplicationLoader active?"
+                    ? "No BufferedCrumbSink resolved; is a CrumbApplicationLoader active?"
                     : "Enter Play mode to stream logs";
                 return;
             }

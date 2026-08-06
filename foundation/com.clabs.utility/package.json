@@ -2,7 +2,7 @@
   "name": "com.clabs.utility",
   "version": "1.1.0",
   "displayName": "CLabs Utility",
-  "description": "Engine-agnostic foundation utilities — identity, colour, registries, disposables, resource providers.",
+  "description": "Engine-agnostic foundation utilities: identity, colour, registries, disposables, resource providers.",
   "shortDescription": "Foundation utilities",
   "unity": "6000.0",
   "dependencies": {

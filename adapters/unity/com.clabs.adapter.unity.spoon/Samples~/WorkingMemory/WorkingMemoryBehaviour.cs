@@ -6,7 +6,7 @@ namespace CLabs.Spoon.Samples {
     /// <summary>
     /// Stands up a KitchenState store and drives it. In Play mode press:
     /// S = serve a crumpet (+5 coin), H = heat the oven (+40°C), N = new day.
-    /// Every change is logged. The store is plain C# — no scene or DI required to learn the loop.
+    /// Every change is logged. The store is plain C#, so no scene or DI is required to learn the loop.
     /// </summary>
     public sealed class WorkingMemoryBehaviour : MonoBehaviour {
         private Store<KitchenState> m_Store;

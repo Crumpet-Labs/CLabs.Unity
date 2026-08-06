@@ -9,7 +9,7 @@
 ## v3.0.0 (2026-05-18)
 ### Breaking changes
 
-- 1.0 release — named delegates, Unity adapter, recipe cookbook (e558fb6)
+- 1.0 release: named delegates, Unity adapter, recipe cookbook (e558fb6)
 
 ### Fixes
 

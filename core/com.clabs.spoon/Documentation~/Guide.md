@@ -1,12 +1,12 @@
-# Spoon — Full Guide
+# Spoon: Full Guide
 
 ## Mental model
 
 Spoon is a Redux-style state container. Every piece of Spoon-managed state lives in a `Store<TState>`. The store owns an immutable `TState` snapshot and exposes exactly three operations to the outside world:
 
-- `State` — read the current snapshot.
-- `Dispatch(IAction)` — send an action. Runs through middleware, then the reducer, then notifies subscribers.
-- `Subscribe(SpoonObserver<TState>)` — register an observer. Returns `IDisposable` for unsubscribe. The observer receives state via `in TState` so the snapshot isn't copied per call.
+- `State`: read the current snapshot.
+- `Dispatch(IAction)`: send an action. Runs through middleware, then the reducer, then notifies subscribers.
+- `Subscribe(SpoonObserver<TState>)`: register an observer. Returns `IDisposable` for unsubscribe. The observer receives state via `in TState` so the snapshot isn't copied per call.
 
 That's the entire interaction surface. Everything else (reducers, middleware, action types) is feature-owned.
 
@@ -31,9 +31,9 @@ public readonly struct GameSettings
 ```
 
 Why `readonly struct` (not `readonly record struct`):
-- **Immutable** — `readonly` fields can only be assigned in the constructor; the reducer returns a new value.
-- **Value-typed** — no heap allocation; cheap to copy.
-- **Unity 6 compatible** — Unity 6 ships C# 9.0, which doesn't include `record struct` (C# 10) or `with` expressions on non-record structs. Plain `readonly struct` works everywhere. On .NET 6+ outside Unity you can use `readonly record struct` if you prefer the brevity; Spoon's `TState : struct` constraint accepts either.
+- **Immutable**: `readonly` fields can only be assigned in the constructor; the reducer returns a new value.
+- **Value-typed**: no heap allocation; cheap to copy.
+- **Unity 6 compatible**: Unity 6 ships C# 9.0, which doesn't include `record struct` (C# 10) or `with` expressions on non-record structs. Plain `readonly struct` works everywhere. On .NET 6+ outside Unity you can use `readonly record struct` if you prefer the brevity; Spoon's `TState : struct` constraint accepts either.
 
 Spoon enforces the `struct` constraint on `IReducer<TState>` and `IStore<TState>`.
 
@@ -71,8 +71,8 @@ Parameter-less actions (commands without payload) are empty `readonly struct`s. 
 
 Implements `IReducer<TState>`. Two members:
 
-- `TState InitialState { get; }` — the starting snapshot for a fresh store.
-- `TState Reduce(TState state, IAction action)` — pure transformation: same state + same action → same new state, no side effects.
+- `TState InitialState { get; }`: the starting snapshot for a fresh store.
+- `TState Reduce(TState state, IAction action)`: pure transformation: same state + same action → same new state, no side effects.
 
 The idiomatic body is a `switch` expression on the action type:
 
@@ -86,7 +86,7 @@ public GameSettings Reduce(GameSettings state, IAction action) => action switch
 };
 ```
 
-The `_ => state` arm silently ignores unhandled actions. This is intentional — reducers should be tolerant of middleware-injected actions they don't care about.
+The `_ => state` arm ignores unhandled actions, so a reducer tolerates actions injected by middleware that it does not handle.
 
 ### 4. Middleware
 
@@ -96,14 +96,14 @@ Implements `IMiddleware<TState>`. A single method:
 void Invoke(IStore<TState> store, IAction action, SpoonDispatch next);
 ```
 
-`SpoonDispatch` is just a named delegate for `(IAction action) -> void`. It's the same shape you've been using everywhere — only named so the middleware signature reads cleanly.
+`SpoonDispatch` is a named delegate for `(IAction action) -> void`. Naming it keeps the middleware signature readable.
 
 Each middleware decides what to do with the action:
 
-- **Pass it on** — call `next(action)` and the action flows through to the next middleware (or the reducer, if this is the last one).
-- **Transform it** — call `next(someOtherAction)` to replace the action mid-pipeline.
-- **Swallow it** — return without calling `next`, the reducer never sees the action.
-- **Observe it** — call `next(action)` then inspect `store.State` (now post-reduce).
+- **Pass it on**: call `next(action)` and the action flows through to the next middleware (or the reducer, if this is the last one).
+- **Transform it**: call `next(someOtherAction)` to replace the action mid-pipeline.
+- **Swallow it**: return without calling `next`, the reducer never sees the action.
+- **Observe it**: call `next(action)` then inspect `store.State` (now post-reduce).
 
 Middleware runs in Russian-doll order: first-registered wraps last-registered. With `[outer, inner]`:
 
@@ -132,7 +132,7 @@ public static IConfigurableCollection UseGameSettingsFeature(this ApplicationBui
 }
 ```
 
-Middleware order in the call is the pipeline order — `LoggingMiddleware` wraps `AnalyticsMiddleware`.
+Middleware order in the call is the pipeline order, so `LoggingMiddleware` wraps `AnalyticsMiddleware`.
 
 ## Reading and observing state
 
@@ -143,7 +143,7 @@ var store = Application<IStore<GameSettings>>.Get();
 var volume = store.State.Volume;
 
 // Observe future changes. Dispose the returned IDisposable to unsubscribe.
-// The 'in' is optional in the lambda — the compiler infers it from SpoonObserver<TState>.
+// The 'in' is optional in the lambda; the compiler infers it from SpoonObserver<TState>.
 using var sub = store.Subscribe((in GameSettings settings) =>
 {
     Console.WriteLine($"Volume: {settings.Volume}");
@@ -152,7 +152,7 @@ using var sub = store.Subscribe((in GameSettings settings) =>
 
 Subscriber callbacks fire synchronously after each dispatch, in registration order, with the post-reduce state snapshot.
 
-Subscribers that dispose themselves mid-callback are safe — the store uses a copy-on-write observer array. Unsubscribing during iteration does not disturb the in-flight notification.
+Subscribers that dispose themselves mid-callback are safe, because the store uses a copy-on-write observer array. Unsubscribing during iteration does not disturb the in-flight notification.
 
 ## Async flows
 
@@ -174,7 +174,7 @@ If you need middleware to intercept an "async work starting" concept specificall
 
 ## Cross-feature dispatch
 
-Each feature has its own `Store<TState>`. Features can dispatch to other features' stores by injecting both — no special API required:
+Each feature has its own `Store<TState>`. Features can dispatch to other features' stores by injecting both. No special API is required:
 
 ```csharp
 public sealed class ProfileMiddleware : IMiddleware<GameSettings>
@@ -195,7 +195,7 @@ Middleware injected via Buttr can hold references to any other store. Cross-feat
 
 ## Re-entrancy
 
-Calling `Dispatch` from inside a reducer or middleware throws `InvalidOperationException`. The same guard covers `Restore` — calling it during an active dispatch (from a reducer, middleware, or subscriber callback) also throws. This is deliberate:
+Calling `Dispatch` from inside a reducer or middleware throws `InvalidOperationException`. The same guard covers `Restore`: calling it during an active dispatch, from a reducer, middleware or subscriber callback, also throws. The reasons:
 
 - Reducers must be pure (no side effects). Dispatching from inside a reducer implies a side effect.
 - Chained dispatches make action order non-deterministic when observers also dispatch.
@@ -203,18 +203,18 @@ Calling `Dispatch` from inside a reducer or middleware throws `InvalidOperationE
 
 If you need a follow-up dispatch in response to some action, do it outside the pipeline:
 
-- From a subscriber callback (but be careful — subscribers that dispatch can re-enter).
+- From a subscriber callback, noting that subscribers which dispatch can re-enter.
 - From an async method that awaits the trigger and then dispatches.
 
 ## Thread safety
 
-Spoon is single-threaded by design. All operations on a `Store<TState>` must come from the same thread — typically the game-loop thread.
+Spoon is single-threaded by design. All operations on a `Store<TState>` must come from the same thread, typically the game-loop thread.
 
 This is an intentional constraint that keeps the store lock-free and allocation-free on the hot path. Games are almost always single-threaded for game logic; if multi-thread dispatch becomes necessary, wrap the store behind a thread-safe queue at the call site.
 
 ## Composing with other CLabs packages
 
-- **Belfry** — use the `spoon-belfry` bridge to republish state-change events as Belfry messages. Lets distant systems (HUD, analytics, networking) react without importing Spoon's types.
+- **Belfry**: use the `spoon-belfry` bridge to republish state-change events as Belfry messages. Lets distant systems (HUD, analytics, networking) react without importing Spoon's types.
 
 ## Anti-patterns
 
@@ -226,7 +226,7 @@ This is an intentional constraint that keeps the store lock-free and allocation-
 
 ## Testing a feature that uses Spoon
 
-Construct `Store<T>` directly in tests — no Buttr container needed:
+Construct `Store<T>` directly in tests. No Buttr container is needed:
 
 ```csharp
 [Fact]

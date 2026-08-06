@@ -11,7 +11,7 @@ namespace CLabs.Tickets.Linq
         // an engine-object detector is registered (Unity/Godot adapters
         // register one) AND the target is recognized as an engine-tracked
         // object. Engine path holds the target by strong reference and
-        // detects destruction through the engine detector — zero allocation.
+        // detects destruction through the engine detector, at zero allocation.
         // Fallback path uses a WeakReference wrapper for pure-C# targets.
         public static ITicketAsyncEnumerable<TProperty> EveryValueChanged<TTarget, TProperty>(TTarget target, Func<TTarget, TProperty> propertySelector, PlayerLoopTiming monitorTiming = PlayerLoopTiming.Update, IEqualityComparer<TProperty> equalityComparer = null, bool cancelImmediately = false)
             where TTarget : class

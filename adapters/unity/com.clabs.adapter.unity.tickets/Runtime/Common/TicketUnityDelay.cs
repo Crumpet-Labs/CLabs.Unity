@@ -10,7 +10,7 @@ namespace CLabs.Tickets
     /// Unity-specific delay helpers that were previously exposed on
     /// <c>partial struct Ticket</c> in core. They live here because they
     /// depend on <see cref="MonoBehaviour"/> or <see cref="Awaitable"/>,
-    /// and C# partial types cannot span assemblies — the engine-agnostic
+    /// and C# partial types cannot span assemblies, so the engine-agnostic
     /// core asmdef cannot reference <c>UnityEngine</c>.
     ///
     /// Callers that used <c>Ticket.WaitForEndOfFrame(...)</c> should move

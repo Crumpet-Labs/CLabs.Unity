@@ -39,8 +39,8 @@ namespace CLabs.Tickets
         // an engine-object detector is registered (Unity/Godot adapters
         // register one) AND the target is recognized as an engine-tracked
         // object. Engine path holds the target by strong reference and
-        // detects destruction through the engine detector — zero allocation.
-        // Fallback path uses a WeakReference wrapper for pure-C# targets —
+        // detects destruction through the engine detector, at zero allocation.
+        // Fallback path uses a WeakReference wrapper for pure-C# targets,
         // one allocation per operation but engine-agnostic.
         public static Ticket<U> WaitUntilValueChanged<T, U>(T target, Func<T, U> monitorFunction, PlayerLoopTiming monitorTiming = PlayerLoopTiming.Update, IEqualityComparer<U> equalityComparer = null, CancellationToken cancellationToken = default(CancellationToken), bool cancelImmediately = false)
           where T : class
@@ -720,7 +720,7 @@ namespace CLabs.Tickets
                     result = new WaitUntilValueChangedEngineObjectPromise<T, U>();
                 }
 
-                result.target = target; // strong reference — engine detector catches destruction
+                result.target = target; // strong reference; engine detector catches destruction
                 result.monitorFunction = monitorFunction;
                 result.currentValue = monitorFunction(target);
                 result.equalityComparer = equalityComparer ?? TicketEqualityComparer.GetDefault<U>();

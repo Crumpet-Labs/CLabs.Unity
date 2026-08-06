@@ -109,13 +109,13 @@ public static IConfigurableCollection UseGameSettingsFeature(this ApplicationBui
 
 ## Constraints and guarantees
 
-- `TState : struct` — state is a value type. `readonly struct` with `readonly` fields keeps it immutable and Unity-6 compatible (Unity 6 ships C# 9, so `record struct` and `with` expressions on non-record structs are unavailable). On .NET 6+ outside Unity, `readonly record struct` is equivalent and slightly less verbose.
+- `TState : struct`: state is a value type. `readonly struct` with `readonly` fields keeps it immutable and Unity-6 compatible (Unity 6 ships C# 9, so `record struct` and `with` expressions on non-record structs are unavailable). On .NET 6+ outside Unity, `readonly record struct` is equivalent and slightly less verbose.
 - Single-threaded by design. All `Dispatch` and subscription calls must come from the same thread (typically the game-loop thread). No internal locking.
 - Re-entrant `Dispatch` throws `InvalidOperationException`. Reducers and middleware must be pure.
-- Subscribing and unsubscribing each allocate one new observer array (copy-on-write, so dispatch stays safe against mid-callback subscription changes). Dispatching boxes the action once per call when it's a value type — the `IAction` marker forces it. For Spoon's intended use (feature-level state, not per-frame data) that's well below noticeable. Observers receive state by `in TState` so the snapshot isn't copied per observer.
+- Subscribing and unsubscribing each allocate one new observer array (copy-on-write, so dispatch stays safe against mid-callback subscription changes). Dispatching boxes the action once per call when it is a value type, which the `IAction` marker requires. Spoon is intended for feature-level state rather than per-frame data. Observers receive state by `in TState` so the snapshot isn't copied per observer.
 - Null actions throw `ArgumentNullException`.
 
 ## Further reading
 
-- [Example.md](Example.md) — recipe cookbook for people new to Redux. Start here if you haven't used a store-based state container before.
-- [Guide.md](Guide.md) — longer walkthrough with patterns for async, cross-feature dispatch, and Belfry re-publishing.
+- [Example.md](Example.md): recipe cookbook for people new to Redux. Start here if you haven't used a store-based state container before.
+- [Guide.md](Guide.md): longer walkthrough with patterns for async, cross-feature dispatch, and Belfry re-publishing.

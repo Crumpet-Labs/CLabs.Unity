@@ -12,7 +12,7 @@ namespace CLabs.Tickets
     /// pointers once at startup (e.g. [RuntimeInitializeOnLoadMethod] on Unity)
     /// via <see cref="RegisterEngineBindings"/>. Core code then dispatches
     /// through the function pointers, producing direct-call codegen instead of
-    /// interface dispatch — preserving UniTask's zero-overhead hot path.
+    /// interface dispatch, preserving UniTask's zero-overhead hot path.
     ///
     /// This class is an acknowledged exception to the CLabs "no static Runtime
     /// classes" convention. Ticket's compiler-generated state machines cannot
@@ -21,12 +21,12 @@ namespace CLabs.Tickets
     /// upstream-parity perf for that lookup.
     ///
     /// <b>Leak safety:</b> function pointers (<c>delegate*&lt;...&gt;</c>) are
-    /// raw IL call targets, not reference types — assigning them does not root
+    /// raw IL call targets, not reference types, so assigning them does not root
     /// any managed object and cannot capture closures. All registered targets
     /// must be <c>static</c> methods, so there is no instance lifetime tie
     /// between this class and the adapter assembly. The one exception is
     /// <see cref="MainThreadSynchronizationContext"/>, which is a real managed
-    /// reference held for the process lifetime — this is intentional (the
+    /// reference held for the process lifetime. This is intentional (the
     /// main-thread sync context IS the process on the engines we target) but
     /// call <see cref="UnregisterEngineBindings"/> if you need to drop the
     /// reference explicitly (tests, engine switching, etc.). On Unity domain
@@ -56,7 +56,7 @@ namespace CLabs.Tickets
         static delegate*<object, bool> isEngineObjectAliveFn;
 
         // Main-thread SynchronizationContext (reference type, not a function
-        // pointer target — adapter assigns this field directly)
+        // pointer target; adapter assigns this field directly)
         static SynchronizationContext mainThreadSyncContext;
 
         public static void AddAction(PlayerLoopTiming timing, IPlayerLoopItem item)
@@ -120,7 +120,7 @@ namespace CLabs.Tickets
 
         /// <summary>
         /// Register the engine bindings. Called once per process during adapter
-        /// init. Pass null for any binding the engine does not support — Ticket
+        /// init. Pass null for any binding the engine does not support, and Ticket
         /// will fall back to safe defaults (IsPlaying=true, FrameCount=0, etc.).
         /// </summary>
         public static void RegisterEngineBindings(

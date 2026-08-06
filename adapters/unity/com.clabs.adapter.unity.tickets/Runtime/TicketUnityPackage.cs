@@ -8,12 +8,12 @@ namespace CLabs.Adapters
     /// Buttr package entry point for the Unity Ticket adapter. Registers the
     /// engine bindings that <see cref="TicketRuntime"/> forwards through on
     /// the async/await hot path. All bindings are static method function
-    /// pointers — no delegate instances, no boxing, no per-call allocation.
+    /// pointers: no delegate instances, no boxing, no per-call allocation.
     /// </summary>
     public static class TicketUnityPackage
     {
         /// <summary>
-        /// Buttr application-builder extension. No-op at present — Unity
+        /// Buttr application-builder extension. No-op at present, because Unity
         /// bindings are registered unconditionally during Unity startup via
         /// <see cref="InitializeTicketRuntime"/> so that core await paths work
         /// before (or without) a Buttr container. Kept for convention and for
@@ -29,7 +29,7 @@ namespace CLabs.Adapters
         /// is guaranteed to execute after <c>PlayerLoopHelper.Init</c>
         /// (<c>AfterAssembliesLoaded</c>), so the Unity synchronization context
         /// and main-thread id are already populated when we capture them.
-        /// Idempotent across Unity domain reloads — static fields reset, this
+        /// Idempotent across Unity domain reloads: static fields reset, this
         /// method re-runs, bindings re-register.
         /// </summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -87,7 +87,7 @@ namespace CLabs.Adapters
 
         public static bool IsEngineObjectAlive(object target)
         {
-            // Uses Unity's overloaded == operator — a destroyed Unity.Object
+            // Uses Unity's overloaded == operator, so a destroyed Unity.Object
             // compares equal to null even though the managed reference is
             // non-null. That's the whole reason engine-object detection
             // needs to live on the engine side.

@@ -27,12 +27,12 @@ A Fork slot is a versioned, integrity-checked save file with a backup. The flow:
 
 Concepts in one breath:
 
-- **Slot** — `SaveSlotInfo` { SlotId, CurrentFile, BackupFile, LastSaveTime, SchemaVersion }.
-- **Envelope** — JSON wrapper with SchemaVersion + Timestamp + DataJson + Checksum.
-- **`ISaveDataProvider`** — raw byte IO, swappable for cloud / console SDKs.
-- **`ISaveSerializer`** — `T ↔ byte[]` + current schema version. Default: JSON.
-- **`ISaveIntegrityValidator`** — checksum generate + verify. Default: SHA256.
-- **`SaveMigrationPipeline`** — composed `ISaveMigrationStep`s that walk old saves forward.
+- **Slot**: `SaveSlotInfo` { SlotId, CurrentFile, BackupFile, LastSaveTime, SchemaVersion }.
+- **Envelope**: JSON wrapper with SchemaVersion + Timestamp + DataJson + Checksum.
+- **`ISaveDataProvider`**: raw byte IO, swappable for cloud / console SDKs.
+- **`ISaveSerializer`**: `T ↔ byte[]` + current schema version. Default: JSON.
+- **`ISaveIntegrityValidator`**: checksum generate + verify. Default: SHA256.
+- **`SaveMigrationPipeline`**: composed `ISaveMigrationStep`s that walk old saves forward.
 
 ---
 
@@ -49,7 +49,7 @@ public sealed class GameSave
 }
 ```
 
-Any class with a parameter-less constructor and JSON-serialisable properties. Keep it flat and self-describing — your future self has to migrate it.
+Any class with a parameter-less constructor and JSON-serialisable properties. Keep it flat and self-describing, because it is what a later migration has to work from.
 
 ### 2. Save to a slot
 
@@ -65,13 +65,13 @@ public sealed partial class SaveService
 
         if (!result.Success)
         {
-            // Report — see Recipe 8 for handling failures
+            // Report; see Recipe 8 for handling failures
         }
     }
 }
 ```
 
-`SaveAsync` is idempotent against the same slot — every call replaces the current file and demotes the previous current to backup.
+`SaveAsync` is idempotent against the same slot: every call replaces the current file and demotes the previous current to backup.
 
 ### 3. Load from a slot
 
@@ -89,12 +89,12 @@ public async Ticket QuickLoad()
         case SaveLoadStatus.SuccessFromBackup:
             // Primary was corrupt, backup loaded. Tell the player.
             ApplyGameData(result.Data);
-            Notify("Loaded backup save — your last save was corrupt.");
+            Notify("Loaded backup save; your last save was corrupt.");
             break;
 
         case SaveLoadStatus.SuccessMigrated:
         case SaveLoadStatus.SuccessMigratedFromBackup:
-            // Save came from an older schema version — Fork migrated it.
+            // Save came from an older schema version, and Fork migrated it.
             ApplyGameData(result.Data);
             // Re-save to bake the migration to disk.
             await i_Fork.SaveAsync("quicksave", result.Data);
@@ -122,7 +122,7 @@ foreach (var slot in i_Fork.GetAvailableSlots())
     // slot.SlotId           e.g. "quicksave"
     // slot.LastSaveTime     UTC DateTime
     // slot.SchemaVersion    int (compare against i_Fork.CurrentSchemaVersion if you expose it)
-    // slot.IsAutoSave       bool (set on the slot info — your code decides)
+    // slot.IsAutoSave       bool (set on the slot info by your code)
 }
 ```
 
@@ -134,7 +134,7 @@ The list reflects whatever was last persisted into `_fork_index.json`. Call `IFo
 var ok = await i_Fork.DeleteSlotAsync("quicksave");
 ```
 
-Removes both current and backup files plus the registry entry. Safe to call on a missing slot — returns false.
+Removes both current and backup files plus the registry entry. Safe to call on a missing slot, where it returns false.
 
 ### 6. Multiple-slot UI
 
@@ -199,7 +199,7 @@ if (result.Status == SaveLoadStatus.SuccessFromBackup) {
 }
 ```
 
-If both primary AND backup fail validation, `NoValidSave` is returned. There's no third fallback — this is the "corrupted, hardware failure, ran out of disk mid-write" case.
+If both primary AND backup fail validation, `NoValidSave` is returned. There is no third fallback. This is the corrupted-file, hardware-failure or out-of-disk-mid-write case.
 
 ### 9. Custom storage provider (Steam Cloud, console, server)
 
@@ -284,14 +284,14 @@ Use the Unity adapter's `ForkApplicationLoader`:
 3. Assign the configuration SO to the loader's field.
 4. Add the loader to your `UnityApplicationBoot`.
 
-The loader does the override for you. If you leave the SO unassigned, the core package's `DefaultForkConfiguration` is used (which writes to a relative `"Saves"` directory — useful for tests, but not where you want a real Unity build's saves to land).
+The loader does the override for you. If you leave the SO unassigned, the core package's `DefaultForkConfiguration` is used (which writes to a relative `"Saves"` directory, which suits tests but is not where a real Unity build should put saves).
 
 ### 12. Test Fork without Unity
 
 For pure-C# tests, construct everything by hand or wire via Buttr:
 
 ```csharp
-// Pure C# — see Tests/Clusters/ForkBasics/ForkRecipes.cs for the full pattern
+// Pure C#; see the ForkBasics cluster tests for the full pattern
 var configuration = new DefaultForkConfiguration(rootPath: "/tmp/test-saves", currentSchemaVersion: 1);
 var provider      = new FileSaveDataProvider(configuration);
 var serializer    = new JsonSaveSerializer(configuration);
@@ -325,5 +325,5 @@ public sealed class StubSaveDataProvider : ISaveDataProvider
 - **Don't skip `LoadRegistryAsync` on app start.** Without it, `GetAvailableSlots` returns empty even though save files exist on disk. The registry is populated from `_fork_index.json` only when you ask.
 - **Don't forget to register migration steps before loading.** Fork won't synthesise missing steps; it'll return `MigrationFailed` and leave the save untouched.
 - **Don't change `T` between save and load for the same slot.** The serializer round-trips a specific shape. If you must change shape, do it via schema migration, not by silently swapping types.
-- **Don't write your own write-then-swap on top of Fork.** It already does this internally — adding another layer just means two temp files and two reads. Just call `SaveAsync` and trust the result.
-- **Don't expect `LoadAsync<T>` to throw on failure.** Failures return `SaveLoadResult<T>` with a non-success `Status` — check it before using `result.Data`.
+- **Don't write your own write-then-swap on top of Fork.** It already does this internally, so another layer means two temp files and two reads. Call `SaveAsync` and check the result.
+- **Don't expect `LoadAsync<T>` to throw on failure.** Failures return `SaveLoadResult<T>` with a non-success `Status`. Check it before using `result.Data`.

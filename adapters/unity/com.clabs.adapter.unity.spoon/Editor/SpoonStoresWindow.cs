@@ -51,7 +51,7 @@ namespace CLabs.Spoon.Unity.Editor
             panels.Add(m_StoresPanel);
             panels.Add(m_StatePanel);
 
-            m_EmptyState = new Label("No stores registered — enter Play mode with a Buttr application that registered Spoon stores.");
+            m_EmptyState = new Label("No stores registered; enter Play mode with a Buttr application that registered Spoon stores.");
             m_EmptyState.AddToClassList("clabs-empty");
 
             m_StatusBar = CLabsStatusBar.Create();

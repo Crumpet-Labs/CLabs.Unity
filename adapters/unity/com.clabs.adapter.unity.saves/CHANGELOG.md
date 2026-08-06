@@ -3,7 +3,7 @@
 ## v1.2.0 (2026-06-18)
 ### Features
 
-- Lab Report Season 1 — Belfry/Spoon/Fork/Knife samples (862dc44)
+- Lab Report Season 1: Belfry/Spoon/Fork/Knife samples (862dc44)
 
 ### Fixes
 

@@ -4,11 +4,11 @@ A recipe cookbook for people who've never used Redux. Read the preamble once, th
 
 ## The mental model
 
-A Spoon store is a small, locked box that holds one piece of game state — like a snapshot of "what the settings look like right now."
+A Spoon store holds one piece of game state: a snapshot of what the settings look like right now.
 
-You can **read** what's in the box at any time. You can't reach in and change it directly. Instead, you push an **action** through a slot — a tiny message that says *"the user just turned the volume down"* or *"language changed to French."*
+You can **read** what's in the box at any time. You can't reach in and change it directly. Instead, you push an **action** into the store: a message describing what happened, such as the user turning the volume down, or the language changing to French.
 
-The store runs your action through a **reducer** — a pure function that looks at the current state plus the action, and returns the **new** state. Then anyone who **subscribed** to the store gets handed the new snapshot.
+The store runs the action through a **reducer**, a pure function that takes the current state plus the action and returns the **new** state. Then anyone who **subscribed** to the store gets handed the new snapshot.
 
 That's the whole loop. No events to wire up, no setters to expose, no thread-safety to think about.
 
@@ -31,12 +31,12 @@ That's the whole loop. No events to wire up, no setters to expose, no thread-saf
 
 Concepts in one breath:
 
-- **State** — a `readonly struct` holding the data.
-- **Action** — a `readonly struct` implementing `IAction`, describing *what happened*.
-- **Reducer** — a class implementing `IReducer<TState>`; pure function `(state, action) → new state`.
-- **Store** — `IStore<TState>`; you get one per feature, registered with Buttr.
-- **Middleware** — optional `IMiddleware<TState>` hooks that wrap dispatch (logging, validation, side effects).
-- **Subscriber** — `SpoonObserver<TState>` callback invoked after each state change.
+- **State**: a `readonly struct` holding the data.
+- **Action**: a `readonly struct` implementing `IAction`, describing *what happened*.
+- **Reducer**: a class implementing `IReducer<TState>`; pure function `(state, action) → new state`.
+- **Store**: `IStore<TState>`; you get one per feature, registered with Buttr.
+- **Middleware**: optional `IMiddleware<TState>` hooks that wrap dispatch (logging, validation, side effects).
+- **Subscriber**: `SpoonObserver<TState>` callback invoked after each state change.
 
 > Unity 6 ships C# 9.0, which doesn't include `record struct` (that's C# 10) or `with` expressions on non-record structs. Examples in this doc use plain `readonly struct` so they work in Unity as well as pure .NET. The `com.clabs.adapter.unity.spoon` package documents the canonical Unity wiring pattern (a `sealed partial class : MonoBehaviour` with `[Inject] private IStore<TState> i_Store;`) and ships a Spoon Stores editor window for live state inspection in Play mode.
 
@@ -86,7 +86,7 @@ public readonly struct SetLanguageAction : IAction
 public readonly struct MuteAction : IAction { }
 ```
 
-`IAction` is a marker — it has no methods. Anything that implements it is dispatchable. Parameter-less actions (commands without payload) can be empty `readonly struct`s.
+`IAction` is a marker interface with no methods. Anything that implements it is dispatchable. Parameter-less actions (commands without payload) can be empty `readonly struct`s.
 
 ### 3. Write a reducer
 
@@ -107,7 +107,7 @@ public sealed class SettingsReducer : IReducer<GameSettings>
 }
 ```
 
-Each handled arm returns a brand-new `GameSettings` carrying the changed field plus the unchanged ones. The `_ => state` arm silently ignores actions the reducer doesn't recognise — by design, middleware can dispatch its own actions and reducers don't have to care.
+Each handled arm returns a brand-new `GameSettings` carrying the changed field plus the unchanged ones. The `_ => state` arm ignores actions the reducer does not recognise. Middleware can dispatch actions of its own, and a reducer is not required to handle them.
 
 ### 4. Stand up a store directly (for tests)
 
@@ -140,7 +140,7 @@ Retrieve it after `builder.Build()`:
 var store = Application<IStore<GameSettings>>.Get();
 ```
 
-> Coming from other CLabs packages, you might expect a `UseSpoonPackage()` step. Spoon doesn't have one — it has nothing global to register. Every store is per-feature.
+> Spoon has no `UseSpoonPackage()` step, unlike other CLabs packages. It registers nothing globally; every store is per-feature.
 
 ### 6. Dispatch an action
 
@@ -170,7 +170,7 @@ store.Dispatch(new SetVolumeAction(0.25f));
 // Prints: Volume now: 0.25
 ```
 
-The `in` keyword means the state is passed by reference — no struct copy per subscriber. If you omit it (`s =>`), the compiler infers it from `SpoonObserver<TState>` anyway, but writing it makes the read-only intent explicit.
+The `in` keyword passes the state by reference, so the struct is not copied per subscriber. If you omit it (`s =>`), the compiler infers it from `SpoonObserver<TState>` anyway, but writing it makes the read-only intent explicit.
 
 Subscribers receive every state change, even when the reducer didn't actually modify state (dispatching `new UnhandledAction()` still notifies).
 
@@ -191,7 +191,7 @@ var store = new Store<GameSettings>(
     new MiddlewareCollection<GameSettings>(logger));
 ```
 
-`LambdaMiddleware<TState>` is the inline-lambda shortcut. The `next` parameter is a `SpoonDispatch` — just a named delegate for `(IAction action) -> void`. Calling it passes the action to the next middleware in the chain (or to the reducer if you're the last one).
+`LambdaMiddleware<TState>` is the inline-lambda shortcut. The `next` parameter is a `SpoonDispatch`, a named delegate for `(IAction action) -> void`. Calling it passes the action to the next middleware in the chain (or to the reducer if you're the last one).
 
 With Buttr:
 
@@ -220,7 +220,7 @@ store.Dispatch(new SetVolumeAction(3.5f));
 // store.State.Volume == 1.0f
 ```
 
-Middleware can also **swallow** an action — just return without calling `next`. The reducer never sees it.
+Middleware can also **swallow** an action by returning without calling `next`. The reducer never sees it.
 
 ### 10. Broadcast state changes to distant systems
 
@@ -266,11 +266,11 @@ store.Restore(snapshot);
 // store.State == snapshot
 ```
 
-> Don't call `Restore` from inside a dispatch (a reducer, middleware, or subscriber callback). It throws `InvalidOperationException` — keep restore calls outside the dispatch cycle.
+> Don't call `Restore` from inside a dispatch (a reducer, middleware, or subscriber callback). It throws `InvalidOperationException`. Keep restore calls outside the dispatch cycle.
 
 ### 12. Cross-feature reactions (one store reacts to another)
 
-Sometimes a change in feature A should trigger a dispatch into feature B. Don't do this from inside a reducer — use a middleware that holds references to both stores:
+Sometimes a change in feature A should trigger a dispatch into feature B. Do this from a middleware holding references to both stores rather than from inside a reducer:
 
 ```csharp
 public sealed class SettingsAnalyticsMiddleware : IMiddleware<GameSettings>
@@ -294,7 +294,7 @@ Buttr injects the other store. Cross-feature coupling becomes explicit and disco
 
 ### 13. Test a reducer
 
-Reducers are pure functions — test them directly without any Store:
+Reducers are pure functions, so they can be tested directly without a Store:
 
 ```csharp
 [Fact]
@@ -314,15 +314,15 @@ For testing middleware or the dispatch chain end-to-end, construct a `Store<T>` 
 
 ### 14. Common mistakes
 
-- **Don't mutate state in place.** Reducers return *new* state — never write `state.Volume = …`. Construct a fresh struct via the constructor, carrying the new values for changed fields and `state.X` for everything else.
+- **Don't mutate state in place.** Reducers return *new* state. Never write `state.Volume = …`. Construct a fresh struct via the constructor, carrying the new values for changed fields and `state.X` for everything else.
 - **Don't dispatch from inside a reducer.** Throws `InvalidOperationException`. Reducers must stay pure. If you need a follow-up dispatch, do it from a middleware (after `next(action)`) or from outside the cycle.
 - **Don't share a store across threads.** Spoon is single-threaded by design. Drive all dispatches from the game-loop thread.
 - **Don't put live references in `TState`.** State should be data, not handles. Lists, dictionaries, and MonoBehaviour refs make non-destructive updates misleading and persistence impossible.
-- **Don't reach for Spoon for per-frame data.** Position, velocity, AI state — those belong in components and entity registries. Spoon is for feature-level state that changes deliberately.
+- **Don't reach for Spoon for per-frame data.** Position, velocity and AI state belong in components and entity registries. Spoon is for feature-level state that changes deliberately.
 
 ---
 
 ## What next?
 
-- [Guide.md](Guide.md) — full walkthrough of the four concepts plus async flows, cross-feature dispatch, and anti-patterns.
-- [README.md](README.md) — quick reference and when-to-use guidance.
+- [Guide.md](Guide.md): full walkthrough of the four concepts plus async flows, cross-feature dispatch, and anti-patterns.
+- [README.md](README.md): quick reference and when-to-use guidance.

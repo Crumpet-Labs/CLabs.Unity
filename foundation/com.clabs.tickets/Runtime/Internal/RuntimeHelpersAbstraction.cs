@@ -42,7 +42,7 @@ namespace CLabs.Tickets.Internal
             }
 
             // Engine-registered value types (Vector2/3/4, Color, Rect, Bounds,
-            // Quaternion, etc. on Unity) — populated by adapter init.
+            // Quaternion, etc. on Unity), populated by adapter init.
             if (AdditionalWellKnownTypes.Contains(t)) return true;
 
             return false;

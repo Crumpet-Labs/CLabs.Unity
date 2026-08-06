@@ -4,7 +4,7 @@ A recipe cookbook for building editor windows on the CLabs editor framework. Eac
 
 ## The mental model
 
-The framework gives you **two window bases** (`CLabsEditorWindow` for panel-style, `CLabsGraphWindow` for graph-style) and **eight reusable components**. Bases own the layout chrome — header, theme load, status bar, editor-tick. You compose components into the content area.
+The framework gives you **two window bases** (`CLabsEditorWindow` for panel-style, `CLabsGraphWindow` for graph-style) and **eight reusable components**. Bases own the layout chrome: header, theme load, status bar and editor tick. Components are composed into the content area.
 
 ```
    CLabsEditorWindow                 CLabsGraphWindow
@@ -83,16 +83,16 @@ panel.Content.Add(
 );
 ```
 
-`Add()` is fluent — it returns the row, so badges and inline values chain. The click handler captures whatever local you close over.
+`Add()` is fluent and returns the row, so badges and inline values chain. The click handler captures whatever local you close over.
 
-### 4. Badges — fixed and dynamic colour
+### 4. Badges: fixed and dynamic colour
 
 ```csharp
-// Fixed semantic kinds — type-safe, themed by CSS.
+// Fixed semantic kinds: type-safe, themed by CSS.
 row.Add(CLabsBadge.Create("Active", BadgeKind.Success));
 row.Add(CLabsBadge.Create("Warning", BadgeKind.Warning));
 
-// Data-driven colour — auto-contrast text.
+// Data-driven colour, with auto-contrast text.
 row.Add(CLabsBadge.Create(season.DisplayName, season.Color.ToUnityColor()));
 
 // Long-lived badge mutated each frame (e.g. world-time phase):
@@ -120,7 +120,7 @@ protected override void OnCreateContent(VisualElement root) {
     panels.Add(m_DetailPanel);
 
     m_EmptyState = CLabsEmptyState
-        .Create("No items — enter Play mode")
+        .Create("No items; enter Play mode")
         .BindTo(m_ListPanel, m_DetailPanel);
 
     root.Add(panels);
@@ -133,17 +133,17 @@ protected override void OnEditorUpdate() {
 }
 ```
 
-`BindTo` is optional — if your window has more complex visibility logic (e.g. multi-mode editor/play switching), call `SetVisible(bool)` on the empty-state and manage sibling panels manually.
+`BindTo` is optional. For more complex visibility logic, such as multi-mode editor and play switching, call `SetVisible(bool)` on the empty-state and manage sibling panels directly.
 
 ### 6. Progress bar
 
 ```csharp
-// Normalised input — most common.
+// Normalised input: the most common form.
 var bar = CLabsProgressBar.Create(showLabel: false, height: 6);
 bar.SetProgress(snapshot.Progress);                  // 0..1
 card.Add(bar);
 
-// Current/max input — convenient when you have raw counters.
+// Current/max input, for raw counters.
 var cooldownBar = CLabsProgressBar.Create();
 cooldownBar.SetProgress(snapshot.Cooldown, snapshot.MaxCooldown);
 cooldownBar.SetFillColor(snapshot.IsReady ? Color.green : Color.yellow);
@@ -157,14 +157,14 @@ xpBar.SetProgress(xp.Current, xp.Required)
 ### 7. Detail row in a property panel
 
 ```csharp
-// String value — shortcut.
+// String value: the shortcut form.
 panel.Content.Add(CLabsDetailRow.Create("Status").SetValue("Unlocked"));
 
 // Badge value.
 panel.Content.Add(CLabsDetailRow.Create("Tier").SetValue(
     CLabsBadge.Create(tier.DisplayName, tier.Color.ToUnityColor())));
 
-// Composed value — bind a PropertyField into the value container.
+// Composed value: bind a PropertyField into the value container.
 var field = new IntegerField { value = state.Rank };
 field.RegisterValueChangedCallback(evt => Apply(evt.newValue));
 panel.Content.Add(CLabsDetailRow.Create("Req. Rank").SetValue(field));
@@ -224,4 +224,4 @@ The framework uses BEM-style class names: `clabs-<component>__<part>--<modifier>
 - `clabs-badge` / `clabs-badge--accent`
 - `clabs-detail-row` / `clabs-detail-row__label` / `clabs-detail-row__value`
 
-When you write adapter-specific USS, use **your own prefix** rather than extending `clabs-*` — e.g. `fork-toolbar__owner-section`, `sprig-properties__buttons`. The `clabs-*` namespace belongs to this framework and may be reorganised between versions.
+When you write adapter-specific USS, use **your own prefix** rather than extending `clabs-*`, for example `fork-toolbar__owner-section` or `sprig-properties__buttons`. The `clabs-*` namespace belongs to this framework and may be reorganised between versions.

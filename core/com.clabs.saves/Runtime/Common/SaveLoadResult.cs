@@ -37,7 +37,7 @@ namespace CLabs.Saves {
         }
 
         public static SaveLoadResult<T> FromBackup(T data, SaveSlotInfo info) {
-            return new(SaveLoadStatus.SuccessFromBackup, data, info, "Primary save was corrupt — loaded from backup");
+            return new(SaveLoadStatus.SuccessFromBackup, data, info, "Primary save was corrupt; loaded from backup");
         }
 
         public static SaveLoadResult<T> Migrated(T data, SaveSlotInfo info) {

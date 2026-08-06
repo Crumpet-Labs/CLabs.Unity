@@ -1,5 +1,5 @@
 namespace CLabs.Spoon.Samples {
-    /// <summary>Immutable snapshot of the lab's live numbers. Spoon never mutates in place — the
+    /// <summary>Immutable snapshot of the lab's live numbers. Spoon never mutates in place; the
     /// reducer returns a fresh copy on every action.</summary>
     public readonly struct KitchenState {
         public int Day { get; }

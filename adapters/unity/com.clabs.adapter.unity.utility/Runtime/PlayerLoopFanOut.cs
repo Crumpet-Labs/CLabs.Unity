@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace CLabs.Utility {
     /// <summary>
     /// Per-type fan-out registry behind <see cref="PlayerLoopInjector"/>. Each distinct channel key owns exactly
-    /// one PlayerLoop subsystem — inserted on the first subscribe, removed when the channel empties — and every
+    /// one PlayerLoop subsystem, inserted on the first subscribe and removed when the channel empties, and every
     /// subscriber of that key shares it. Disposing a subscription removes only that one callback, so sibling
     /// subscribers keep ticking. The PlayerLoop coupling is supplied through the constructor seams, leaving this
     /// type engine-agnostic and unit-testable.

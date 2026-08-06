@@ -1,4 +1,4 @@
-# CLabs Belfry — Guide
+# CLabs Belfry: Guide
 
 > Historic note: renamed from `com.clabs.eda` (Event-Driven Architecture) in the kitchen-theme sweep. The public API moved from `IEventFactory.CreatePublisher/CreateSubscriber` to the Tower/Rope/Ring shape: `IBellTower.Rope(key).RingBell(msg)` to publish, `IBellTower.Rope(key).OnBell<T>(handler)` to subscribe. Internal types were also renamed: `EventService → Belfry`, `EventBuffer → Peal`, `IEventQueueStrategy → IRingOrder`, `FairRoundRobinStrategy → FairRoundRobinRingOrder`, `StrictPriorityStrategy → StrictPriorityRingOrder`.
 
@@ -83,7 +83,7 @@ public static class k {
 
 this means anywhere `k.Towers.GameManager` you can access it. 
 
-Having said this it can be any object — a `string`, an enum, a `ScriptableObject`, Type. 
+Having said this it can be any object: a `string`, an enum, a `ScriptableObject`, or a `Type`.
 The rope combines the key with `typeof(T)` to form a `BellChannel(scope, messageType)` lookup, so the same rope can carry multiple message types and listeners can pick out specific ones.
 
 ### Async ringing
@@ -135,8 +135,8 @@ public sealed partial class ScoreTracker : MonoBehaviour {
 
 `OnBell` returns an `IDisposable`. Disposing it removes the listener. The standard pattern:
 
-- `OnEnable` — hook
-- `OnDisable` — dispose
+- `OnEnable`: hook
+- `OnDisable`: dispose
 
 This keeps subscriptions tied to Unity's enable/disable lifecycle and avoids dangling handlers.
 
@@ -155,8 +155,8 @@ m_Subscription = rope.OnBell(
 
 The routing pair is `BellChannel(object scope, Type messageType)`:
 
-- **scope** — the publisher identity, typically a `Type` like `k.Towers.CombatSystem`
-- **messageType** — the message struct type, derived from the generic parameter on `RingBell<T>` / `OnBell<T>`
+- **scope**: the publisher identity, typically a `Type` like `k.Towers.CombatSystem`
+- **messageType**: the message struct type, derived from the generic parameter on `RingBell<T>` / `OnBell<T>`
 
 So:
 
@@ -164,7 +164,7 @@ So:
 - A subscriber must know the publisher's scope to receive its messages
 - One rope (one scope) can carry multiple message types
 
-`BellChannel` is a `readonly struct` implementing `IEquatable<BellChannel>` — equality is based on both members.
+`BellChannel` is a `readonly struct` implementing `IEquatable<BellChannel>`, with equality based on both members.
 
 ## Peals (async ringing)
 
@@ -193,14 +193,14 @@ public sealed class SaveMediator {
     }
 
     public void OnCriticalShutdown() {
-        // Priority 100 is in the critical set — fires immediately, skipping the queue.
+        // Priority 100 is in the critical set: fires immediately, skipping the queue.
         var message = new SaveRequestedMessage(reason: "shutdown");
         m_SaveRope.RingToll(in message, priority: 100);
     }
 }
 ```
 
-Calling `Rope(key)` without a `PealConfig` produces a sync-only rope — `RingToll` on that rope has no peal to enqueue through.
+Calling `Rope(key)` without a `PealConfig` produces a sync-only rope, so `RingToll` on that rope has no peal to enqueue through.
 
 ### IPealConfig
 
@@ -221,7 +221,7 @@ Round-robins across priority levels. Higher-priority levels are visited first in
 |---|---|
 | Ordering | Priorities sorted descending (highest first) |
 | Fairness | Each priority level gets one dequeue per rotation cycle |
-| Starvation | Prevented — all levels participate in every cycle |
+| Starvation | Prevented; all levels participate in every cycle |
 
 #### StrictPriorityRingOrder
 
@@ -230,8 +230,8 @@ Always dequeues from the highest-priority level first. Lower-priority actions on
 | Behaviour | Detail |
 |---|---|
 | Ordering | Priorities sorted ascending; dequeue from highest |
-| Fairness | None — highest priority drains completely first |
-| Starvation | Possible — continuous high-priority work blocks lower levels |
+| Fairness | None; highest priority drains completely first |
+| Starvation | Possible; continuous high-priority work blocks lower levels |
 
 ### Custom ring orders
 
@@ -262,7 +262,7 @@ public sealed class WeightedRingOrder : IRingOrder {
 
 ## Bridge pattern
 
-Belfry depends on Tickets to function correctly. The intended ecosystem has each domain package exposing local `Action<>` events, and a small bridge assembly that translates those into Belfry messages. This keeps every domain package independent — none of them references `CLabs.Belfry` in its own asmdef.
+Belfry depends on Tickets to function correctly. The intended ecosystem has each domain package exposing local `Action<>` events, and a small bridge assembly that translates those into Belfry messages. This keeps every domain package independent, since none of them references `CLabs.Belfry` in its own asmdef.
 
 Each bridge follows the same shape:
 
@@ -271,7 +271,7 @@ Each bridge follows the same shape:
 3. Ring the struct on a dedicated rope via `IBellTower`
 4. Implement `IDisposable` for cleanup
 
-Intended bridge ecosystem (forthcoming — not all shipped yet):
+Intended bridge ecosystem (not all shipped yet):
 
 | Bridge | Source package | What it rings |
 |---|---|---|
@@ -296,6 +296,6 @@ Intended bridge ecosystem (forthcoming — not all shipped yet):
 |---|---|---|
 | `IBelfry` | `Belfry` | The subscription store and dispatch core |
 | `IPealFactory` | `PealFactory` | Builds `IPeal` instances from `IPealConfig` |
-| `IBellTower` | `BellTower` | Entry point — produces `BellRope`s by key |
+| `IBellTower` | `BellTower` | Entry point; produces `BellRope`s by key |
 
-`IPealConfig` and `IRingOrder` are *not* registered globally — they're constructed at the call site when async ropes are needed. This keeps async ordering a per-rope choice rather than an application-wide one.
+`IPealConfig` and `IRingOrder` are *not* registered globally. They are constructed at the call site when async ropes are needed. This keeps async ordering a per-rope choice rather than an application-wide one.

@@ -18,7 +18,7 @@ namespace CLabs.Editor {
             }
         }
 
-        // Fluent shadow of VisualElement.Add — returns this so callers can chain badges.
+        // Fluent shadow of VisualElement.Add: returns this so callers can chain badges.
         public new CLabsRow Add(VisualElement element) {
             base.Add(element);
             return this;

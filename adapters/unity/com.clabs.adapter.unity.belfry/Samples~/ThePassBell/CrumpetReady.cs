@@ -10,7 +10,7 @@ namespace CLabs.Belfry.Samples {
         }
     }
 
-    /// <summary>Rope keys for the lab's bell tower — kept in one place so publisher and
+    /// <summary>Rope keys for the lab's bell tower, kept in one place so publisher and
     /// subscribers agree on the channel.</summary>
     public static class PassBellKeys {
         public const string Service = "lab.service";

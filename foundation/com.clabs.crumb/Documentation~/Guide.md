@@ -1,4 +1,4 @@
-# CLabs Crumb — Full Guide
+# CLabs Crumb: Full Guide
 
 ## Mental model
 
@@ -13,13 +13,13 @@ Log calls pass through the configured `ICrumbSink` (console output) and through 
 ## The four pieces
 
 ```
-ICrumbConfiguration            — defaults: file logging, log dir, rotation, default filters
-ICrumbSink                     — the console sink contract; pluggable
-CrumbRegistry                  — Registry<Type, CrumbLogger>; the global "who's logging" lookup
-CrumbLogger                    — per-consumer, transient, owns one Type
+ICrumbConfiguration            : defaults: file logging, log dir, rotation, default filters
+ICrumbSink                     : the console sink contract; pluggable
+CrumbRegistry                  : Registry<Type, CrumbLogger>; the global "who's logging" lookup
+CrumbLogger                    : per-consumer, transient, owns one Type
 ```
 
-`CrumbFileSink` is registered as a concrete service and always runs alongside whatever `ICrumbSink` is bound — file output is independent of the console sink.
+`CrumbFileSink` is registered as a concrete service and always runs alongside whatever `ICrumbSink` is bound, so file output is independent of the console sink.
 
 ## Levels and format
 
@@ -45,7 +45,7 @@ yyyy-MM-dd HH:mm:ss.fff [LVL] [TypeName] message
 
 ## Getting a logger
 
-`CrumbLogger` is registered as **transient** — every consumer gets a fresh instance. Call `Initialize(type)` to register it in the `CrumbRegistry` keyed by the owning type:
+`CrumbLogger` is registered as **transient**, so every consumer gets a fresh instance. Call `Initialize(type)` to register it in the `CrumbRegistry` keyed by the owning type:
 
 ```csharp
 public sealed partial class EnemyAI : MonoBehaviour {
@@ -63,7 +63,7 @@ public sealed partial class EnemyAI : MonoBehaviour {
 
 Until `Initialize` is called the logger writes with `TypeName == "Uninitialized"`. Repeated `Initialize` calls re-key the registration in the registry.
 
-`CrumbLogger` implements `IDisposable` — disposing unregisters the logger from the registry. The Buttr container disposes transients when the container itself is disposed, so most consumers never call `Dispose` directly.
+`CrumbLogger` implements `IDisposable`, and disposing unregisters the logger from the registry. The Buttr container disposes transients when the container itself is disposed, so most consumers never call `Dispose` directly.
 
 ### Without Buttr
 
@@ -125,7 +125,7 @@ Set `DefaultFilters` on your `ICrumbConfiguration` implementation. New loggers p
 
 `ICrumbConfiguration` is the contract; the package ships a plain-C# `CrumbConfiguration` as the default with reasonable values (`LogDirectory = "Logs"`, 5MB rotation, 5 file retention, all levels enabled).
 
-To swap in your own implementation — Unity SO, environment-variable-driven config, integration-test fixture, anything — use the `IConfigurableCollection` returned by `UseCrumbPackage()`:
+To swap in your own implementation, whether a Unity SO, an environment-variable-driven config or an integration-test fixture, use the `IConfigurableCollection` returned by `UseCrumbPackage()`:
 
 ```csharp
 var builder = new ApplicationBuilder();
@@ -135,7 +135,7 @@ builder.UseCrumbPackage()
 using var app = builder.Build();
 ```
 
-The same pattern works for `ICrumbSink` — the package binds `ConsoleCrumbSink` by default and the Unity adapter overrides to `UnityCrumbSink` via this exact mechanism.
+The same pattern works for `ICrumbSink`: the package binds `ConsoleCrumbSink` by default, and the Unity adapter overrides it to `UnityCrumbSink` through this mechanism.
 
 ## File sink and rotation
 
@@ -145,7 +145,7 @@ The same pattern works for `ICrumbSink` — the package binds `ConsoleCrumbSink`
 2. Flush.
 3. If `CurrentFileSize >= MaxFileSizeBytes`, rotate: rename `current.log` to `log_{yyyyMMdd_HHmmss}.log`, open a fresh `current.log`, prune older `log_*.log` files keeping only `MaxFileCount`.
 
-Writes are guarded by a single `lock` — safe to call from any thread.
+Writes are guarded by a single `lock`, so they are safe to call from any thread.
 
 Directory defaults differ by configuration source:
 
@@ -160,11 +160,11 @@ Directory defaults differ by configuration source:
 
 - Search bar to filter by type name.
 - Per-logger toggle (`Enabled`).
-- Per-level filter chips (`VRB`/`INF`/`WRN`/`ERR`/`FTL`) — click to flip the corresponding `CrumbFilters` flag on the logger.
+- Per-level filter chips (`VRB`/`INF`/`WRN`/`ERR`/`FTL`). Clicking one flips the corresponding `CrumbFilters` flag on the logger.
 - Bulk "All On" / "All Off" buttons.
 - Status bar showing the file-logging status and `LogDirectory`.
 
-The window discovers loggers via `Application<CrumbRegistry>.Get()` and reflects the live state — no extra wiring required if Crumb is registered.
+The window discovers loggers via `Application<CrumbRegistry>.Get()` and reflects the live state. No extra wiring is required if Crumb is registered.
 
 ## Disposal
 
@@ -177,4 +177,4 @@ The window discovers loggers via `Application<CrumbRegistry>.Get()` and reflects
 - **Don't share one `CrumbLogger` across types.** Initialize one per consumer; the registry's per-type keying is what makes the manager window and per-class filtering work.
 - **Don't write to the file sink at high frequency.** Every `Write` flushes; for hot-path logging consider a custom `ICrumbSink` that batches.
 - **Don't expect log loss to be visible.** Filters silently drop; if you can't see a level in your sink, check `Enabled` and `Filters` first.
-- **Don't lose the configuration override.** If you call `UseCrumbPackage()` and never `.WithImplementation<ICrumbConfiguration>(...)`, you get `CrumbConfiguration`'s defaults — including a relative `"Logs"` directory that may not be where you want logs to land.
+- **Don't lose the configuration override.** If you call `UseCrumbPackage()` and never `.WithImplementation<ICrumbConfiguration>(...)`, you get `CrumbConfiguration`'s defaults, including a relative `"Logs"` directory that may not be where you want logs to land.

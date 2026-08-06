@@ -53,7 +53,7 @@ namespace CLabs.Crumb.Unity.Editor {
             m_ListView = new ScrollView(ScrollViewMode.Vertical);
             m_ListView.AddToClassList("logger-list");
 
-            m_EmptyState = new Label("No loggers active — enter Play mode to see registered loggers");
+            m_EmptyState = new Label("No loggers active; enter Play mode to see registered loggers");
             m_EmptyState.AddToClassList("clabs-empty");
 
             container.Add(m_ListView);

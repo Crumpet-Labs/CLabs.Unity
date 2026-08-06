@@ -1,6 +1,6 @@
 # CLabs Adapter: Editor (Unity)
 
-Shared Unity editor framework used across every other adapter's editor tooling. Stable foundation — used by editor windows in every CLabs adapter. Not a wrapper for a core package; this is foundational UI infrastructure.
+Shared Unity editor framework used across every other adapter's editor tooling. It is used by editor windows in every CLabs adapter. Not a wrapper for a core package; this is foundational UI infrastructure.
 
 ## What this provides
 
@@ -21,7 +21,7 @@ Shared Unity editor framework used across every other adapter's editor tooling. 
 | `CLabsStatusBar` | Footer status bar with `.Text` label + fluent `AddDot(enabled)` for status indicators. |
 | `CLabsRow` | Horizontal list-row with name + click callback + selected/disabled state. Compose badges via fluent `Add()`. |
 | `CLabsBadge` | Static factory for coloured pills (`BadgeKind.Accent/Success/Warning/Error/Neutral`) plus a dynamic-color overload with auto-contrast text. |
-| `CLabsEmptyState` | Empty-state label with `SetVisible(bool)` and `BindTo(...siblings)` — flips the empty-state and bound panels in opposite directions in one call. |
+| `CLabsEmptyState` | Empty-state label with `SetVisible(bool)` and `BindTo(...siblings)`, which flips the empty-state and bound panels in opposite directions in one call. |
 | `CLabsProgressBar` | Fill bar with `SetProgress(normalized)` or `SetProgress(current, max)`, optional label, optional fill colour. |
 | `CLabsDetailRow` | Property-panel row with a fixed-width label and arbitrary value content. Compose `PropertyField`, badges, etc. into `ValueContainer`. |
 
@@ -39,7 +39,7 @@ Adapters writing their own USS may reference these tokens:
 | Brand | `--clabs-accent`, `--clabs-accent-hover`, `--clabs-accent-text`, `--clabs-secondary`, `--clabs-secondary-hover`, `--clabs-brand-orange/gold/pink/rose/magenta/sky/cyan/blue` |
 | Semantic | `--clabs-success`, `--clabs-warning`, `--clabs-error`, `--clabs-info`, `--clabs-neutral` |
 
-The brand palette is the extension surface — adapters can pull a brand colour into their own selectors without hard-coding hex. Some tokens (e.g. `--clabs-accent-hover`, `--clabs-info`, `--clabs-secondary-hover`) are declared but not yet referenced inside the framework — they're available for adapter-side use today and the framework will wire them in as more components arrive.
+The brand palette is the extension surface, so adapters can pull a brand colour into their own selectors without hard-coding hex. Some tokens (`--clabs-accent-hover`, `--clabs-info`, `--clabs-secondary-hover`) are declared but not referenced inside the framework. They are available for adapter-side use, and the framework will wire them in as more components arrive.
 
 ## Composition patterns
 
@@ -61,7 +61,7 @@ panel.Content.Add(
 );
 ```
 
-`CLabsRow.Add` is fluent — it returns `this` and shadows `VisualElement.Add` so badges and value labels chain cleanly. `SetSelected(bool)` and `SetDisabled(bool)` toggle the visual state.
+`CLabsRow.Add` is fluent: it returns `this` and shadows `VisualElement.Add`, so badges and value labels chain. `SetSelected(bool)` and `SetDisabled(bool)` toggle the visual state.
 
 ## Setup
 
@@ -69,9 +69,9 @@ Add a dependency on `com.clabs.adapter.unity.editor` in your adapter's `package.
 
 ## Dependencies
 
-No asmdef references — this is the foundation layer that other editor asmdefs build on top of.
+No asmdef references. This is the foundation layer other editor asmdefs build on.
 
 ## See also
 
-- [Example.md](Example.md) — recipe cookbook with copy-paste snippets for every component
+- [Example.md](Example.md): recipe cookbook with copy-paste snippets for every component
 - [../Code-Index.md](../Code-Index.md)

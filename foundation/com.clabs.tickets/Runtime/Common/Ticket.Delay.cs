@@ -395,7 +395,7 @@ namespace CLabs.Tickets
         }
 
         // WaitForEndOfFramePromise moved to Unity adapter (TicketUnityDelay.cs)
-        // — it depends on MonoBehaviour.StartCoroutine and UnityEngine.WaitForEndOfFrame.
+        // because it depends on MonoBehaviour.StartCoroutine and UnityEngine.WaitForEndOfFrame.
 
         sealed class DelayFramePromise : ITicketSource, IPlayerLoopItem, ITaskPoolNode<DelayFramePromise>
         {

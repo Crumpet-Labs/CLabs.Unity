@@ -8,7 +8,7 @@ namespace CLabs.Utility {
         /// <summary>
         /// Hook <paramref name="customUpdate"/> into Unity's PlayerLoop Update phase. The type parameter
         /// <typeparamref name="T"/> names a shared channel: every caller using the same <typeparamref name="T"/>
-        /// shares a single PlayerLoop subsystem, and disposing the returned handle removes only that callback —
+        /// shares a single PlayerLoop subsystem, and disposing the returned handle removes only that callback,
         /// siblings on the same channel keep running. The subsystem is removed once the last subscriber disposes.
         /// </summary>
         public static IDisposable InjectUpdate<T>(Action customUpdate) =>

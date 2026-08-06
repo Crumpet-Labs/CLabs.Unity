@@ -5,7 +5,7 @@ namespace CLabs.Tickets.Internal
 {
     /// <summary>
     /// Factory-driven default equality comparer used by tickets APIs that
-    /// need to compare values — <see cref="Progress.CreateOnlyValueChanged{T}"/>,
+    /// need to compare values: <see cref="Progress.CreateOnlyValueChanged{T}"/>,
     /// <c>Ticket.WaitUntilValueChanged</c>, and <c>EveryValueChanged</c>.
     ///
     /// This package is engine-agnostic, so it can't reference the Unity-only
@@ -14,7 +14,7 @@ namespace CLabs.Tickets.Internal
     /// Unity adapter installs an override factory on startup via
     /// <see cref="SetOverride"/>. When no override is installed (e.g. another
     /// engine, or the Unity adapter hasn't initialised yet), we fall back to
-    /// <see cref="EqualityComparer{T}.Default"/> — which still does the right
+    /// <see cref="EqualityComparer{T}.Default"/>, which still does the right
     /// thing for most types; only Unity math structs get bitwise instead of
     /// fuzzy comparison.
     /// </summary>

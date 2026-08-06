@@ -29,7 +29,7 @@ namespace CLabs.Saves.Samples {
             if (result.Success)
                 Debug.Log($"[Three Forks] Loaded {result.Data.ChefName} · day {result.Data.Day} · {result.Data.Coins} coin (status: {result.Status}).");
             else
-                Debug.Log($"[Three Forks] Load failed: {result.Status} — {result.Message}.");
+                Debug.Log($"[Three Forks] Load failed: {result.Status}: {result.Message}.");
         }
 
         [ContextMenu("List slots")]

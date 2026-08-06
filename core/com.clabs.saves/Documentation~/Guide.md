@@ -1,8 +1,8 @@
-# CLabs Fork — Full Guide
+# CLabs Fork: Full Guide
 
 ## Overview
 
-Fork manages save slots — versioned, integrity-checked save files with a backup fallback. It sits above your game's in-memory state (Knife, Spoon, anything else) and handles the mechanics of persisting that state to disk safely.
+Fork manages save slots: versioned, integrity-checked save files with a backup fallback. It sits above your game's in-memory state (Knife, Spoon, anything else) and handles the mechanics of persisting that state to disk safely.
 
 ## Architecture
 
@@ -26,9 +26,9 @@ Game Code
 
 Each slot has:
 
-- **Current file** — the latest valid save.
-- **Backup file** — the previous save, kept as a fallback.
-- **Metadata** — last save time, schema version, auto-save flag.
+- **Current file**: the latest valid save.
+- **Backup file**: the previous save, kept as a fallback.
+- **Metadata**: last save time, schema version, auto-save flag.
 
 Slots are tracked in a lightweight `_fork_index.json` registry file in the configured `RootPath`. The registry is loaded on `IForkService.LoadRegistryAsync()` and rewritten on every save / delete.
 
@@ -63,7 +63,7 @@ Games evolve. Save format v1 won't match v5. Fork handles this with a step-based
 ### How it works
 
 1. Each `ISaveMigrationStep` converts from version `N` to `N+1`.
-2. Steps work on **raw JSON strings** — no need for old type definitions in your codebase.
+2. Steps work on **raw JSON strings**, so old type definitions are not needed in your codebase.
 3. If a save is v2 and the current schema is v5, Fork runs: `v2→v3 → v3→v4 → v4→v5`.
 4. If any step in the chain is missing, migration fails gracefully and the load reports `MigrationFailed`.
 
@@ -126,16 +126,16 @@ builder.UseForkPackage()
 using var app = builder.Build();
 ```
 
-The same shape applies to `ISaveSerializer` and `ISaveIntegrityValidator` if you ever need to swap them — both are registered through `IConfigurableCollection` keyed by the interface.
+The same shape applies to `ISaveSerializer` and `ISaveIntegrityValidator` if you ever need to swap them. Both are registered through `IConfigurableCollection`.
 
 ## Custom providers
 
 | Platform | Provider |
 |---|---|
 | Local filesystem | `FileSaveDataProvider` (built-in) |
-| Steam Cloud | Custom — use Steamworks API |
-| Console (PS5, Xbox) | Custom — use platform SDK |
-| Cloud sync | Custom — your backend API |
+| Steam Cloud | Custom; use the Steamworks API |
+| Console (PS5, Xbox) | Custom; use the platform SDK |
+| Cloud sync | Custom; your backend API |
 
 The provider only handles raw byte IO. Serialization, checksums, and versioning are handled inside Fork; your provider just reads and writes bytes.
 
@@ -145,5 +145,5 @@ The Unity adapter ships a `Fork Viewer` editor window (`Window > Crumpet Labs > 
 
 ## Disposal
 
-- `IForkService` doesn't need explicit disposal — Buttr disposes registered singletons on container disposal.
+- `IForkService` needs no explicit disposal, since Buttr disposes registered singletons when the container is disposed.
 - The save / load operations are atomic per call; nothing is left half-written even on abrupt shutdown (the write-then-swap step is the guarantee).

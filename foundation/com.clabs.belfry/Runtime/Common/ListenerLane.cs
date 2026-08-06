@@ -5,7 +5,7 @@ namespace CLabs.Belfry {
     /// <summary>
     /// The bindings registered on one channel, kept sorted by priority then subscription order, with a
     /// copy-on-write snapshot. <see cref="Snapshot"/> rebuilds the array only after the listener set changes,
-    /// so publishing on an unchanged channel allocates nothing. The returned array is treated as immutable —
+    /// so publishing on an unchanged channel allocates nothing. The returned array is treated as immutable:
     /// mutations replace the reference rather than editing in place, so an in-flight dispatch that captured an
     /// earlier snapshot is never disturbed by a subscribe/unsubscribe during that dispatch.
     /// </summary>

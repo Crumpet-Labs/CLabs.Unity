@@ -2,7 +2,7 @@
   "name": "com.clabs.saves",
   "version": "1.1.1",
   "displayName": "CLabs Saves",
-  "description": "Save slot management — write-then-swap, integrity-checked saves, schema migration pipelines, pluggable storage providers.",
+  "description": "Save slot management: write-then-swap, integrity-checked saves, schema migration pipelines, pluggable storage providers.",
   "shortDescription": "Save slots",
   "unity": "6000.0",
   "dependencies": {

@@ -21,7 +21,7 @@ namespace CLabs.Tickets
         TriggerEvent<T> triggerEvent;
 
         // Upstream Ticket had a [SerializeField] attribute here for inspector
-        // visibility. Removed in Phase B engine separation — the attribute had
+        // visibility. Removed in Phase B engine separation: the attribute had
         // no runtime effect outside the Unity inspector, and AsyncReactiveProperty
         // is a pure-C# type that nobody inspects in practice.
         T latestValue;

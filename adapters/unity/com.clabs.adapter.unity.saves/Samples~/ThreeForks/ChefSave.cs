@@ -1,7 +1,7 @@
 using System;
 
 namespace CLabs.Saves.Samples {
-    /// <summary>One playthrough's save payload — plain serializable data. Fork handles integrity,
+    /// <summary>One playthrough's save payload: plain serializable data. Fork handles integrity,
     /// write-then-swap, and migration around it.</summary>
     [Serializable]
     public sealed class ChefSave {

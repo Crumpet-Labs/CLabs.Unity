@@ -12,7 +12,7 @@ Engine-agnostic. The core package has no Unity dependency; Unity consumers use t
 builder.UseCrumbPackage();
 ```
 
-This registers `ICrumbConfiguration` (with a sensible default), `ICrumbSink` (console-bound by default), `CrumbFileSink`, `CrumbRegistry`, and a transient `CrumbLogger`. Adapters override the defaults via the `WithFactory<T>` mechanism on the returned `IConfigurableCollection` — see the Unity adapter for a worked loader.
+This registers `ICrumbConfiguration` (with a sensible default), `ICrumbSink` (console-bound by default), `CrumbFileSink`, `CrumbRegistry`, and a transient `CrumbLogger`. Adapters override the defaults with `WithImplementation<T>` on the returned `IConfigurableCollection`. The Unity adapter has a worked loader.
 
 ### 2. Inject and initialise a logger
 
@@ -54,20 +54,20 @@ void Write(string level, string typeName, string message);
 
 The package ships three concrete sinks:
 
-- **`ConsoleCrumbSink`** — `System.Console.WriteLine` output (default for pure-C# consumers).
-- **`CrumbFileSink`** — rotating file sink writing to `ICrumbConfiguration.LogDirectory`, rotating at `MaxFileSizeBytes`, pruning to `MaxFileCount`.
-- **`NullCrumbSink`** — discards all output (useful for tests or muted contexts).
+- **`ConsoleCrumbSink`**: `System.Console.WriteLine` output (default for pure-C# consumers).
+- **`CrumbFileSink`**: rotating file sink writing to `ICrumbConfiguration.LogDirectory`, rotating at `MaxFileSizeBytes`, pruning to `MaxFileCount`.
+- **`NullCrumbSink`**: discards all output (useful for tests or muted contexts).
 
 The Unity adapter adds a fourth: `UnityCrumbSink`, mapping levels to `Debug.Log` / `Debug.LogWarning` / `Debug.LogError`.
 
 ## Dependencies
 
-- `Buttr.Core` — DI + lifecycle.
-- `CLabs.Utility` — `Registry<TKey, TValue>` for the per-type logger lookup.
+- `Buttr.Core`: DI + lifecycle.
+- `CLabs.Utility`: `Registry<TKey, TValue>` for the per-type logger lookup.
 
 Pure C#. `noEngineReferences: true`. Runs in tests without Unity.
 
 ## Further reading
 
-- [Example.md](Example.md) — recipe cookbook for the canonical wiring + filtering + sink-override patterns.
-- [Guide.md](Guide.md) — full walkthrough of the platform-DI override pattern, filter semantics, file rotation, and the `CrumbRegistry` editor surface.
+- [Example.md](Example.md): recipe cookbook for the canonical wiring + filtering + sink-override patterns.
+- [Guide.md](Guide.md): full walkthrough of the platform-DI override pattern, filter semantics, file rotation, and the `CrumbRegistry` editor surface.

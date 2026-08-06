@@ -13,7 +13,7 @@ namespace CLabs.Adapters {
         }
 
         private void OnEnable() {
-            // Batch subscription — all in one place, one IDisposable
+            // Batch subscription: all in one place, one IDisposable
             m_Subscription = m_Rope.OnBell(
                 new BellListener<bool>(Foo),
                 new BellListener<int>(Bar),

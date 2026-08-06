@@ -4,7 +4,7 @@ Re-publishes Spoon store state changes as Belfry messages. Lets distant systems 
 
 ## What it does
 
-When both `com.clabs.spoon` and `com.clabs.belfry` are installed, this bridge attaches a subscriber to a `Store<TState>` that fires a `SpoonStateChangedMessage<TState>` on every change. Listeners hook Belfry through their own keys — no compile-time coupling to the feature that owns the store.
+When both `com.clabs.spoon` and `com.clabs.belfry` are installed, this bridge attaches a subscriber to a `Store<TState>` that fires a `SpoonStateChangedMessage<TState>` on every change. Listeners hook Belfry through their own keys, with no compile-time coupling to the feature that owns the store.
 
 ## Wiring
 
@@ -17,7 +17,7 @@ public static IConfigurableCollection UseGameSettingsFeature(this ApplicationBui
 }
 ```
 
-The `bellKey` (`"game-settings"` above) is the Belfry rope key — listeners must use the same key.
+The `bellKey` (`"game-settings"` above) is the Belfry rope key. Listeners must use the same key.
 
 ## Consuming
 
@@ -34,8 +34,8 @@ using var handle = rope.OnBell<SpoonStateChangedMessage<GameSettings>>(
 
 ## Dependencies
 
-- `com.clabs.spoon` — the store source.
-- `com.clabs.belfry` — the message bus.
+- `com.clabs.spoon`: the store source.
+- `com.clabs.belfry`: the message bus.
 
 Pure C#. `noEngineReferences: true`. Runs in tests without Unity.
 
@@ -43,8 +43,8 @@ Pure C#. `noEngineReferences: true`. Runs in tests without Unity.
 
 - Every dispatch produces a Belfry message, even if the reducer returned identical state. Filter in the subscriber if that matters.
 - The mediator is a singleton per `TState`. Dispose it to stop republishing (normally the container lifetime handles this).
-- Belfry's `RingBell` is synchronous — the subscriber callback runs on the dispatch thread. Use `RingToll` (the async lane) if you need queued, awaitable delivery.
+- Belfry's `RingBell` is synchronous, so the subscriber callback runs on the dispatch thread. Use `RingToll` (the async lane) if you need queued, awaitable delivery.
 
 ## Further reading
 
-- [Guide.md](Guide.md) — full walkthrough of message firing, listener patterns, and bell vs toll choice.
+- [Guide.md](Guide.md): full walkthrough of message firing, listener patterns, and bell vs toll choice.

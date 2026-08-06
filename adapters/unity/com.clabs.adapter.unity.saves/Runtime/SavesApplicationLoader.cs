@@ -9,7 +9,7 @@ namespace CLabs.Adapters {
     /// UnityApplicationLoaderBase that brings up a Fork application container. Optionally accepts
     /// a <see cref="SavesConfigurationSO"/>; if none is assigned, the core package's default
     /// <see cref="DefaultSavesConfiguration"/> is used (which writes to a relative <c>"Saves"</c>
-    /// directory — useful for tests, but Unity consumers should supply an SO so saves land under
+    /// directory, which suits tests, but Unity consumers should supply an SO so saves land under
     /// <c>Application.persistentDataPath</c>).
     /// </summary>
     [CreateAssetMenu(fileName = "SavesApplicationLoader", menuName = "CLabs/Saves/Application Loader")]

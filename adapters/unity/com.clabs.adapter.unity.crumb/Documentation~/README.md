@@ -9,11 +9,11 @@ Unity bindings for `com.clabs.crumb`. Supplies a `Debug.Log` sink, a `Scriptable
 | `UnityCrumbSink` | `ICrumbSink` that maps levels to `Debug.Log` / `Debug.LogWarning` / `Debug.LogError` |
 | `CrumbConfigurationSO` | `ScriptableObject` implementing `ICrumbConfiguration` (file logging, log dir under `Application.persistentDataPath`, rotation, default filters) |
 | `CrumbApplicationLoader` | `UnityApplicationLoaderBase` SO that builds a Crumb application container with `CrumbConfigurationSO` and `UnityCrumbSink` overrides applied |
-| `CrumbManagerWindow` | `Window > Crumpet Labs > Crumb Manager` — live per-logger toggles and filter chips during Play mode |
+| `CrumbManagerWindow` | `Window > Crumpet Labs > Crumb Manager`: live per-logger toggles and filter chips during Play mode |
 
 ## Setup
 
-### Option A — use the application loader (recommended)
+### Option A: use the application loader (recommended)
 
 1. Create a `CrumbConfigurationSO` asset: `Create > CLabs > Crumb > Configuration`.
 2. Create a `CrumbApplicationLoader` asset: `Create > CLabs / Crumb / Application Loader`.
@@ -30,7 +30,7 @@ builder.UseCrumbPackage()
 m_Application = builder.Build();
 ```
 
-### Option B — register Crumb yourself inside a larger loader
+### Option B: register Crumb yourself inside a larger loader
 
 If your project has a single composite loader that registers many packages, replicate the override block manually:
 
@@ -46,15 +46,15 @@ public override Awaitable LoadAsync(CancellationToken cancellationToken) {
 }
 ```
 
-The `WithFactory<T>` overrides work because the core `UseCrumbPackage()` registers `ICrumbConfiguration` and `ICrumbSink` via the single-arg `AddSingleton<T>().WithFactory(...)` form — that puts them in the `IConfigurableCollection` keyed by the interface, which is what `WithFactory<T>` looks up.
+The overrides work because `UseCrumbPackage()` registers both ports with the two-argument `AddSingleton<TAbstract, TConcrete>()` form. `WithImplementation<TAbstract>` scans the collection by abstract type and accepts any implementation of it, which is why the loader can supply a `CompositeCrumbSink` where the default was a `ConsoleCrumbSink`.
 
 ## Dependencies
 
-- `com.clabs.crumb` — core logger + filter framework
-- `com.crumpetlabs.buttr` + `com.crumpetlabs.buttr.unity` — DI and `UnityApplicationLoaderBase`
-- `com.clabs.adapter.unity.editor` — `CLabsEditorWindow` framework
+- `com.clabs.crumb`: core logger + filter framework
+- `com.crumpetlabs.buttr` + `com.crumpetlabs.buttr.unity`: DI and `UnityApplicationLoaderBase`
+- `com.clabs.adapter.unity.editor`: `CLabsEditorWindow` framework
 
 ## See also
 
-- The `com.clabs.crumb` package's `Documentation~/Guide.md` — full logger walkthrough.
-- [../Code-Index.md](../Code-Index.md) — auto-generated public surface listing.
+- The `com.clabs.crumb` package's `Documentation~/Guide.md`: full logger walkthrough.
+- [../Code-Index.md](../Code-Index.md): auto-generated public surface listing.

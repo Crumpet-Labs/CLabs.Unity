@@ -1,6 +1,6 @@
-# The Lab's Working Memory — Spoon sample
+# The Lab's Working Memory: Spoon sample
 
-The lab's live numbers — day, coins, Old Hob's temperature — live in **one reactive store**.
+The lab's live numbers, day, coins and Old Hob's temperature, live in **one reactive store**.
 Spoon is Redux-style: you never mutate state directly, you **dispatch an action**, a **pure reducer**
 returns a fresh snapshot, and **subscribers** are notified.
 
@@ -11,7 +11,7 @@ returns a fresh snapshot, and **subscribers** are notified.
 
 ## The loop to learn
 `Dispatch(action)` → `KitchenReducer.Reduce(state, action)` → new `KitchenState` → your `Subscribe`
-observer fires. `IsSafeToServe` is a **selector** — derived from state, never stored.
+observer fires. `IsSafeToServe` is a **selector**: derived from state, never stored.
 
 ## See it live (optional)
 To inspect the store in **Window → Crumpet Labs → Spoon Stores DevTools**, register it with a Buttr
@@ -19,4 +19,4 @@ container at build time (the DevTools window reads Buttr's registry, populated b
 See the `com.clabs.adapter.unity.spoon` adapter README for the registration snippet.
 
 ## Save/load hook
-`Store.Restore(state)` rehydrates a store from a saved snapshot — the bridge to Fork/Knife (later episodes).
+`Store.Restore(state)` rehydrates a store from a saved snapshot, which is the bridge to Fork/Knife in later episodes.

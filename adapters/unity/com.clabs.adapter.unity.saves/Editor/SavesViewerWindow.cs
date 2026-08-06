@@ -45,7 +45,7 @@ namespace CLabs.Saves.Unity.Editor {
             panels.Add(m_SlotsPanel);
             panels.Add(m_DetailPanel);
 
-            m_EmptyState = new Label("No save slots found — enter Play Mode");
+            m_EmptyState = new Label("No save slots found; enter Play Mode");
             m_EmptyState.AddToClassList("clabs-empty");
 
             m_StatusBar = CLabsStatusBar.Create();

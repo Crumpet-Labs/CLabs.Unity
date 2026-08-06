@@ -2,7 +2,7 @@
   "name": "com.clabs.adapter.unity.editor",
   "version": "0.2.1",
   "displayName": "CLabs Adapter: Editor (Unity)",
-  "description": "Shared Unity editor framework — window bases (CLabsEditorWindow, CLabsGraphWindow), components (Header/Panel/Toolbar/StatusBar/Row/Badge/EmptyState/ProgressBar/DetailRow), and the CrumpetLabs.uss theme.",
+  "description": "Shared Unity editor framework: window bases (CLabsEditorWindow, CLabsGraphWindow), components (Header/Panel/Toolbar/StatusBar/Row/Badge/EmptyState/ProgressBar/DetailRow), and the CrumpetLabs.uss theme.",
   "shortDescription": "Unity editor UI framework",
   "unity": "6000.0",
   "dependencies": {},

@@ -9,7 +9,7 @@ namespace CLabs.Tickets
     /// <summary>
     /// Unity-specific factory overloads for creating <see cref="UnityAction"/>
     /// adapters around async TicketVoid methods. Split out of Ticket.Factory.cs
-    /// in Phase B engine separation — partial classes cannot span assemblies, so
+    /// in Phase B engine separation: partial classes cannot span assemblies, so
     /// these overloads moved from <c>Ticket.UnityAction(...)</c> in core to
     /// <c>TicketUnityActions.UnityAction(...)</c> in the Unity adapter.
     /// Will be folded back under a unified Ticket API in Phase D's rebrand pass.

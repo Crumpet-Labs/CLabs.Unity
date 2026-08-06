@@ -10,8 +10,8 @@ A type-safe, key-scoped pub/sub messaging system built on the **Tower / Rope / R
 | `BellRope` | Per-key façade exposing `RingBell<T>(in T msg)`, `RingToll<T>(in T msg, priority)`, and `OnBell<T>(handler, priority)`. |
 | `IBelfry` | Low-level subscription store backing the tower. Most code goes through `BellRope`. |
 | `IPeal` / `Peal` / `IPealConfig` / `PealConfig` | Async queue + config for `RingToll`. Backed by an `IRingOrder`. |
-| `IRingOrder` + `FairRoundRobinRingOrder` / `StrictPriorityRingOrder` | Pluggable dequeue strategies — fairness vs strict priority. |
-| `BellMessage<T>` | `delegate void BellMessage<T>(in T message)` — the handler signature. |
+| `IRingOrder` + `FairRoundRobinRingOrder` / `StrictPriorityRingOrder` | Pluggable dequeue strategies: fairness against strict priority. |
+| `BellMessage<T>` | `delegate void BellMessage<T>(in T message)`, the handler signature. |
 | `UseBelfry()` | `ApplicationBuilder` extension registering `IBelfry`, `IPealFactory`, `IBellTower` as singletons. |
 
 ## Installation
@@ -36,8 +36,8 @@ dotnet add package CLabs.Belfry
 
 You must install these alongside Belfry **in this order**:
 
-1. **Buttr.Core** — the DI / application-builder framework. Belfry registers its services on an `ApplicationBuilder` from Buttr. → [Buttr.Core](https://github.com/Crumpet-Labs/Buttr.Core)
-2. **CLabs.Tickets** — the async/await primitive `RingToll` returns. → [CLabs.Tickets](https://github.com/Crumpet-Labs/CLabs.Tickets)
+1. **Buttr.Core**: the DI / application-builder framework. Belfry registers its services on an `ApplicationBuilder` from Buttr. → [Buttr.Core](https://github.com/Crumpet-Labs/Buttr.Core)
+2. **CLabs.Tickets**: the async/await primitive `RingToll` returns. → [CLabs.Tickets](https://github.com/Crumpet-Labs/CLabs.Tickets)
 3. **CLabs.Belfry** itself.
 
 ## Using it
@@ -132,7 +132,7 @@ await i_Tower
 
 ## Unity users
 
-If you're building a Unity project, install the [CLabs.Unity](https://github.com/Crumpet-Labs/CLabs.Unity) UPM umbrella — Belfry ships inside it together with its Unity adapter (`com.clabs.adapter.unity.belfry`). This repo is for plain .NET consumers.
+If you're building a Unity project, install the [CLabs.Unity](https://github.com/Crumpet-Labs/CLabs.Unity) UPM umbrella, which ships Belfry together with its Unity adapter (`com.clabs.adapter.unity.belfry`). This repo is for plain .NET consumers.
 
 ## License
 

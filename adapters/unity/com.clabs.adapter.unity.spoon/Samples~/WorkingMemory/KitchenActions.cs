@@ -13,6 +13,6 @@ namespace CLabs.Spoon.Samples {
         public HeatedOven(int delta) => Delta = delta;
     }
 
-    /// <summary>A new service day opened — bank the day, cool the oven back to room temperature.</summary>
+    /// <summary>A new service day opened: bank the day, cool the oven back to room temperature.</summary>
     public readonly struct NewDay : IAction { }
 }

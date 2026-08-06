@@ -6,14 +6,14 @@ Engine-agnostic. The core package has no Unity dependency; Unity consumers use t
 
 ## Features
 
-- **Save slots** — multiple save files with current + backup per slot.
-- **Write-then-swap** — never overwrites existing saves; validates the new file before promoting.
-- **Integrity validation** — SHA256 checksums detect corruption before deserialization.
-- **Schema migration** — versioned saves with a step-by-step migration pipeline.
-- **Platform abstraction** — swap `ISaveDataProvider` for Steam Cloud, consoles, etc.
-- **Slot registry** — persistent index of all saves; no filesystem scanning.
-- **Backup fallback** — automatically tries the backup file if the primary is corrupt.
-- **Buttr DI integration** — register with `builder.UseForkPackage()` and inject `IForkService`.
+- **Save slots**: multiple save files with current + backup per slot.
+- **Write-then-swap**: never overwrites existing saves; validates the new file before promoting.
+- **Integrity validation**: SHA256 checksums detect corruption before deserialization.
+- **Schema migration**: versioned saves with a step-by-step migration pipeline.
+- **Platform abstraction**: swap `ISaveDataProvider` for Steam Cloud, consoles, etc.
+- **Slot registry**: persistent index of all saves; no filesystem scanning.
+- **Backup fallback**: automatically tries the backup file if the primary is corrupt.
+- **Buttr DI integration**: register with `builder.UseForkPackage()` and inject `IForkService`.
 
 ## Quick start
 
@@ -23,7 +23,7 @@ Engine-agnostic. The core package has no Unity dependency; Unity consumers use t
 builder.UseForkPackage();
 ```
 
-`UseForkPackage` registers a default `IForkConfiguration` (writes to a relative `"Saves"` directory), the registry, the JSON serializer, the SHA256 validator, the file provider, and `IForkService`. To override the configuration — for a Unity build, a Steam Cloud provider, or anything else — chain `.WithImplementation<T>(...)` on the returned `IConfigurableCollection`:
+`UseForkPackage` registers a default `IForkConfiguration` (writes to a relative `"Saves"` directory), the registry, the JSON serializer, the SHA256 validator, the file provider, and `IForkService`. To override the configuration, whether for a Unity build, a Steam Cloud provider or anything else, chain `.WithImplementation<T>(...)` on the returned `IConfigurableCollection`:
 
 ```csharp
 builder.UseForkPackage()
@@ -88,18 +88,18 @@ Register migration steps before calling `LoadAsync`.
 
 ## Custom providers
 
-Implement `ISaveDataProvider` for platform-specific storage (Steam Cloud, console APIs, your own backend). The provider handles raw byte IO only — serialization, checksums, and versioning are handled by Fork. Override with `.WithImplementation<ISaveDataProvider>(() => new MyProvider())`.
+Implement `ISaveDataProvider` for platform-specific storage (Steam Cloud, console APIs, your own backend). The provider handles raw byte IO only. Serialization, checksums and versioning are handled by Fork. Override with `.WithImplementation<ISaveDataProvider>(() => new MyProvider())`.
 
 ## Dependencies
 
-- `Buttr.Core` — DI + lifecycle.
-- `com.clabs.tickets` — `Ticket` async primitive.
-- `com.clabs.crumb` — operator-visible logging on serialization / validation failures.
-- `com.unity.nuget.newtonsoft-json` — JSON serialization.
+- `Buttr.Core`: DI + lifecycle.
+- `com.clabs.tickets`: `Ticket` async primitive.
+- `com.clabs.crumb`: operator-visible logging on serialization / validation failures.
+- `com.unity.nuget.newtonsoft-json`: JSON serialization.
 
 Pure C#. `noEngineReferences: true`. Runs in tests without Unity.
 
 ## Further reading
 
-- [Example.md](Example.md) — recipe cookbook covering save / load / migration / custom-provider patterns end-to-end.
-- [Guide.md](Guide.md) — full walkthrough of slots, write-then-swap, integrity, the migration pipeline, custom providers, and the platform-DI override pattern.
+- [Example.md](Example.md): recipe cookbook covering save / load / migration / custom-provider patterns end-to-end.
+- [Guide.md](Guide.md): full walkthrough of slots, write-then-swap, integrity, the migration pipeline, custom providers, and the platform-DI override pattern.

@@ -2,7 +2,7 @@
   "name": "com.clabs.adapter.unity.saves",
   "version": "1.2.0",
   "displayName": "CLabs Adapter: Saves (Unity)",
-  "description": "Unity adapter for CLabs Saves — persistentDataPath-backed ScriptableObject configuration, application loader, and the save-slot viewer editor window.",
+  "description": "Unity adapter for CLabs Saves: persistentDataPath-backed ScriptableObject configuration, application loader, and the save-slot viewer editor window.",
   "shortDescription": "Saves Unity adapter",
   "unity": "6000.0",
   "dependencies": {

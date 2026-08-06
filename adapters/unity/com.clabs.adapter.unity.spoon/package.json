@@ -2,7 +2,7 @@
   "name": "com.clabs.adapter.unity.spoon",
   "version": "2.1.0",
   "displayName": "CLabs Spoon Unity Adapter",
-  "description": "Unity adapter for CLabs Spoon — editor inspector window (Spoon Stores DevTools) for live state inspection in Play mode, plus Unity 6 (C# 9) syntax conventions for state and action types.",
+  "description": "Unity adapter for CLabs Spoon: editor inspector window (Spoon Stores DevTools) for live state inspection in Play mode, plus Unity 6 (C# 9) syntax conventions for state and action types.",
   "shortDescription": "Unity adapter for Spoon",
   "unity": "6000.0",
   "dependencies": {

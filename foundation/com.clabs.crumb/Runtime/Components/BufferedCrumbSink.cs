@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CLabs.Crumb {
     /// <summary>
-    /// An <see cref="ICrumbSink"/> that keeps the most recent log lines in a bounded in-memory ring — for an
+    /// An <see cref="ICrumbSink"/> that keeps the most recent log lines in a bounded in-memory ring, for an
     /// in-editor console or a runtime debug view. Thread-safe. Compose it alongside another sink (e.g. the Unity
     /// console) with <see cref="CompositeCrumbSink"/>. Pollers read <see cref="Version"/> to detect changes cheaply
     /// and <see cref="Snapshot"/> to read the entries.

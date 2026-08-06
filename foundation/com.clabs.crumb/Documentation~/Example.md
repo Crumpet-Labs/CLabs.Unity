@@ -43,9 +43,9 @@ public sealed partial class PlayerController : MonoBehaviour
 
 Three rules:
 
-- `sealed partial class` — Buttr's source generator needs `partial` to populate `[Inject]` fields.
-- `[Inject] private CrumbLogger i_Logger;` — `i_` prefix marks injected fields.
-- `Initialize(GetType())` in `Awake` — registers the logger in `CrumbRegistry` keyed by your type so editor tooling can find it.
+- `sealed partial class`: Buttr's source generator needs `partial` to populate `[Inject]` fields.
+- `[Inject] private CrumbLogger i_Logger;`: `i_` prefix marks injected fields.
+- `Initialize(GetType())` in `Awake` registers the logger in `CrumbRegistry`, keyed by your type, so editor tooling can find it.
 
 ### 2. Log at all five levels
 
@@ -76,7 +76,7 @@ File output adds an ISO-8601 timestamp prefix to every line.
 Each logger has a `Filters` bitmask (`CrumbFilters`) controlling which levels emit. Override at any time:
 
 ```csharp
-// Mute Verbose on this logger only — keep everything else.
+// Mute Verbose on this logger only; keep everything else.
 i_Logger.Filters = CrumbFilters.Info | CrumbFilters.Warning | CrumbFilters.Error | CrumbFilters.Fatal;
 
 // Only show failures.
@@ -100,7 +100,7 @@ i_Logger.Enabled = true;             // back on
 The default `ICrumbSink` is `ConsoleCrumbSink` (writes to `System.Console`). Override via the `IConfigurableCollection` returned from `UseCrumbPackage`:
 
 ```csharp
-// Unity adapter wires this for you via UnityCrumbSink — but you can do it yourself:
+// The Unity adapter wires this via UnityCrumbSink; to do it by hand:
 builder.UseCrumbPackage()
     .WithImplementation<ICrumbSink>(() => new UnityCrumbSink());
 ```
@@ -112,7 +112,7 @@ builder.UseCrumbPackage()
     .WithImplementation<ICrumbSink>(() => new NullCrumbSink());
 ```
 
-Custom sinks are equally easy — implement `ICrumbSink.Write(level, typeName, message)` and route to whatever you like (in-memory buffer, network endpoint, structured-logging backend).
+A custom sink implements `ICrumbSink.Write(level, typeName, message)` and routes anywhere: an in-memory buffer, a network endpoint, a structured-logging backend.
 
 ### 6. Replace the configuration
 
@@ -153,18 +153,18 @@ Constructor order is `(registry, fileSink, consoleSink, configuration)`. Look at
 In Unity, `Window > Crumpet Labs > Crumb Manager` lists every registered logger in Play mode:
 
 - Per-logger toggle to flip `Enabled`.
-- Per-level chips (`VRB`/`INF`/`WRN`/`ERR`/`FTL`) — click to flip the bit in `Filters`.
+- Per-level chips (`VRB`/`INF`/`WRN`/`ERR`/`FTL`). Clicking one flips the bit in `Filters`.
 - Bulk "All On" / "All Off".
 - Search by type name.
 - Status bar shows file-logging state and the live `LogDirectory`.
 
-Nothing extra to wire — the manager discovers loggers via the registry that `Initialize` populates.
+Nothing extra needs wiring; the manager discovers loggers through the registry that `Initialize` populates.
 
 ---
 
 ## Common mistakes
 
-- **Don't share one logger across types.** Each consumer gets its own injected `CrumbLogger`, and `Initialize(GetType())` keys it correctly. The manager window groups by type — sharing one logger means everything reports under whichever type registered first.
+- **Don't share one logger across types.** Each consumer gets its own injected `CrumbLogger`, and `Initialize(GetType())` keys it correctly. The manager window groups by type, so sharing one logger makes everything report under whichever type registered first.
 - **Don't forget to call `Initialize`.** Without it the type name is `"Uninitialized"` in every log line, and the registry never learns about your logger.
 - **Don't fight the file sink.** It always runs in parallel with the console sink. If you want zero disk output, set `ICrumbConfiguration.FileLoggingEnabled = false`.
 - **Don't expect filter changes to be retroactive.** Filters short-circuit on the way IN; once a line is in your console / file, it's there.

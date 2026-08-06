@@ -59,7 +59,7 @@ namespace CLabs.Tickets
                     // No handler registered. Upstream Ticket routed this through
                     // Unity's Debug.LogException with a configurable LogType
                     // dispatcher (UnobservedExceptionWriteLogType field). The
-                    // engine-agnostic fallback uses System.Diagnostics.Trace —
+                    // engine-agnostic fallback uses System.Diagnostics.Trace;
                     // engine adapters can subscribe UnobservedTaskException to
                     // bridge into their native logger if desired.
                     System.Diagnostics.Trace.TraceError("UnobservedTaskException: " + ex.ToString());
