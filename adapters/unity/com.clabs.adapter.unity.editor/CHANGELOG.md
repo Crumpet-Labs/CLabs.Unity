@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.2 (2026-08-07)
+
+### Fixes
+
+- resolve window stylesheets by name when the package path is absent (67f296f)
+
 ## v0.2.1 (2026-06-18)
 ### Fixes
 

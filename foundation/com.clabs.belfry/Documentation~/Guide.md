@@ -284,7 +284,6 @@ Intended bridge ecosystem (not all shipped yet):
 | `temper-belfry` | Temper | State entered, exited, transition occurred |
 | `stats-belfry` | Stats | Stat changed, modifier added/removed |
 | `oven-belfry` | Oven | Day / month / season / phase / year transitions |
-| `tick-belfry` | Tick | Tick heartbeats |
 | `zest-belfry` | Zest | Reputation value + tier changes |
 | `sprig-belfry` | Sprig | Talent unlock / refund / grant / revoke / respec |
 

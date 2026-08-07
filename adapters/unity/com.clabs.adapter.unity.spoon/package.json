@@ -8,7 +8,7 @@
   "dependencies": {
     "com.clabs.spoon": "2.0.1",
     "com.clabs.utility": "1.1.0",
-    "com.clabs.adapter.unity.editor": "0.2.1",
+    "com.clabs.adapter.unity.editor": "0.2.2",
     "com.crumpetlabs.buttr": "1.4.1"
   },
   "author": {

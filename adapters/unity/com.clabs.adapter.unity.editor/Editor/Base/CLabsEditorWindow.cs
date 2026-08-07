@@ -1,12 +1,19 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace CLabs.Editor {
     public abstract class CLabsEditorWindow : EditorWindow {
-        private const string ThemePath = "Packages/CLabs.Editor/Styles/CrumpetLabs.uss";
+        private const string ThemePath = "Packages/com.clabs.adapter.unity.editor/Editor/Styles/CrumpetLabs.uss";
 
         protected abstract string WindowTitle { get; }
+
+        /// <summary>
+        /// Optional path to a window-specific stylesheet, e.g. a Packages/ asset path for UPM installs.
+        /// When the path does not resolve (DLL consumers have no package folder), the sheet is located
+        /// by filename via an AssetDatabase search, so shipping the .uss anywhere in the project suffices.
+        /// </summary>
         protected virtual string PackageStyleSheetPath => null;
 
         public void CreateGUI() {
@@ -45,6 +52,10 @@ namespace CLabs.Editor {
             var packagePath = PackageStyleSheetPath;
             if (!string.IsNullOrEmpty(packagePath)) {
                 var packageSheet = LoadStyleSheet(packagePath);
+                if (packageSheet == null) {
+                    packageSheet = FindStyleSheetByName(Path.GetFileNameWithoutExtension(packagePath));
+                }
+
                 if (packageSheet != null) {
                     root.styleSheets.Add(packageSheet);
                 }

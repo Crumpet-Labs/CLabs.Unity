@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace CLabs.Editor {
     public abstract class CLabsGraphWindow : EditorWindow {
-        private const string ThemePath = "Packages/CLabs.Editor/Styles/CrumpetLabs.uss";
+        private const string ThemePath = "Packages/com.clabs.adapter.unity.editor/Editor/Styles/CrumpetLabs.uss";
 
         protected abstract string WindowTitle { get; }
         protected abstract GraphView OnCreateGraphView();
